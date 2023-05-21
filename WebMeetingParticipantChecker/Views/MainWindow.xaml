@@ -1,0 +1,307 @@
+﻿<Window
+    x:Class="WebMeetingParticipantChecker.Views.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodel="clr-namespace:WebMeetingParticipantChecker.ViewModels"
+    Title="{Binding Title}"
+    Width="720"
+    Height="480"
+    MinWidth="320"
+    MinHeight="140"
+    d:DataContext="{d:DesignInstance {x:Type viewmodel:MainWindowViewModel}}"
+    mc:Ignorable="d"
+    FontSize="13"
+    WindowStyle="None"
+    StateChanged="WindowStateChanged"
+    Style="{StaticResource WindowStyle}">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Resources\Theme.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="BoolToVisible" />
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid Margin="0,0,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32px"/>
+            <RowDefinition Height="2px"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <!--  タイトルバー  -->
+        <Grid Grid.Row="0" Style="{StaticResource GridStyle}" Margin="0,0,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Image Grid.Column="0" Source="../icon.ico" Width="16" Height="16" HorizontalAlignment="Left" Margin="8,0,4,0"/>
+            <Label Grid.Column="1" x:Name="TitleLabel" Content="{Binding Title}" VerticalAlignment="Center" Style="{StaticResource LablelStyle}"/>
+            <Button Grid.Column="2" Content="設定" Width="48px" Margin="0,0,16,0" Style="{StaticResource HeaderButton}" Click="HandleSetting" />
+            <Button Grid.Column="3" Content="0" Width="32px" Height="32px" Style="{StaticResource HeaderSystemButton}" HorizontalAlignment="Right" Click="HandleMinimize"/>
+            <Button Grid.Column="4" Content="1" Width="32px" Height="32px" Style="{StaticResource HeaderSystemButton}" HorizontalAlignment="Right" x:Name="MaximizeButton" Click="HandleMaximizeOrRestoreWindow" />
+            <Button Grid.Column="5" Content="r" Width="32px" Height="32px" Style="{StaticResource HeaderCloseSystemButton}" HorizontalAlignment="Right" Click="HandleClose"/>
+        </Grid>
+        <!--  区切り線  -->
+        <Grid Grid.Row="1">
+            <Border BorderBrush="Gray" BorderThickness="1,1,1,1" />
+        </Grid>
+        <!--  メインコンテンツ  -->
+        <Grid Grid.Row="2" Style="{StaticResource GridStyle}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.5*" />
+                <ColumnDefinition Width="2px" />
+                <ColumnDefinition Width="0.5*" />
+            </Grid.ColumnDefinitions>
+            <!--  プリセット選択領域  -->
+            <Grid Grid.Column="0"  Style="{StaticResource GridStyle}" Margin="0,4,0,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="32px" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <!--  プリセット選択  -->
+                    <Grid Grid.Row="0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="48px" />
+                                <ColumnDefinition Width="72px" />
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <ComboBox
+                                Style="{StaticResource FlatComboBox}"
+                                x:Name="cbPreset"
+                                Margin="4,0,2,0"
+                                HorizontalAlignment="Stretch"
+                                VerticalContentAlignment="Center"
+                                DisplayMemberPath="Name"
+                                IsSynchronizedWithCurrentItem="True"
+                                ItemsSource="{Binding Path=PresetNames}"
+                                SelectedValuePath="Id"
+                                SelectionChanged="SelectionChangedPreset">
+                                    <ComboBox.ItemContainerStyle>
+                                        <Style TargetType="ComboBoxItem">
+                                            <Setter Property="Height" Value="32px" />
+                                        </Style>
+                                    </ComboBox.ItemContainerStyle>
+                                </ComboBox>
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <Button Content="編集" 
+                                    IsEnabled="{Binding IsPresetTargetForFile}"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Margin="2,0,2,0" 
+                                    Style="{StaticResource FlatButton}"
+                                    Command="{Binding EditPresetCommand}"></Button>
+                            </Grid>
+                            <Grid Grid.Column="2">
+                                <Button Content="再読込" 
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Margin="2,0,4,0" 
+                                    Style="{StaticResource FlatButton}"
+                                    Command="{Binding ReloadPresetCommand}"></Button>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <!--  対象ユーザ情報  -->
+                    <Grid Grid.Row="1">
+                        <ListView ItemsSource="{Binding Path=SelectPresetData}" 
+                              Style="{StaticResource ListViewStyle}"
+                              BorderBrush="{x:Null}" d:ItemsSource="{d:SampleData ItemCount=5}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock
+                                        Margin="8,0,8,0"
+                                        VerticalAlignment="Center"
+                                        Style="{StaticResource TextBlockStyle}"
+                                        Text="{Binding}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="Height" Value="32px" />
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                        </ListView>
+                    </Grid>
+                </Grid>
+            </Grid>
+            <!--  区切り線  -->
+            <Grid Grid.Column="1">
+                <Border BorderBrush="Gray" BorderThickness="1,1,1,1" />
+            </Grid>
+            <!--  接続監視領域  -->
+            <Grid Grid.Column="2" Style="{StaticResource GridStyle}" Margin="0,4,0,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="32px" />
+                        <RowDefinition Height="32px" />
+                        <RowDefinition Height="32px" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <!--  開始停止ボタン  -->
+                    <Grid Grid.Row="0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="0.3*" />
+                                <ColumnDefinition Width="0.3*" />
+                                <ColumnDefinition Width="0.3*" />
+                            </Grid.ColumnDefinitions>
+                            <!--  開始ボタン  -->
+                            <Grid Grid.Column="0">
+                                <Button
+                                Margin="4,0,2,0"
+                                Style="{StaticResource FlatButton}"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                Command="{Binding StartCommand, Mode=OneWay}"
+                                Content="開始"
+                                IsEnabled="{Binding CanStart}" />
+                            </Grid>
+                            <!--  一時停止/再開ボタン  -->
+                            <Grid Grid.Column="1">
+                                <Button
+                                Margin="2,0,2,0"
+                                Style="{StaticResource FlatButton}"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                Command="{Binding PauseCommand, Mode=OneWay}"
+                                Content="{Binding PauseButtonString}"
+                                IsEnabled="{Binding CanPauseAndResume}" />
+                            </Grid>
+                            <!--  停止ボタン  -->
+                            <Grid Grid.Column="2">
+                                <Button
+                                Margin="2,0,4,0"
+                                Style="{StaticResource FlatButton}"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                Command="{Binding StopCommand, Mode=OneWay}"
+                                Content="停止"
+                                IsEnabled="{Binding CanStop}" />
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <!--  チェックボックス  -->
+                    <Grid Grid.Row="1" Style="{StaticResource GridStyle}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="200px"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <CheckBox Margin="8,0,8,0" Content="自動スクロールによる監視を許可"
+                                  VerticalContentAlignment="Center"
+                                  Style="{StaticResource CheckBoxStyle}"
+                                  IsChecked="{Binding IsEnableAutoScroll}"
+                                  ToolTipService.ShowDuration="30000">
+                                    <CheckBox.ToolTip>
+                                        <TextBlock>
+                                    監視中状態時、監視周期毎に参加者リストにフォーカスがあたるとともに、↓キーの入力が発生します。<LineBreak/>
+                                    少人数でスクロールが不要ならOFF、多人数でスクロールが必要ならONとしてください。<LineBreak/>
+                                    ※ 有効な場合、監視中のときのみ他の操作が阻害されます。
+                                        </TextBlock>
+                                    </CheckBox.ToolTip>
+                                </CheckBox>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <!--  接続結果  -->
+                    <Grid Grid.Row="2"  Style="{StaticResource GridStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <Label
+                            Margin="8,0,0,0"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource LablelStyle}"
+                            Content="{Binding Path=StatusDisplayString}">
+                                <!--<Label.Style>
+                                <Style TargetType="Label">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsJoin}" Value="true">
+                                            <Setter Property="Foreground" Value="LightGreen"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Label.Style>-->
+                            </Label>
+                        </StackPanel>
+                    </Grid>
+                    <!--  接続状況  -->
+                    <Grid Grid.Row="3">
+                        <ListView ItemsSource="{Binding Path=MonitoringInfos}" 
+                              Style="{StaticResource ListViewStyle}"
+                              Tag="{Binding DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" 
+                              BorderBrush="{x:Null}" d:ItemsSource="{d:SampleData ItemCount=5}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <!--  接続状態  -->
+                                        <Label Width="40px">
+                                            <Label.Style>
+                                                <Style TargetType="Label">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsJoin, Mode=OneWay}" Value="False">
+                                                            <Setter Property="Foreground" Value="Red" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IsJoin, Mode=OneWay}" Value="True">
+                                                            <Setter Property="Foreground" Value="#32cd32" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IsManual, Mode=OneWay}" Value="True">
+                                                            <Setter Property="Content" Value="手動" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IsManual, Mode=OneWay}" Value="False">
+                                                            <Setter Property="Content" Value="●" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Label.Style>
+                                        </Label>
+                                        <!--  ユーザ  -->
+                                        <TextBlock VerticalAlignment="Center" 
+                                               Style="{StaticResource TextBlockStyle}"
+                                               Text="{Binding Name, Mode=OneWay}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                            <!--  リスト要素のコンテキストメニュー  -->
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="Height" Value="32px" />
+                                    <!--  コンテキストメニューでViewModelを参照できるように指定  -->
+                                    <Setter Property="Tag" Value="{Binding DataContext, RelativeSource={RelativeSource AncestorType=ListView}}" />
+                                    <Setter Property="ContextMenu">
+                                        <Setter.Value>
+                                            <ContextMenu DataContext="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
+                                                <MenuItem
+                                                Command="{Binding SwitchingParticipantStateCommand}"
+                                                CommandParameter="{Binding PlacementTarget.Content.Id, Mode=OneWay, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                                Header="参加状態を手動で切り替える" 
+                                                Style="{StaticResource MenuItemStyle}"
+                                                />
+                                                <MenuItem
+                                                Command="{Binding SetParticipantAutoCommand}"
+                                                CommandParameter="{Binding PlacementTarget.Content.Id, Mode=OneWay, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                                Header="参加状態を自動監視にする" 
+                                                Style="{StaticResource MenuItemStyle}"/>
+                                            </ContextMenu>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                        </ListView>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
