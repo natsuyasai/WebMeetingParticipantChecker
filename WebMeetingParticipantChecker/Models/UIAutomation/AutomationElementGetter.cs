@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Forms;
 using UIAutomationClient;
+using WebMeetingParticipantChecker.Models.Monitoring;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 using static WebMeetingParticipantChecker.Models.Monitoring.MonitoringType;
 
@@ -13,7 +15,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
     /// https://docs.microsoft.com/ja-jp/dotnet/framework/ui-automation/subscribe-to-ui-automation-events
     /// https://docs.microsoft.com/ja-jp/windows/win32/winauto/uiauto-eventsforclients
     /// </remarks>
-    internal class AutomationElementGetter
+    internal abstract class AutomationElementGetter
     {
         /// <summary>
         /// 対象の要素
@@ -34,22 +36,20 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// <summary>
         /// CUIAutomation
         /// </summary>
-        private readonly CUIAutomation _automation;
-
-        /// <summary>
-        /// 取得対象名
-        /// </summary>
-        private readonly string _targetName;
+        protected readonly CUIAutomation _automation;
 
         /// <summary>
         /// コンストラクタ
         /// </summary>
         /// <param name="targetName"></param>
-        public AutomationElementGetter(string targetName)
+        public AutomationElementGetter()
         {
-            _targetName = "出席者";
             _automation = new CUIAutomation();
         }
+
+        protected abstract string getTargetName();
+
+        protected abstract IUIAutomationCondition getConditon();
 
         /// <summary>
         /// フォーカスイベント購読
@@ -90,7 +90,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
             try
             {
                 Console.WriteLine($"name:[{element.CurrentName}]");
-                if (element.CurrentName.Contains(_targetName))
+                if (element.CurrentName.Contains(getTargetName()))
                 {
                     SetTargetElement(element);
                 }
@@ -106,7 +106,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
                         {
                             break;
                         }
-                        if (ret.CurrentName.Contains(_targetName))
+                        if (ret.CurrentName.Contains(getTargetName()))
                         {
                             SetTargetElement(ret);
                             break;
@@ -128,9 +128,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// <returns></returns>
         private IUIAutomationElement? TryGetParentElement(IUIAutomationElement current)
         {
-            var condition = _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_ListControlTypeId);
-            // TODO: teams
-            //var condition = _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_TreeControlTypeId);
+            var condition = getConditon();
             var walker = _automation.CreateTreeWalker(condition);
             var parent = walker.GetParentElement(current);
             return parent;

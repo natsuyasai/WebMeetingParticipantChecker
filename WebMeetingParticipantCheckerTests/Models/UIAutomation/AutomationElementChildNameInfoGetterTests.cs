@@ -54,7 +54,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
         {
             // 試験対象生成
             var fakeRootElement = new UIAutomationElementFake();
-            var target = new AutomationElementChildNameInfoGetter(new CUIAutomation(), fakeRootElement, 10);
+            var target = new AutomationElementChildNameInfoGetter(new CUIAutomation(), fakeRootElement, Monitoring.MonitoringType.Target.Zoom, 10);
 
             // ダミーの要素情報生成
             var elemArrayFake = new UIAutomationElementArrayFake();
@@ -115,7 +115,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
         {
             // 試験対象生成
             var fakeRootElement = new UIAutomationElementFake();
-            var target = new AutomationElementChildNameInfoGetter(new CUIAutomation(), fakeRootElement, 10);
+            var target = new AutomationElementChildNameInfoGetter(new CUIAutomation(), fakeRootElement, Monitoring.MonitoringType.Target.Zoom, 10);
 
             // ダミーの要素情報生成
             var elemArrayFake = new UIAutomationElementArrayFake();
@@ -177,7 +177,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
             // 試験対象生成
             const int MaxCount = 10;
             var fakeRootElement = new UIAutomationElementFake();
-            var target = new AutomationElementChildNameInfoGetter(new CUIAutomation(), fakeRootElement, MaxCount);
+            var target = new AutomationElementChildNameInfoGetter(new CUIAutomation(), fakeRootElement, Monitoring.MonitoringType.Target.Zoom, MaxCount);
 
             // ダミーの要素情報生成
             var elemArrayFake = new UIAutomationElementArrayFake();

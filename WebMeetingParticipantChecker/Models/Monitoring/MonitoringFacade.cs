@@ -97,7 +97,7 @@ namespace WebMeetingParticipantChecker.Models.Monitoring
             Console.WriteLine("タスク開始");
             var infoGetter = new AutomationElementChildNameInfoGetter(
                 new CUIAutomation(),
-                _automationElementGetter[(int)_targetType].TargetElement!, null);
+                _automationElementGetter[(int)_targetType].TargetElement!, _targetType, null);
             await _monitoringModel.StartMonitoring(onJoinStateChangeCallback, infoGetter);
         }
 

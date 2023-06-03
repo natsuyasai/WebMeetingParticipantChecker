@@ -64,15 +64,6 @@ namespace WebMeetingParticipantChecker.ViewModels
         };
 
         /// <summary>
-        /// 監視対象
-        /// </summary>
-        public enum TargetType
-        {
-            Zoom = 0,
-            Teams
-        }
-
-        /// <summary>
         /// プリセット関連
         /// </summary>
         private IPresetModel _presetList { get; set; } = default!;
@@ -209,8 +200,8 @@ namespace WebMeetingParticipantChecker.ViewModels
             }
         }
 
-        private TargetType _targetType;
-        public TargetType CheckTarget
+        private MonitoringType.Target _targetType = MonitoringType.Target.Zoom;
+        public MonitoringType.Target CheckTarget
         {
             get => _targetType;
             set
@@ -377,7 +368,7 @@ namespace WebMeetingParticipantChecker.ViewModels
 
             // Zoomの参加者ウィンドウ検索開始
             UpdateStatus(StatusValue.TargetWindowCaputure);
-            await _monitoringFacade.SelectZoomParticipantElement(MonitoringType.Target.Teams, OnDetectedTargetElemetCallback);
+            await _monitoringFacade.SelectZoomParticipantElement(_targetType, OnDetectedTargetElemetCallback);
         }
 
         /// <summary>

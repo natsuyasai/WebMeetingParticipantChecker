@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using UIAutomationClient;
 using WebMeetingParticipantChecker.Models.Config;
+using WebMeetingParticipantChecker.Models.Monitoring;
 using WebMeetingParticipantChecker.Utils;
+using static WebMeetingParticipantChecker.Models.Monitoring.MonitoringType;
 
 namespace WebMeetingParticipantChecker.Models.UIAutomation
 {
@@ -27,11 +29,6 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         private readonly CUIAutomation _automation;
 
         /// <summary>
-        /// AutomationCondition
-        /// </summary>
-        private readonly IUIAutomationCondition _condition;
-
-        /// <summary>
         /// キーダウンイベントを発生さえる最大回数(1回の更新あたり)
         /// </summary>
         private readonly int KeyDonwMaxCount = 200;
@@ -41,16 +38,16 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// </summary>
         private readonly char[] ZoomElementTargetNameSplitChars = new char[] { ',' };
 
+        private readonly Target _target;
+
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public AutomationElementChildNameInfoGetter(CUIAutomation automation, IUIAutomationElement element, int? keyDonwMaxCount = null)
+        public AutomationElementChildNameInfoGetter(CUIAutomation automation, IUIAutomationElement element, Target target, int? keyDonwMaxCount = null)
         {
             _automation = automation;
-            //_condition = _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_ListItemControlTypeId);
-            // TODO: teams
-            _condition = _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_TreeItemControlTypeId);
             _targetElement = element;
+            _target = target;
             if (keyDonwMaxCount == null)
             {
                 KeyDonwMaxCount = AppSettingsManager.KyedownMaxCount;
@@ -70,6 +67,19 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
             return _nameInfos;
         }
 
+        private IUIAutomationCondition GetConfition()
+        {
+            switch (_target)
+            {
+                case Target.Zoom:
+                    return _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_ListItemControlTypeId);
+                case Target.Teams:
+                    return _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_TreeItemControlTypeId);
+                default:
+                    return _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_ListItemControlTypeId);
+            }
+        }
+
         /// <summary>
         /// 全子要素の名前設定
         /// </summary>
@@ -83,7 +93,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
                 var downCount = 0;
                 do
                 {
-                    var elementItems = _targetElement.FindAll(TreeScope.TreeScope_Descendants, _condition);
+                    var elementItems = _targetElement.FindAll(TreeScope.TreeScope_Descendants, GetConfition());
                     if (elementItems == null)
                     {
                         continue;

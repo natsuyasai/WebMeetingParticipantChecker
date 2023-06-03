@@ -22,14 +22,12 @@ namespace WebMeetingParticipantChecker
 
         private static IServiceProvider ConfigureServices()
         {
-            var targetNameForZoom = "参加者リスト";
-            var targetNameForTeams = "出席者";
             var services = new ServiceCollection()
                 .AddSingleton<IConfigurationManager, ConfigurationManagerWrapper>()
                 .AddSingleton<AutomationElementGetter[]>(
                 provider => new AutomationElementGetter[] {
-                    new AutomationElementGetter(targetNameForZoom),
-                    new AutomationElementGetter(targetNameForTeams) })
+                    new ZoomAutomationElementGetter(),
+                    new TeamsAutomationElementGetter() })
                 .AddSingleton<MonitoringModel>()
                 .AddSingleton<IMonitoringFacade, MonitoringFacade>()
                 .AddTransient<MainWindowViewModel>();
