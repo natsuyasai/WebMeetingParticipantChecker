@@ -12,7 +12,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
     /// <summary>
     /// AutomationElementツリー情報取得
     /// </summary>
-    internal class AutomationElementChildNameInfoGetter : IAutomationElementChildNameInfoGetter
+    internal abstract class AutomationElementChildNameInfoGetter : IAutomationElementChildNameInfoGetter
     {
         /// <summary>
         /// 捜査対象の要素
@@ -26,7 +26,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// <summary>
         /// UIAutomation
         /// </summary>
-        private readonly CUIAutomation _automation;
+        protected readonly CUIAutomation _automation;
 
         /// <summary>
         /// キーダウンイベントを発生さえる最大回数(1回の更新あたり)
@@ -38,16 +38,13 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// </summary>
         private readonly char[] ZoomElementTargetNameSplitChars = new char[] { ',' };
 
-        private readonly Target _target;
-
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public AutomationElementChildNameInfoGetter(CUIAutomation automation, IUIAutomationElement element, Target target, int? keyDonwMaxCount = null)
+        public AutomationElementChildNameInfoGetter(CUIAutomation automation, IUIAutomationElement element, int? keyDonwMaxCount = null)
         {
             _automation = automation;
             _targetElement = element;
-            _target = target;
             if (keyDonwMaxCount == null)
             {
                 KeyDonwMaxCount = AppSettingsManager.KyedownMaxCount;
@@ -67,18 +64,11 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
             return _nameInfos;
         }
 
-        private IUIAutomationCondition GetConfition()
-        {
-            switch (_target)
-            {
-                case Target.Zoom:
-                    return _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_ListItemControlTypeId);
-                case Target.Teams:
-                    return _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_TreeItemControlTypeId);
-                default:
-                    return _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_ListItemControlTypeId);
-            }
-        }
+        /// <summary>
+        /// condition取得
+        /// </summary>
+        /// <returns></returns>
+        protected abstract IUIAutomationCondition GetConfition();
 
         /// <summary>
         /// 全子要素の名前設定

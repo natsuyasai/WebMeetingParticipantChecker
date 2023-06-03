@@ -94,11 +94,28 @@ namespace WebMeetingParticipantChecker.Models.Monitoring
             {
                 throw new ArgumentException("対象の要素が見つかっていません");
             }
-            Console.WriteLine("タスク開始");
-            var infoGetter = new AutomationElementChildNameInfoGetter(
-                new CUIAutomation(),
-                _automationElementGetter[(int)_targetType].TargetElement!, _targetType, null);
-            await _monitoringModel.StartMonitoring(onJoinStateChangeCallback, infoGetter);
+            Console.WriteLine("タスク開始"); ;
+            await _monitoringModel.StartMonitoring(onJoinStateChangeCallback, GetAutomationElementChildNameInfoGetter());
+        }
+
+        /// <summary>
+        /// 子要素取得クラス取得
+        /// </summary>
+        /// <returns></returns>
+        private AutomationElementChildNameInfoGetter GetAutomationElementChildNameInfoGetter()
+        {
+            return _targetType switch
+            {
+                MonitoringType.Target.Zoom =>
+                new ZoomAutomationElementChildNameInfoGetter(
+                    new CUIAutomation(), _automationElementGetter[(int)_targetType].TargetElement!, null),
+                MonitoringType.Target.Teams =>
+                new TeamsAutomationElementChildNameInfoGetter(
+                    new CUIAutomation(), _automationElementGetter[(int)_targetType].TargetElement!, null),
+                _ =>
+                new ZoomAutomationElementChildNameInfoGetter(
+                    new CUIAutomation(), _automationElementGetter[(int)_targetType].TargetElement!, null),
+            };
         }
 
         /// <summary>
