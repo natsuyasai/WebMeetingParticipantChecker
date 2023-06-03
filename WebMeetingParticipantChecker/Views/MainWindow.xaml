@@ -39,13 +39,22 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <Image Grid.Column="0" Source="../icon.ico" Width="16" Height="16" HorizontalAlignment="Left" Margin="8,0,4,0"/>
             <Label Grid.Column="1" x:Name="TitleLabel" Content="{Binding Title}" VerticalAlignment="Center" Style="{StaticResource LablelStyle}"/>
-            <Button Grid.Column="2" Content="設定" Width="48px" Margin="0,0,16,0" Style="{StaticResource HeaderButton}" Click="HandleSetting" />
-            <Button Grid.Column="3" Content="0" Width="32px" Height="32px" Style="{StaticResource HeaderSystemButton}" HorizontalAlignment="Right" Click="HandleMinimize"/>
-            <Button Grid.Column="4" Content="1" Width="32px" Height="32px" Style="{StaticResource HeaderSystemButton}" HorizontalAlignment="Right" x:Name="MaximizeButton" Click="HandleMaximizeOrRestoreWindow" />
-            <Button Grid.Column="5" Content="r" Width="32px" Height="32px" Style="{StaticResource HeaderCloseSystemButton}" HorizontalAlignment="Right" Click="HandleClose"/>
+            <Grid Grid.Column="2" Style="{StaticResource GridStyle}" Margin="8,0,8,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <RadioButton Grid.Column="0" Content="Zoom" Width="48px" Style="{StaticResource RadioToggleButton}" Margin="0,0,4,0" GroupName="TargetType"/>
+                <RadioButton Grid.Column="1" Content="Teams" Width="48px" Style="{StaticResource RadioToggleButton}" Margin="4,0,16,0" GroupName="TargetType"/>
+            </Grid>
+            <Button Grid.Column="3" Content="設定" Width="48px" Margin="0,0,16,0" Style="{StaticResource HeaderButton}" Click="HandleSetting" />
+            <Button Grid.Column="4" Content="0" Width="32px" Height="32px" Style="{StaticResource HeaderSystemButton}" HorizontalAlignment="Right" Click="HandleMinimize"/>
+            <Button Grid.Column="5" Content="1" Width="32px" Height="32px" Style="{StaticResource HeaderSystemButton}" HorizontalAlignment="Right" x:Name="MaximizeButton" Click="HandleMaximizeOrRestoreWindow" />
+            <Button Grid.Column="56" Content="r" Width="32px" Height="32px" Style="{StaticResource HeaderCloseSystemButton}" HorizontalAlignment="Right" Click="HandleClose"/>
         </Grid>
         <!--  区切り線  -->
         <Grid Grid.Row="1">
