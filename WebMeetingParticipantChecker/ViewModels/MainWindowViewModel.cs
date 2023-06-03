@@ -64,6 +64,15 @@ namespace WebMeetingParticipantChecker.ViewModels
         };
 
         /// <summary>
+        /// 監視対象
+        /// </summary>
+        public enum TargetType
+        {
+            Zoom = 0,
+            Teams
+        }
+
+        /// <summary>
         /// プリセット関連
         /// </summary>
         private IPresetModel _presetList { get; set; } = default!;
@@ -200,6 +209,16 @@ namespace WebMeetingParticipantChecker.ViewModels
             }
         }
 
+        private TargetType _targetType;
+        public TargetType CheckTarget
+        {
+            get => _targetType;
+            set
+            {
+                _targetType = value;
+                OnPropertyChanged(nameof(CheckTarget));
+            }
+        }
         #endregion 表示データ
 
         #region コマンド

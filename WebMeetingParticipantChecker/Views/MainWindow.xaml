@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewmodel="clr-namespace:WebMeetingParticipantChecker.ViewModels"
+    xmlns:converter="clr-namespace:WebMeetingParticipantChecker.Views.Converter"
     Title="{Binding Title}"
     Width="720"
     Height="480"
@@ -22,6 +23,7 @@
                 <ResourceDictionary Source="..\Resources\Theme.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <BooleanToVisibilityConverter x:Key="BoolToVisible" />
+            <converter:TargetTypeConverter x:Key="TargetTypeToBoolean" />
         </ResourceDictionary>
     </Window.Resources>
     <Grid Margin="0,0,0,0">
@@ -48,8 +50,19 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <RadioButton Grid.Column="0" Content="Zoom" Width="48px" Style="{StaticResource RadioToggleButton}" Margin="0,0,4,0" GroupName="TargetType"/>
-                <RadioButton Grid.Column="1" Content="Teams" Width="48px" Style="{StaticResource RadioToggleButton}" Margin="4,0,16,0" GroupName="TargetType"/>
+                <RadioButton Grid.Column="0" 
+                             Content="Zoom" 
+                             Width="48px" 
+                             Style="{StaticResource RadioToggleButton}" 
+                             Margin="0,0,4,0" 
+                             GroupName="TargetType"
+                             IsChecked="{Binding Path=CheckTarget, Mode=TwoWay, Converter={StaticResource TargetTypeToBoolean}, ConverterParameter=Zoom, UpdateSourceTrigger=PropertyChanged}"/>
+                <RadioButton Grid.Column="1" 
+                             Content="Teams" 
+                             Width="48px" Style="{StaticResource RadioToggleButton}" 
+                             Margin="4,0,16,0" 
+                             GroupName="TargetType"
+                             IsChecked="{Binding Path=CheckTarget,Mode=TwoWay, Converter={StaticResource TargetTypeToBoolean}, ConverterParameter=Teams, UpdateSourceTrigger=PropertyChanged}"/>
             </Grid>
             <Button Grid.Column="3" Content="設定" Width="48px" Margin="0,0,16,0" Style="{StaticResource HeaderButton}" Click="HandleSetting" />
             <Button Grid.Column="4" Content="0" Width="32px" Height="32px" Style="{StaticResource HeaderSystemButton}" HorizontalAlignment="Right" Click="HandleMinimize"/>
