@@ -276,17 +276,15 @@
                 <Setter Property="Background" Value="#1a1a1a"/>
             </Trigger>
             <Trigger Property="IsChecked" Value="true">
-                <Setter Property="Background" Value="#333333"/>
-            </Trigger>
-            <Trigger Property="IsEnabled" Value="true">
+                <Setter Property="Background" Value="#000000"/>
                 <Setter Property="Foreground" Value="#ffffff"/>
-            </Trigger>
-            <Trigger Property="IsEnabled" Value="false">
-                <Setter Property="Foreground" Value="#595959"/>
             </Trigger>
             <Trigger Property="IsChecked" Value="false">
                 <Setter Property="Background" Value="#000000"/>
-                <Setter Property="Foreground" Value="#595959"/>
+                <Setter Property="Foreground" Value="#808080"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="false">
+                <Setter Property="Foreground" Value="#808080"/>
             </Trigger>
         </Style.Triggers>
     </Style>
