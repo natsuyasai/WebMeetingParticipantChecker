@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Automation;
 using UIAutomationClient;
+using WebMeetingParticipantChecker.Models.Config;
 using WebMeetingParticipantChecker.Models.Monitoring;
 
 namespace WebMeetingParticipantChecker.Models.UIAutomation
@@ -17,7 +18,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
 
         protected override string getTargetName()
         {
-            return "参加者リスト";
+            return AppSettingsManager.ZoomParticipantListName;
         }
 
         protected override IUIAutomationCondition getConditon()

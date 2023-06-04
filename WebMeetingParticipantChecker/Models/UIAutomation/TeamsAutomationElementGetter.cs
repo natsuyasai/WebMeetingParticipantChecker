@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UIAutomationClient;
+using WebMeetingParticipantChecker.Models.Config;
 using WebMeetingParticipantChecker.Models.Monitoring;
 
 namespace WebMeetingParticipantChecker.Models.UIAutomation
@@ -16,7 +17,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
 
         protected override string getTargetName()
         {
-            return "出席者";
+            return AppSettingsManager.TeamsParticipantListName;
         }
 
         protected override IUIAutomationCondition getConditon()

@@ -11,6 +11,7 @@ using Moq;
 using System.Collections.ObjectModel;
 using WebMeetingParticipantChecker.Models.Monitoring;
 using WebMeetingParticipantChecker.Models.Preset;
+using Microsoft.Extensions.Configuration;
 
 namespace WebMeetingParticipantChecker.ViewModels.Tests
 {
@@ -20,12 +21,8 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
         [TestInitialize]
         public void TestInitialize()
         {
-            var moq = new Mock<IConfigurationManager>();
-            var settingDic = new NameValueCollection
-            {
-                { "MonitoringCycleMs", "100" },
-            };
-            moq.SetupGet(x => x.AppSettings).Returns(settingDic);
+            var moq = new Mock<IConfigurationRoot>();
+            moq.SetupGet(x => x["MonitoringCycleMs"]).Returns("100");
             AppSettingsManager.Intialization(moq.Object);
         }
 

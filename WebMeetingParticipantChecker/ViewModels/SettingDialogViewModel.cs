@@ -3,6 +3,10 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using System;
 using System.Configuration;
+using System.IO;
+using System.Linq;
+using System.Text.Json;
+using System.Windows.Shapes;
 using WebMeetingParticipantChecker.Models.Config;
 using ZoomParticipantChecker.Model.Message;
 
@@ -15,6 +19,7 @@ namespace WebMeetingParticipantChecker.ViewModels
     {
         private readonly string _initMonitoringCycleMs;
 
+        private readonly string FileName = "appsettings.json";
 
         #region 表示データ
 
@@ -72,9 +77,24 @@ namespace WebMeetingParticipantChecker.ViewModels
         {
             try
             {
-                var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                config.AppSettings.Settings["MonitoringCycleMs"].Value = _monitoringCycleMs;
-                config.Save();
+                var path = System.IO.Path.Join(Directory.GetCurrentDirectory(), FileName);
+
+                var config = ReadCurrentSetting(path);
+                if (config == null)
+                {
+                    Console.WriteLine("読み込み失敗");
+                    return;
+                }
+
+                var props = typeof(ConfigrationParameter).GetProperties();
+
+                var targetProp = props.FirstOrDefault(item => item.Name == "MonitoringCycleMs");
+                targetProp?.SetValue(config, _monitoringCycleMs);
+
+                using var writer = new StreamWriter(path);
+                var json = JsonSerializer.Serialize(config);
+                writer.Write(json);
+
                 OnPropertyChanged(nameof(ExistsNotAppliedData));
                 WeakReferenceMessenger.Default.Send(new SettingApplyMessage("設定完了"));
             }
@@ -82,6 +102,14 @@ namespace WebMeetingParticipantChecker.ViewModels
             {
                 Console.WriteLine(e);
             }
+        }
+
+        private ConfigrationParameter? ReadCurrentSetting(string path)
+        {
+            using var reader = new StreamReader(path);
+            var json = reader.ReadToEnd();
+            var config = JsonSerializer.Deserialize<ConfigrationParameter>(json);
+            return config;
         }
     }
 }

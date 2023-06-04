@@ -9,6 +9,7 @@ using Moq;
 using System.Collections.Specialized;
 using WebMeetingParticipantChecker.Models.Config;
 using WebMeetingParticipantChecker.Models.UIAutomation;
+using Microsoft.Extensions.Configuration;
 
 namespace WebMeetingParticipantChecker.Models.Monitoring.Tests
 {
@@ -18,12 +19,8 @@ namespace WebMeetingParticipantChecker.Models.Monitoring.Tests
         [TestInitialize]
         public void TestInitialize()
         {
-            var moq = new Mock<IConfigurationManager>();
-            var settingDic = new NameValueCollection
-            {
-                { "MonitoringCycleMs", "100" },
-            };
-            moq.SetupGet(x => x.AppSettings).Returns(settingDic);
+            var moq = new Mock<IConfigurationRoot>();
+            moq.SetupGet(x => x["MonitoringCycleMs"]).Returns("100");
             AppSettingsManager.Intialization(moq.Object);
         }
 

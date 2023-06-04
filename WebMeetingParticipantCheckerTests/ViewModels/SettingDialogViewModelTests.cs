@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Moq;
 using System.Collections.Specialized;
 using WebMeetingParticipantChecker.Models.Config;
+using Microsoft.Extensions.Configuration;
 
 namespace WebMeetingParticipantChecker.ViewModels.Tests
 {
@@ -18,12 +19,8 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
         [TestCategory("設定画面VM作成")]
         public void 設定画面VM作成()
         {
-            var moq = new Mock<IConfigurationManager>();
-            var settingDic = new NameValueCollection
-            {
-                { "MonitoringCycleMs", "100" },
-            };
-            moq.SetupGet(x => x.AppSettings).Returns(settingDic);
+            var moq = new Mock<IConfigurationRoot>();
+            moq.SetupGet(x => x["MonitoringCycleMs"]).Returns("100");
             AppSettingsManager.Intialization(moq.Object);
 
             var target = new SettingDialogViewModel();
@@ -36,12 +33,8 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
         [TestCategory("設定適用")]
         public void 設定適用()
         {
-            var moq = new Mock<IConfigurationManager>();
-            var settingDic = new NameValueCollection
-            {
-                { "MonitoringCycleMs", "100" },
-            };
-            moq.SetupGet(x => x.AppSettings).Returns(settingDic);
+            var moq = new Mock<IConfigurationRoot>();
+            moq.SetupGet(x => x["MonitoringCycleMs"]).Returns("100");
             AppSettingsManager.Intialization(moq.Object);
 
             var target = new SettingDialogViewModel();

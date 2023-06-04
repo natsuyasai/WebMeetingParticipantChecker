@@ -1,8 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,7 +25,6 @@ namespace WebMeetingParticipantChecker
         private static IServiceProvider ConfigureServices()
         {
             var services = new ServiceCollection()
-                .AddSingleton<IConfigurationManager, ConfigurationManagerWrapper>()
                 .AddSingleton<AutomationElementGetter[]>(
                 provider => new AutomationElementGetter[] {
                     new ZoomAutomationElementGetter(),
@@ -45,8 +46,11 @@ namespace WebMeetingParticipantChecker
             Resources.MergedDictionaries.Clear();
             Resources.MergedDictionaries.Add(dic);
 
-
-            AppSettingsManager.Intialization(Services.GetRequiredService<IConfigurationManager>());
+            var config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build();
+            AppSettingsManager.Intialization(config);
         }
 
 
