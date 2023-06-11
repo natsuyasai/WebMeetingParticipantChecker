@@ -224,6 +224,7 @@
                                 <CheckBox Margin="8,0,8,0" Content="自動スクロールによる監視を許可"
                                   VerticalContentAlignment="Center"
                                   Style="{StaticResource CheckBoxStyle}"
+                                  IsEnabled="{Binding Path=CheckTarget, Mode=OneWay, Converter={StaticResource TargetTypeToBoolean}, ConverterParameter=Zoom }"
                                   IsChecked="{Binding IsEnableAutoScroll}"
                                   ToolTipService.ShowDuration="30000">
                                     <CheckBox.ToolTip>

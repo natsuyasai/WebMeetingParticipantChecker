@@ -200,6 +200,9 @@ namespace WebMeetingParticipantChecker.ViewModels
             }
         }
 
+        /// <summary>
+        /// 監視対象
+        /// </summary>
         private MonitoringType.Target _targetType = MonitoringType.Target.Zoom;
         public MonitoringType.Target CheckTarget
         {

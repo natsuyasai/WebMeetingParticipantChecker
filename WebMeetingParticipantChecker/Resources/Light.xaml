@@ -95,6 +95,11 @@
     </Style>
     <!-- チェックボックス用 -->
     <Style x:Key="CheckBoxStyle" TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="false">
+                <Setter Property="Foreground" Value="#808080"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
     <!-- テキストブロック用 -->
     <Style x:Key="TextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
