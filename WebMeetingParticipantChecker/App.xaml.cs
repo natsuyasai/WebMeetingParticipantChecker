@@ -48,7 +48,7 @@ namespace WebMeetingParticipantChecker
 
             var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
+                .AddJsonFile(ConfigDefine.FileName)
                 .Build();
             AppSettingsManager.Intialization(config);
         }

@@ -95,17 +95,18 @@
             <Button Grid.Column="1" 
                     Width="64px" 
                     Height="24px" 
-                    Content="閉じる" 
-                    Margin="4,4,4,4" 
-                    Style="{StaticResource FlatButton}" 
-                    Click="HandleClose"/>
-            <Button Grid.Column="2" 
-                    Width="64px" 
-                    Height="24px" 
                     Content="適用" 
                     Margin="4,4,4,4" 
                     Style="{StaticResource FlatButton}" 
                     Command="{Binding ApplyCommand}"/>
+            <Button Grid.Column="2" 
+                    Width="64px" 
+                    Height="24px" 
+                    Content="閉じる" 
+                    Margin="4,4,4,4" 
+                    Style="{StaticResource FlatButton}" 
+                    Click="HandleClose"/>
+
         </Grid>
     </Grid>
 </Window>

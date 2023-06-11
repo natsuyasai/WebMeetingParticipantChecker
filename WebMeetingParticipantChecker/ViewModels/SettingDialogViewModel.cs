@@ -19,8 +19,6 @@ namespace WebMeetingParticipantChecker.ViewModels
     {
         private readonly string _initMonitoringCycleMs;
 
-        private readonly string FileName = "appsettings.json";
-
         #region 表示データ
 
         /// <summary>
@@ -77,7 +75,7 @@ namespace WebMeetingParticipantChecker.ViewModels
         {
             try
             {
-                var path = System.IO.Path.Join(Directory.GetCurrentDirectory(), FileName);
+                var path = ConfigDefine.GetFileNameForFullPath();
 
                 var config = ReadCurrentSetting(path);
                 if (config == null)

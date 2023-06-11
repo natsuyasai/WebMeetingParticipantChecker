@@ -23,7 +23,7 @@
 
   <ItemGroup>
     <Content Include="icon.ico" />
-    <None Update="appsettings.json">
+    <None Update="settings.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -34,6 +34,8 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
     <PackageReference Include="System.Runtime.WindowsRuntime" Version="4.7.0" />
     <PackageReference Include="System.Text.Json" Version="7.0.2" />
   </ItemGroup>
