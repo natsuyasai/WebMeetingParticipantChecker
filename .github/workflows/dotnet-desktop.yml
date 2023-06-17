@@ -75,7 +75,8 @@ jobs:
         uses: microsoft/setup-msbuild@v1.0.2
 
       - name: Build project
-        run: msbuild $env:Solution_Name -t:rebuild -verbosity:diag 
+        run: msbuild $env:Solution_Name
+        shell: cmd
 
       # Execute all unit tests in the solution
       - name: Execute unit tests
