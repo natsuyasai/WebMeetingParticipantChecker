@@ -1,0 +1,37 @@
+sequenceDiagram
+
+    actor user
+    participant ui as UI
+    participant main as MainViewModel
+    participant preset as PresetModel
+    participant monitor as MonitoringModel
+
+    user->>ui: 開始
+    ui->>main: 開始
+    main->>preset: 対象読み込み
+    preset-->>main: 読み込み完了
+    main-->>ui: 対象表示
+
+    main->>main: 捕捉準備中状態に設定
+
+    main->>monitor: 参加者ウィンドウ捕捉開始
+    main->>main: 捕捉中状態に設定
+    monitor->>monitor: 捕捉待ち
+    monitor-->>main: 捕捉完了
+
+    main->>main: 監視中状態に設定
+
+    main->>monitor: 監視開始
+    monitor-->>main: 監視開始
+
+    loop 参加状態変更確認
+        monitor-->>monitor: 参加状態確認
+        monitor->> main: 参加状態変更
+        main->>ui: 参加状態更新
+
+        opt 全員参加済み
+            main->>main: 完了状態に設定
+            main->>monitor: 監視停止
+            monitor-->>main: 監視停止
+        end
+    end
