@@ -19,10 +19,6 @@
     Style="{StaticResource WindowStyle}">
     <Window.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="..\Resources\Theme.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-            <BooleanToVisibilityConverter x:Key="BoolToVisible" />
             <converter:TargetTypeConverter x:Key="TargetTypeToBoolean" />
         </ResourceDictionary>
     </Window.Resources>
@@ -56,13 +52,13 @@
                              Style="{StaticResource RadioToggleButton}" 
                              Margin="0,0,4,0" 
                              GroupName="TargetType"
-                             IsChecked="{Binding Path=CheckTarget, Mode=TwoWay, Converter={StaticResource TargetTypeToBoolean}, ConverterParameter=Zoom, UpdateSourceTrigger=PropertyChanged}"/>
+                             IsChecked="{Binding Path=CheckTarget, Mode=TwoWay, Converter={StaticResource  TargetTypeToBoolean}, ConverterParameter=Zoom, UpdateSourceTrigger=PropertyChanged}"/>
                 <RadioButton Grid.Column="1" 
                              Content="Teams" 
                              Width="48px" Style="{StaticResource RadioToggleButton}" 
                              Margin="4,0,16,0" 
                              GroupName="TargetType"
-                             IsChecked="{Binding Path=CheckTarget,Mode=TwoWay, Converter={StaticResource TargetTypeToBoolean}, ConverterParameter=Teams, UpdateSourceTrigger=PropertyChanged}"/>
+                             IsChecked="{Binding Path=CheckTarget,Mode=TwoWay, Converter={StaticResource  TargetTypeToBoolean}, ConverterParameter=Teams, UpdateSourceTrigger=PropertyChanged}"/>
             </Grid>
             <Button Grid.Column="3" Content="設定" Width="48px" Margin="0,0,16,0" Style="{StaticResource HeaderButton}" Click="HandleSetting" />
             <Button Grid.Column="4" Content="0" Width="32px" Height="32px" Style="{StaticResource HeaderSystemButton}" HorizontalAlignment="Right" Click="HandleMinimize"/>
@@ -224,7 +220,7 @@
                                 <CheckBox Margin="8,0,8,0" Content="自動スクロールによる監視を許可"
                                   VerticalContentAlignment="Center"
                                   Style="{StaticResource CheckBoxStyle}"
-                                  IsEnabled="{Binding Path=CheckTarget, Mode=OneWay, Converter={StaticResource TargetTypeToBoolean}, ConverterParameter=Zoom }"
+                                  IsEnabled="{Binding Path=CheckTarget, Mode=OneWay, Converter={StaticResource  TargetTypeToBoolean}, ConverterParameter=Zoom }"
                                   IsChecked="{Binding IsEnableAutoScroll}"
                                   ToolTipService.ShowDuration="30000">
                                     <CheckBox.ToolTip>

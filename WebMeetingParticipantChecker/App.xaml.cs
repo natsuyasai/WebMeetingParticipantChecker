@@ -8,10 +8,13 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
+using System.Windows.Threading;
 using WebMeetingParticipantChecker.Models.Config;
 using WebMeetingParticipantChecker.Models.Monitoring;
 using WebMeetingParticipantChecker.Models.UIAutomation;
 using WebMeetingParticipantChecker.ViewModels;
+using WebMeetingParticipantChecker.Views;
 
 namespace WebMeetingParticipantChecker
 {
@@ -38,14 +41,6 @@ namespace WebMeetingParticipantChecker
 
         public App()
         {
-            string dicPath = (GetAppsUseLightTheme() == 0) ? @"Resources\Dark.xaml" : @"Resources\Light.xaml";
-            var dic = new ResourceDictionary
-            {
-                Source = new Uri(dicPath, UriKind.Relative)
-            };
-            Resources.MergedDictionaries.Clear();
-            Resources.MergedDictionaries.Add(dic);
-
             var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile(ConfigDefine.FileName)
@@ -53,6 +48,21 @@ namespace WebMeetingParticipantChecker
             AppSettingsManager.Intialization(config);
         }
 
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+
+            // テーマ更新
+            string dicPath = (GetAppsUseLightTheme() == 0) ? @"Resources\Dark.xaml" : @"Resources\Light.xaml";
+            var dic = new ResourceDictionary
+            {
+                Source = new Uri(dicPath, UriKind.Relative)
+            };
+            Current.Resources.MergedDictionaries.Clear();
+            Current.Resources.MergedDictionaries.Add(dic);
+            this.Resources.MergedDictionaries.Clear();
+            this.Resources.MergedDictionaries.Add(dic);
+        }
 
         /// 
         /// AppsUseLightTheme の値を取得する。

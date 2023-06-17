@@ -14,14 +14,6 @@
         Style="{StaticResource WindowStyle}"
         BorderThickness="4"
         d:DataContext="{d:DesignInstance {x:Type viewmodel:SettingDialogViewModel}}">
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="..\Resources\Theme.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-            <BooleanToVisibilityConverter x:Key="BoolToVisible" />
-        </ResourceDictionary>
-    </Window.Resources>
     <Grid Style="{StaticResource GridStyle}">
         <Grid.RowDefinitions>
             <RowDefinition Height="32px"/>

@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:WebMeetingParticipantChecker"
              StartupUri="Views/MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary Source="Resources\Theme.xaml" />
     </Application.Resources>
 </Application>
