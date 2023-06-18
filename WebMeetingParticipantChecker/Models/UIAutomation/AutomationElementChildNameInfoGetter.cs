@@ -17,7 +17,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// <summary>
         /// 捜査対象の要素
         /// </summary>
-        private readonly IUIAutomationElement _targetElement;
+        protected readonly IUIAutomationElement _targetElement;
         /// <summary>
         /// 取得した名前情報
         /// </summary>
@@ -32,11 +32,6 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// キーダウンイベントを発生さえる最大回数(1回の更新あたり)
         /// </summary>
         private readonly int KeyDonwMaxCount = 200;
-
-        /// <summary>
-        /// 対象名の分割文字
-        /// </summary>
-        private readonly char[] ZoomElementTargetNameSplitChars = new char[] { ',' };
 
         /// <summary>
         /// コンストラクタ
@@ -68,7 +63,12 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// condition取得
         /// </summary>
         /// <returns></returns>
-        protected abstract IUIAutomationCondition GetConfition();
+        protected abstract IUIAutomationCondition GetCondition();
+
+
+        protected abstract IUIAutomationElementArray? GetElementItems();
+
+        protected abstract IEnumerable<string> GetSplittedTargetElementName(string elementName);
 
         /// <summary>
         /// 全子要素の名前設定
@@ -83,7 +83,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
                 var downCount = 0;
                 do
                 {
-                    var elementItems = _targetElement.FindAll(TreeScope.TreeScope_Descendants, GetConfition());
+                    var elementItems = GetElementItems();
                     if (elementItems == null)
                     {
                         continue;
@@ -94,24 +94,24 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
                     {
                         var item = elementItems.GetElement(i);
                         // 2週目で同じ要素なら終了
-                        if (firstElement == item.CurrentName)
+                        if (firstElement == item?.CurrentName)
                         {
                             isSearch = false;
                             break;
                         }
-                        if (item.CurrentName == "")
+                        if (item?.CurrentName == null || item.CurrentName == "")
                         {
                             continue;
                         }
                         // 名前の後の「(ホスト,自分)」や操作ボタンの文字もカンマ区切りで取れるため，分割して登録
                         // (名前にカンマを入れると，先頭要素だけが名前とは限らなくなるため，一応全て保持)
-                        foreach (var str in item.CurrentName.Split(ZoomElementTargetNameSplitChars))
+                        foreach (var str in GetSplittedTargetElementName(item.CurrentName))
                         {
                             var addStr = StringUtils.RemoveSpace(str);
                             _nameInfos[addStr] = item.CurrentName;
                         }
                         lastElement = item;
-                        firstElement = firstElement ?? item.CurrentName;
+                        firstElement ??= item.CurrentName;
                     }
                     // 自動スクロールが許可されていなければ中断
                     if (!isEnableAutoScroll)

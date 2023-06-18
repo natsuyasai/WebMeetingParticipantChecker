@@ -15,12 +15,12 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         {
         }
 
-        protected override string getTargetName()
+        protected override string GetTargetName()
         {
             return AppSettingsManager.TeamsParticipantListName;
         }
 
-        protected override IUIAutomationCondition getConditon()
+        protected override IUIAutomationCondition GetConditon()
         {
             return _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_TreeControlTypeId);
         }

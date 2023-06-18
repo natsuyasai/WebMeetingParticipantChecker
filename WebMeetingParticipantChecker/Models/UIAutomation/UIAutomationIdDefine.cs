@@ -36,8 +36,13 @@
         public static readonly int UIA_TreeControlTypeId = 50023;
 
         /// <summary>
-        /// UIA_ControlTypeIds.UIA_ListControlTypeId
+        /// UIA_ControlTypeIds.UIA_TreeItemControlTypeId
         /// </summary>
         public static readonly int UIA_TreeItemControlTypeId = 50024;
+
+        /// <summary>
+        /// UIA_ControlTypeIds.UIA_GroupControlTypeId
+        /// </summary>
+        public static readonly int UIA_GroupControlTypeId = 50026;
     }
 }

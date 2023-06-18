@@ -47,9 +47,9 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
             _automation = new CUIAutomation();
         }
 
-        protected abstract string getTargetName();
+        protected abstract string GetTargetName();
 
-        protected abstract IUIAutomationCondition getConditon();
+        protected abstract IUIAutomationCondition GetConditon();
 
         /// <summary>
         /// フォーカスイベント購読
@@ -90,7 +90,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
             try
             {
                 Console.WriteLine($"name:[{element.CurrentName}]");
-                if (element.CurrentName.Contains(getTargetName()))
+                if (element.CurrentName.Contains(GetTargetName()))
                 {
                     SetTargetElement(element);
                 }
@@ -106,7 +106,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
                         {
                             break;
                         }
-                        if (ret.CurrentName.Contains(getTargetName()))
+                        if (ret.CurrentName.Contains(GetTargetName()))
                         {
                             SetTargetElement(ret);
                             break;
@@ -128,7 +128,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// <returns></returns>
         private IUIAutomationElement? TryGetParentElement(IUIAutomationElement current)
         {
-            var condition = getConditon();
+            var condition = GetConditon();
             var walker = _automation.CreateTreeWalker(condition);
             var parent = walker.GetParentElement(current);
             return parent;
