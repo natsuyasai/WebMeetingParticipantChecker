@@ -66,7 +66,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         protected abstract IUIAutomationCondition GetCondition();
 
 
-        protected abstract IUIAutomationElementArray? GetElementItems();
+        protected abstract UIAutomationElementArray? GetElementItems();
 
         protected abstract IEnumerable<string> GetSplittedTargetElementName(string elementName);
 

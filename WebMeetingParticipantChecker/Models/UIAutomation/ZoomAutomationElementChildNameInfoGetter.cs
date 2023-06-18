@@ -24,9 +24,10 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
             return _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_ListItemControlTypeId);
         }
 
-        protected override IUIAutomationElementArray? GetElementItems()
+        protected override UIAutomationElementArray? GetElementItems()
         {
-            return _targetElement.FindAll(TreeScope.TreeScope_Descendants, GetCondition());
+            var items = _targetElement.FindAll(TreeScope.TreeScope_Descendants, GetCondition());
+            return new UIAutomationElementArray(items); 
         }
 
         protected override IEnumerable<string> GetSplittedTargetElementName(string elementName)

@@ -19,9 +19,9 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
             return _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_TreeItemControlTypeId);
         }
 
-        protected override IUIAutomationElementArray? GetElementItems()
+        protected override UIAutomationElementArray? GetElementItems()
         {
-            var targetNames = new List<string>();
+            var elements = new List<IUIAutomationElement>();
             var items = _targetElement.FindAll(TreeScope.TreeScope_Descendants, GetCondition());
             for (int i = 0; i < items.Length; i++)
             {
@@ -43,9 +43,9 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
                     continue;
                 }
                 var secondChildsChild = walker.GetFirstChildElement(secondChild);
-                targetNames.Add(secondChildsChild?.CurrentName ?? item.CurrentName);
+                elements.Add(secondChildsChild ?? item);
             }
-            return items;
+            return new UIAutomationElementArray(elements);
         }
 
         protected override IEnumerable<string> GetSplittedTargetElementName(string elementName)
