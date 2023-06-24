@@ -77,8 +77,8 @@ jobs:
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v1.0.2
 
-    - name: Build Rebuild project
-      run: MSBuild.exe $env:Solution_Name
+    - name: Build project
+      run: MSBuild.exe  /t:restore /p:RestorePackagesConfig=true $env:Solution_Name
         
     # Execute all unit tests in the solution
     - name: Execute unit tests
