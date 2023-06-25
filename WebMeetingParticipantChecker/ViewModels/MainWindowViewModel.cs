@@ -86,7 +86,7 @@ namespace WebMeetingParticipantChecker.ViewModels
             get
             {
                 var assembly = Assembly.GetExecutingAssembly();
-                return $"Zoom参加者チェック - ver{assembly.GetName().Version}";
+                return $"Web会議参加者チェック - ver{assembly.GetName().Version}";
             }
         }
 
