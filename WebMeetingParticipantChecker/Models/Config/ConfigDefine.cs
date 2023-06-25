@@ -9,7 +9,7 @@ namespace WebMeetingParticipantChecker.Models.Config
 {
     internal static class ConfigDefine
     {
-        public static string FileName { get; } = "settings.json";
+        public static string FileName { get; } = "usersettings.json";
 
         public static string GetFileNameForFullPath()
         {
