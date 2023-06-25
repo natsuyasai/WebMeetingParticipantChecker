@@ -8,6 +8,7 @@
     <ApplicationIcon>icon.ico</ApplicationIcon>
     <UseWindowsForms>True</UseWindowsForms>
     <PackageIcon>icon.ico</PackageIcon>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
 
   <ItemGroup>

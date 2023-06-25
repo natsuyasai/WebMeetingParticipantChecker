@@ -1,12 +1,24 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0-windows8.0</TargetFramework>
+    <TargetFramework>net7.0-windows10.0.17763.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <COMReference Include="UIAutomationClient">
+      <WrapperTool>tlbimp</WrapperTool>
+      <VersionMinor>0</VersionMinor>
+      <VersionMajor>1</VersionMajor>
+      <Guid>944de083-8fb8-45cf-bcb7-c477acb2f897</Guid>
+      <Lcid>0</Lcid>
+      <Isolated>false</Isolated>
+      <EmbedInteropTypes>true</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
@@ -20,10 +32,6 @@
     <ProjectReference Include="..\WebMeetingParticipantChecker\WebMeetingParticipantChecker.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="Interop.UIAutomationClient">
-      <HintPath>..\WebMeetingParticipantChecker\obj\Debug\net7.0-windows8.0\Interop.UIAutomationClient.dll</HintPath>
-    </Reference>
-  </ItemGroup>
+
 
 </Project>
