@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -66,12 +67,15 @@ namespace WebMeetingParticipantChecker.Models.Monitoring
         /// </summary>
         public bool IsEnableAutoScroll = false;
 
+        private readonly ILogger _logger;
+
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public MonitoringModel()
+        public MonitoringModel(ILogger  logger)
         {
             DelayTimeMs = AppSettingsManager.MonitoringCycleMs;
+            _logger = logger;
         }
 
         /// <summary>
@@ -144,6 +148,7 @@ namespace WebMeetingParticipantChecker.Models.Monitoring
                 catch
                 {
                     Console.WriteLine("開放失敗");
+                    _logger.LogError("開放失敗");
                 }
             }
         }
@@ -201,6 +206,7 @@ namespace WebMeetingParticipantChecker.Models.Monitoring
             await Task.Run(async () =>
             {
                 Console.WriteLine("監視中");
+                _logger.LogInformation("監視中");
                 while (!_taskCancelStatus.MonitoringTaskCancel)
                 {
                     _taskPauseObject.Wait();
