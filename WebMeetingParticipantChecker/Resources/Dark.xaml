@@ -288,9 +288,6 @@
                 <Setter Property="Background" Value="#000000"/>
                 <Setter Property="Foreground" Value="#808080"/>
             </Trigger>
-            <Trigger Property="IsEnabled" Value="false">
-                <Setter Property="Foreground" Value="#808080"/>
-            </Trigger>
         </Style.Triggers>
     </Style>
 </ResourceDictionary>

@@ -213,6 +213,15 @@ namespace WebMeetingParticipantChecker.ViewModels
                 OnPropertyChanged(nameof(CheckTarget));
             }
         }
+
+        /// <summary>
+        /// 監視対象切り替えラジオボタンを有効とするか
+        /// </summary>
+        public bool IsEnableTargetTypeRadio
+        {
+            get { return _status == StatusValue.Init; }
+        }
+
         #endregion 表示データ
 
         #region コマンド
@@ -357,6 +366,7 @@ namespace WebMeetingParticipantChecker.ViewModels
             OnPropertyChanged(nameof(CanStart));
             OnPropertyChanged(nameof(CanStop));
             OnPropertyChanged(nameof(CanPauseAndResume));
+            OnPropertyChanged(nameof(IsEnableTargetTypeRadio));
         }
 
         /// <summary>
