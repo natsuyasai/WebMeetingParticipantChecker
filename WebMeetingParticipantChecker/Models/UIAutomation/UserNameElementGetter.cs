@@ -12,16 +12,22 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
     /// <summary>
     /// AutomationElementツリー情報取得
     /// </summary>
-    internal abstract class AutomationElementChildNameInfoGetter : IAutomationElementChildNameInfoGetter
+    internal abstract class UserNameElementGetter : IUserNameElementGetter
     {
         /// <summary>
         /// 捜査対象の要素
         /// </summary>
         protected readonly IUIAutomationElement _targetElement;
+        
         /// <summary>
         /// 取得した名前情報
         /// </summary>
-        private Dictionary<string, string> _nameInfos = new Dictionary<string, string>();
+        /// <remarks>
+        /// 本来は都度取得のためメンバに保持する必要はないが、
+        /// zoomで自動スクロール時に取りこぼす可能性を考慮して、
+        /// 一度取得したものは常に保持しておくようにする
+        /// </remarks>
+        private Dictionary<string, string> _nameInfos = new();
 
         /// <summary>
         /// UIAutomation
@@ -36,7 +42,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public AutomationElementChildNameInfoGetter(CUIAutomation automation, IUIAutomationElement element, int? keyDonwMaxCount = null)
+        public UserNameElementGetter(CUIAutomation automation, IUIAutomationElement element, int? keyDonwMaxCount = null)
         {
             _automation = automation;
             _targetElement = element;
@@ -53,7 +59,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// <summary>
         /// 名前情報更新
         /// </summary>
-        public IDictionary<string, string> UpdateNameListInfo(bool isEnableAutoScroll)
+        public IDictionary<string, string> GetNameList(bool isEnableAutoScroll)
         {
             SetAllChildrenName(isEnableAutoScroll);
             return _nameInfos;
@@ -65,9 +71,20 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// <returns></returns>
         protected abstract IUIAutomationCondition GetCondition();
 
+        /// <summary>
+        /// 名前要素リスト取得
+        /// </summary>
+        /// <returns></returns>
+        protected abstract UIAutomationElementArray? GetNameElements();
 
-        protected abstract UIAutomationElementArray? GetElementItems();
-
+        /// <summary>
+        /// 対象要素の名前の文字列を分割したものを取得
+        /// </summary>
+        /// <remarks>
+        /// Zoomではカンマ区切りでコントロールの名前も取得できてしまうので、適宜分割してもらう
+        /// </remarks>
+        /// <param name="elementName"></param>
+        /// <returns></returns>
         protected abstract IEnumerable<string> GetSplittedTargetElementName(string elementName);
 
         /// <summary>
@@ -83,7 +100,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
                 var downCount = 0;
                 do
                 {
-                    var elementItems = GetElementItems();
+                    var elementItems = GetNameElements();
                     if (elementItems == null)
                     {
                         continue;

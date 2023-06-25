@@ -107,7 +107,7 @@ namespace WebMeetingParticipantChecker.Models.Monitoring
         /// <summary>
         /// 監視開始
         /// </summary>
-        public async Task StartMonitoring(Action onJoinStateChangeCallback, IAutomationElementChildNameInfoGetter automationElementTreeInfoGetter)
+        public async Task StartMonitoring(Action onJoinStateChangeCallback, IUserNameElementGetter automationElementTreeInfoGetter)
         {
             _taskCancelStatus.StartMonitoring();
             await MonitoringParticioant(automationElementTreeInfoGetter, onJoinStateChangeCallback);
@@ -196,7 +196,7 @@ namespace WebMeetingParticipantChecker.Models.Monitoring
         /// <summary>
         /// 対象監視
         /// </summary>
-        private async Task MonitoringParticioant(IAutomationElementChildNameInfoGetter treeInfoGetter, Action onJoinStateChangeCallback)
+        private async Task MonitoringParticioant(IUserNameElementGetter treeInfoGetter, Action onJoinStateChangeCallback)
         {
             await Task.Run(async () =>
             {
@@ -228,10 +228,10 @@ namespace WebMeetingParticipantChecker.Models.Monitoring
         /// </summary>
         /// <param name="treeInfoGetter"></param>
         /// <returns></returns>
-        private bool UpdateJoinState(IAutomationElementChildNameInfoGetter treeInfoGetter)
+        private bool UpdateJoinState(IUserNameElementGetter treeInfoGetter)
         {
             bool needNotifyChange = false;
-            var dict = treeInfoGetter.UpdateNameListInfo(IsEnableAutoScroll);
+            var dict = treeInfoGetter.GetNameList(IsEnableAutoScroll);
             foreach (var info in _searchInfos)
             {
                 if (dict.ContainsKey(info.Name) || dict.Where(a => a.Key.Contains(info.Name)).FirstOrDefault().Value != null)

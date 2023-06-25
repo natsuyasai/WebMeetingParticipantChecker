@@ -67,8 +67,8 @@ namespace WebMeetingParticipantChecker.Models.Monitoring.Tests
                 { "ユーザ2","" },
                 { "3ユーザ","" },
             };
-            var moq = new Mock<IAutomationElementChildNameInfoGetter>();
-            moq.Setup(x => x.UpdateNameListInfo(It.IsAny<bool>()))
+            var moq = new Mock<IUserNameElementGetter>();
+            moq.Setup(x => x.GetNameList(It.IsAny<bool>()))
                 .Returns(retDict);
 
             var targetUsers = new List<string>()

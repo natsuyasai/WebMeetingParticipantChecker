@@ -30,7 +30,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
         [TestCategory("プリセットデータ読み込み")]
         public async Task プリセットデータ読み込み()
         {
-            var target = new MainWindowViewModel(new Mock<IMonitoringFacade>().Object);
+            var target = new MainWindowViewModel(new Mock<IMonitoring>().Object);
 
             await target.ReadPresetData();
 
@@ -50,7 +50,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
         [TestCategory("プリセット選択アイテム設定")]
         public async Task 選択したプリセットを保持する()
         {
-            var target = new MainWindowViewModel(new Mock<IMonitoringFacade>().Object);
+            var target = new MainWindowViewModel(new Mock<IMonitoring>().Object);
             var selectedPreset = new PresetInfo(0, "", "テンプレートプリセット1", new List<string>() { "テンプレート1", "テンプレート2" });
             await target.ReadPresetData();
 
@@ -63,7 +63,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
         [TestCategory("監視開始")]
         public async Task 監視開始_捕捉中()
         {
-            var moq = new Mock<IMonitoringFacade>();
+            var moq = new Mock<IMonitoring>();
             moq.Setup(x => x.GetMonitoringInfos())
                 .Returns(new List<MonitoringInfo>()
                 {
@@ -93,7 +93,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
         [TestCategory("監視開始")]
         public async Task 監視開始_Zoomウィンドウ捕捉完了_監視中状態()
         {
-            var moq = new Mock<IMonitoringFacade>();
+            var moq = new Mock<IMonitoring>();
             var target = new MainWindowViewModel(moq.Object);
             SetMonitoringFacadeMock(ref moq, target);
             moq.Setup(x => x.StartMonitoring(It.IsAny<Action>()))
@@ -122,7 +122,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
         [TestCategory("監視停止")]
         public async Task 監視停止()
         {
-            var moq = new Mock<IMonitoringFacade>();
+            var moq = new Mock<IMonitoring>();
             var target = new MainWindowViewModel(moq.Object);
             SetMonitoringFacadeMock(ref moq, target);
             await target.ReadPresetData();
@@ -149,7 +149,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
         [TestCategory("一時停止/再開")]
         public async Task 監視中に一時停止にして再開させる()
         {
-            var moq = new Mock<IMonitoringFacade>();
+            var moq = new Mock<IMonitoring>();
             var target = new MainWindowViewModel(moq.Object);
             SetMonitoringFacadeMock(ref moq, target);
             await target.ReadPresetData();
@@ -183,7 +183,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
         [TestCategory("参加状態手動切り替え")]
         public async Task 監視中_参加状態を手動で参加状態に切り替え()
         {
-            var moq = new Mock<IMonitoringFacade>();
+            var moq = new Mock<IMonitoring>();
             var target = new MainWindowViewModel(moq.Object);
             SetMonitoringFacadeMock(ref moq, target);
             await target.ReadPresetData();
@@ -213,7 +213,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
         [TestCategory("参加状態手動切り替え")]
         public async Task 一時停止中_参加状態を手動で参加状態に切り替え()
         {
-            var moq = new Mock<IMonitoringFacade>();
+            var moq = new Mock<IMonitoring>();
             var target = new MainWindowViewModel(moq.Object);
             SetMonitoringFacadeMock(ref moq, target);
             await target.ReadPresetData();
@@ -244,7 +244,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
         [TestCategory("参加状態を自動に切り替え")]
         public async Task 参加状態を自動に切り替え()
         {
-            var moq = new Mock<IMonitoringFacade>();
+            var moq = new Mock<IMonitoring>();
             var target = new MainWindowViewModel(moq.Object);
             SetMonitoringFacadeMock(ref moq, target);
             await target.ReadPresetData();
@@ -286,7 +286,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
         [TestCategory("参加監視")]
         public async Task 全員参加()
         {
-            var moq = new Mock<IMonitoringFacade>();
+            var moq = new Mock<IMonitoring>();
             var target = new MainWindowViewModel(moq.Object);
             SetMonitoringFacadeMock(ref moq, target);
             await target.ReadPresetData();
@@ -321,7 +321,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
             Assert.IsFalse(target.CanPauseAndResume);
         }
 
-        private void SetMonitoringFacadeMock(ref Mock<IMonitoringFacade> moq, MainWindowViewModel target)
+        private void SetMonitoringFacadeMock(ref Mock<IMonitoring> moq, MainWindowViewModel target)
         {
             moq.Setup(x => x.SelectZoomParticipantElement(It.IsAny<MonitoringType.Target>(), It.IsAny<Action>()))
                 .Callback<MonitoringType.Target, Action>((_, action) =>

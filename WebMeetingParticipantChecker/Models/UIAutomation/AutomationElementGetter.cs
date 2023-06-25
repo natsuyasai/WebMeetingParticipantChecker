@@ -47,8 +47,16 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
             _automation = new CUIAutomation();
         }
 
-        protected abstract string GetTargetName();
+        /// <summary>
+        /// 取得対象の要素の名前
+        /// </summary>
+        /// <returns></returns>
+        protected abstract string GetTargetElementName();
 
+        /// <summary>
+        /// 要素取得時のコンディション取得
+        /// </summary>
+        /// <returns></returns>
         protected abstract IUIAutomationCondition GetConditon();
 
         /// <summary>
@@ -90,7 +98,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
             try
             {
                 Console.WriteLine($"name:[{element.CurrentName}]");
-                if (element.CurrentName.Contains(GetTargetName()))
+                if (element.CurrentName.Contains(GetTargetElementName()))
                 {
                     SetTargetElement(element);
                 }
@@ -106,7 +114,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
                         {
                             break;
                         }
-                        if (ret.CurrentName.Contains(GetTargetName()))
+                        if (ret.CurrentName.Contains(GetTargetElementName()))
                         {
                             SetTargetElement(ret);
                             break;

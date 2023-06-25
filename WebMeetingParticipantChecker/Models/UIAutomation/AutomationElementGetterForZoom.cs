@@ -10,13 +10,13 @@ using WebMeetingParticipantChecker.Models.Monitoring;
 
 namespace WebMeetingParticipantChecker.Models.UIAutomation
 {
-    internal class ZoomAutomationElementGetter : AutomationElementGetter
+    internal class AutomationElementGetterForZoom : AutomationElementGetter
     {
-        public ZoomAutomationElementGetter() : base()
+        public AutomationElementGetterForZoom() : base()
         {
         }
 
-        protected override string GetTargetName()
+        protected override string GetTargetElementName()
         {
             return AppSettingsManager.ZoomParticipantListName;
         }

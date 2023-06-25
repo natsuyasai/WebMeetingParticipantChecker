@@ -9,13 +9,13 @@ using WebMeetingParticipantChecker.Models.Monitoring;
 
 namespace WebMeetingParticipantChecker.Models.UIAutomation
 {
-    internal class TeamsAutomationElementGetter : AutomationElementGetter
+    internal class AutomationElementGetterForTeams : AutomationElementGetter
     {
-        public TeamsAutomationElementGetter() : base()
+        public AutomationElementGetterForTeams() : base()
         {
         }
 
-        protected override string GetTargetName()
+        protected override string GetTargetElementName()
         {
             return AppSettingsManager.TeamsParticipantListName;
         }

@@ -11,7 +11,7 @@ using WebMeetingParticipantCheckerTests.TestUtils;
 namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
 {
     [TestClass()]
-    public class AutomationElementChildNameInfoGetterTests
+    public class UserNameElementGetterForZoomTests
     {
         [TestMethod()]
         [TestCategory("名前情報更新")]
@@ -19,7 +19,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
         {
             // 試験対象生成
             var fakeRootElement = new UIAutomationElementFake();
-            var target = new ZoomAutomationElementChildNameInfoGetter(new CUIAutomation(), fakeRootElement, 0);
+            var target = new UserNameElementGetterForZoom(new CUIAutomation(), fakeRootElement, 0);
 
             // ダミーの要素情報生成
             var elemArrayFake = new UIAutomationElementArrayFake();
@@ -42,7 +42,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
             fakeRootElement.UIAutomationElementArrayFake = elemArrayFake;
 
             // 実行
-            var ret = target.UpdateNameListInfo(false);
+            var ret = target.GetNameList(false);
             CollectionAssert.AreEqual(actual.Keys, ret.Keys.ToList());
             UIAutomationElementFake lastItem = (UIAutomationElementFake)fakeRootElement.UIAutomationElementArrayFake.GetElement(fakeRootElement.UIAutomationElementArrayFake.Length - 1);
             Assert.AreEqual(false, lastItem.selectionItemPatternFake.IsSelected);
@@ -54,7 +54,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
         {
             // 試験対象生成
             var fakeRootElement = new UIAutomationElementFake();
-            var target = new ZoomAutomationElementChildNameInfoGetter(new CUIAutomation(), fakeRootElement, 10);
+            var target = new UserNameElementGetterForZoom(new CUIAutomation(), fakeRootElement, 10);
 
             // ダミーの要素情報生成
             var elemArrayFake = new UIAutomationElementArrayFake();
@@ -103,7 +103,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
             };
 
             // 実行
-            var ret = target.UpdateNameListInfo(true);
+            var ret = target.GetNameList(true);
             CollectionAssert.AreEqual(actual.Keys, ret.Keys.ToList());
             Assert.AreEqual(true, lastFakeItem.selectionItemPatternFake.IsSelected);
             Assert.AreEqual(true, lastFakeItem2.selectionItemPatternFake.IsSelected);
@@ -115,7 +115,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
         {
             // 試験対象生成
             var fakeRootElement = new UIAutomationElementFake();
-            var target = new ZoomAutomationElementChildNameInfoGetter(new CUIAutomation(), fakeRootElement, 10);
+            var target = new UserNameElementGetterForZoom(new CUIAutomation(), fakeRootElement, 10);
 
             // ダミーの要素情報生成
             var elemArrayFake = new UIAutomationElementArrayFake();
@@ -164,7 +164,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
             };
 
             // 実行
-            var ret = target.UpdateNameListInfo(true);
+            var ret = target.GetNameList(true);
             CollectionAssert.AreEqual(actual.Keys, ret.Keys.ToList());
             Assert.AreEqual(true, lastFakeItem.selectionItemPatternFake.IsSelected);
         }
@@ -177,7 +177,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
             // 試験対象生成
             const int MaxCount = 10;
             var fakeRootElement = new UIAutomationElementFake();
-            var target = new ZoomAutomationElementChildNameInfoGetter(new CUIAutomation(), fakeRootElement, MaxCount);
+            var target = new UserNameElementGetterForZoom(new CUIAutomation(), fakeRootElement, MaxCount);
 
             // ダミーの要素情報生成
             var elemArrayFake = new UIAutomationElementArrayFake();
@@ -228,7 +228,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
             lastFakeItem.selectionItemPatternFake.OnSelect = onSelect;
 
             // 実行
-            var ret = target.UpdateNameListInfo(true);
+            var ret = target.GetNameList(true);
             CollectionAssert.AreEqual(actual.Keys, ret.Keys.ToList());
             Assert.AreEqual(true, lastFakeItem.selectionItemPatternFake.IsSelected);
             Assert.AreEqual(false, lastFakeItem2.selectionItemPatternFake.IsSelected);

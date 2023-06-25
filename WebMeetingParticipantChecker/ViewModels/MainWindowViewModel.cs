@@ -66,11 +66,11 @@ namespace WebMeetingParticipantChecker.ViewModels
         /// <summary>
         /// プリセット関連
         /// </summary>
-        private IPresetModel _presetList { get; set; } = default!;
+        private IPreset _presetList { get; set; } = default!;
         /// <summary>
         /// 監視関連
         /// </summary>
-        private IMonitoringFacade _monitoringFacade { get; set; }
+        private IMonitoring _monitoringFacade { get; set; }
 
 
         /// <summary>
@@ -314,7 +314,7 @@ namespace WebMeetingParticipantChecker.ViewModels
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public MainWindowViewModel(IMonitoringFacade monitoringFacade)
+        public MainWindowViewModel(IMonitoring monitoringFacade)
         {
             _status = StatusValue.Init;
             _monitoringFacade = monitoringFacade;

@@ -7,9 +7,9 @@ using UIAutomationClient;
 
 namespace WebMeetingParticipantChecker.Models.UIAutomation
 {
-    internal class TeamsAutomationElementChildNameInfoGetter : AutomationElementChildNameInfoGetter
+    internal class UserNameElementGetterForTeams : UserNameElementGetter
     {
-        public TeamsAutomationElementChildNameInfoGetter(CUIAutomation automation, IUIAutomationElement element, int? keyDonwMaxCount = null)
+        public UserNameElementGetterForTeams(CUIAutomation automation, IUIAutomationElement element, int? keyDonwMaxCount = null)
             : base(automation, element, keyDonwMaxCount)
         {
         }
@@ -19,7 +19,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
             return _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_TreeItemControlTypeId);
         }
 
-        protected override UIAutomationElementArray? GetElementItems()
+        protected override UIAutomationElementArray? GetNameElements()
         {
             var elements = new List<IUIAutomationElement>();
             var items = _targetElement.FindAll(TreeScope.TreeScope_Descendants, GetCondition());

@@ -30,10 +30,10 @@ namespace WebMeetingParticipantChecker
             var services = new ServiceCollection()
                 .AddSingleton<AutomationElementGetter[]>(
                 provider => new AutomationElementGetter[] {
-                    new ZoomAutomationElementGetter(),
-                    new TeamsAutomationElementGetter() })
+                    new AutomationElementGetterForZoom(),
+                    new AutomationElementGetterForTeams() })
                 .AddSingleton<MonitoringModel>()
-                .AddSingleton<IMonitoringFacade, MonitoringFacade>()
+                .AddSingleton<IMonitoring, MonitoringService>()
                 .AddTransient<MainWindowViewModel>();
 
             return services.BuildServiceProvider();

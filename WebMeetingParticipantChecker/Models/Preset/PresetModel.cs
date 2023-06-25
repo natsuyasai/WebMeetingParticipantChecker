@@ -8,7 +8,7 @@ using static WebMeetingParticipantChecker.Models.Preset.PresetInfo;
 
 namespace WebMeetingParticipantChecker.Models.Preset
 {
-    internal class PresetModel : IPresetModel
+    internal class PresetModel : IPreset
     {
         /// <summary>
         /// プリセット

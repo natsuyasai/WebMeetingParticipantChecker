@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace WebMeetingParticipantChecker.Models.Monitoring
 {
-    internal interface IMonitoringFacade
+    internal interface IMonitoring
     {
         IEnumerable<MonitoringInfo> GetMonitoringInfos();
         bool IsAllJoin();

@@ -8,9 +8,9 @@ using WebMeetingParticipantChecker.Models.UIAutomation;
 namespace WebMeetingParticipantChecker.Models.Monitoring
 {
     /// <summary>
-    /// 監視関連ファサードクラス
+    /// 監視関連
     /// </summary>
-    internal class MonitoringFacade : IMonitoringFacade
+    internal class MonitoringService : IMonitoring
     {
         /// <summary>
         /// 参加者リスト取得
@@ -27,7 +27,7 @@ namespace WebMeetingParticipantChecker.Models.Monitoring
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public MonitoringFacade()
+        public MonitoringService()
         {
             _automationElementGetter = App.Services.GetService<AutomationElementGetter[]>()!;
             _monitoringModel = App.Services.GetService<MonitoringModel>()!;
@@ -94,26 +94,26 @@ namespace WebMeetingParticipantChecker.Models.Monitoring
             {
                 throw new ArgumentException("対象の要素が見つかっていません");
             }
-            Console.WriteLine("タスク開始"); ;
-            await _monitoringModel.StartMonitoring(onJoinStateChangeCallback, GetAutomationElementChildNameInfoGetter());
+            Console.WriteLine("タスク開始");
+            await _monitoringModel.StartMonitoring(onJoinStateChangeCallback, GetUserNameElementGetter());
         }
 
         /// <summary>
         /// 子要素取得クラス取得
         /// </summary>
         /// <returns></returns>
-        private AutomationElementChildNameInfoGetter GetAutomationElementChildNameInfoGetter()
+        private UserNameElementGetter GetUserNameElementGetter()
         {
             return _targetType switch
             {
                 MonitoringType.Target.Zoom =>
-                new ZoomAutomationElementChildNameInfoGetter(
+                new UserNameElementGetterForZoom(
                     new CUIAutomation(), _automationElementGetter[(int)_targetType].TargetElement!, null),
                 MonitoringType.Target.Teams =>
-                new TeamsAutomationElementChildNameInfoGetter(
+                new UserNameElementGetterForTeams(
                     new CUIAutomation(), _automationElementGetter[(int)_targetType].TargetElement!, null),
                 _ =>
-                new ZoomAutomationElementChildNameInfoGetter(
+                new UserNameElementGetterForZoom(
                     new CUIAutomation(), _automationElementGetter[(int)_targetType].TargetElement!, null),
             };
         }
