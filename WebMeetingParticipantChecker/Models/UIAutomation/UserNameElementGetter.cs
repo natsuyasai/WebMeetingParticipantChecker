@@ -26,7 +26,9 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// zoomで自動スクロール時に取りこぼす可能性を考慮して、
         /// 一度取得したものは常に保持しておくようにする
         /// </remarks>
+#pragma warning disable IDE0044 // 読み取り専用修飾子を追加します
         private Dictionary<string, string> _nameInfos = new();
+#pragma warning restore IDE0044 // 読み取り専用修飾子を追加します
 
         /// <summary>
         /// UIAutomation
@@ -62,8 +64,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// </summary>
         public IDictionary<string, string> GetNameList(bool isEnableAutoScroll)
         {
-            SetAllChildrenName(isEnableAutoScroll);
-            return _nameInfos;
+            return GetAllChildrenName(isEnableAutoScroll);
         }
 
         /// <summary>
@@ -91,7 +92,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// <summary>
         /// 全子要素の名前設定
         /// </summary>
-        private void SetAllChildrenName(bool isEnableAutoScroll)
+        private Dictionary<string, string> GetAllChildrenName(bool isEnableAutoScroll)
         {
             try
             {
@@ -167,7 +168,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
             {
                 _logger.Error(ex, "監視実行エラー");
             }
-            return;
+            return _nameInfos;
         }
     }
 }
