@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UIAutomationClient;
+﻿using UIAutomationClient;
 using WebMeetingParticipantChecker.Models.Config;
-using WebMeetingParticipantChecker.Models.Monitoring;
 
 namespace WebMeetingParticipantChecker.Models.UIAutomation
 {

@@ -9,6 +9,7 @@
     <UseWindowsForms>True</UseWindowsForms>
     <PackageIcon>icon.ico</PackageIcon>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>

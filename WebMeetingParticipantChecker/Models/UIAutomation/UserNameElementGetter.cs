@@ -4,9 +4,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using UIAutomationClient;
 using WebMeetingParticipantChecker.Models.Config;
-using WebMeetingParticipantChecker.Models.Monitoring;
 using WebMeetingParticipantChecker.Utils;
-using static WebMeetingParticipantChecker.Models.Monitoring.MonitoringType;
 
 namespace WebMeetingParticipantChecker.Models.UIAutomation
 {
@@ -19,7 +17,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// 捜査対象の要素
         /// </summary>
         protected readonly IUIAutomationElement _targetElement;
-        
+
         /// <summary>
         /// 取得した名前情報
         /// </summary>
@@ -165,9 +163,9 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
                     }
                 } while (isSearch);
             }
-            catch
+            catch (Exception ex)
             {
-                _logger.Info("エラー");
+                _logger.Error(ex, "監視実行エラー");
             }
             return;
         }

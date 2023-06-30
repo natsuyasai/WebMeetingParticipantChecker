@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using UIAutomationClient;
 
 namespace WebMeetingParticipantChecker.Models.UIAutomation
@@ -14,7 +10,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// </summary>
         private readonly char[] ElementTargetNameSplitChars = new char[] { ',' };
 
-        public UserNameElementGetterForZoom(CUIAutomation automation, IUIAutomationElement element, int? keyDonwMaxCount = null) 
+        public UserNameElementGetterForZoom(CUIAutomation automation, IUIAutomationElement element, int? keyDonwMaxCount = null)
             : base(automation, element, keyDonwMaxCount)
         {
         }
@@ -27,7 +23,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         protected override UIAutomationElementArray? GetNameElements()
         {
             var items = _targetElement.FindAll(TreeScope.TreeScope_Descendants, GetCondition());
-            return new UIAutomationElementArray(items); 
+            return new UIAutomationElementArray(items);
         }
 
         protected override IEnumerable<string> GetSplittedTargetElementName(string elementName)

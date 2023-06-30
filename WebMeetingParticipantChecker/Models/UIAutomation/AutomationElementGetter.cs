@@ -1,11 +1,6 @@
 ﻿using NLog;
 using System;
-using System.Linq;
-using System.Windows.Forms;
 using UIAutomationClient;
-using WebMeetingParticipantChecker.Models.Monitoring;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
-using static WebMeetingParticipantChecker.Models.Monitoring.MonitoringType;
 
 namespace WebMeetingParticipantChecker.Models.UIAutomation
 {
@@ -126,9 +121,9 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                _logger.Error("要素確認失敗");
+                _logger.Error(ex, "要素確認失敗");
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualBasic.FileIO;
 using NLog;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace WebMeetingParticipantChecker.Models.Preset
         /// <summary>
         /// プリセット
         /// </summary>
-        private List<PresetInfo> _preset = new List<PresetInfo>();
+        private List<PresetInfo> _preset = new();
 
         /// <summary>
         /// 現在のインデックス
@@ -146,9 +147,10 @@ namespace WebMeetingParticipantChecker.Models.Preset
                 _preset.Sort(new PresetInfoNaturalStringComparer());
                 return Task.FromResult(true);
             }
-            catch
+            catch (Exception ex)
             {
                 _preset = new List<PresetInfo>() { new ErrorPresetInfo() };
+                _logger.Error(ex, "読み込み失敗");
                 return Task.FromResult(false);
             }
         }
@@ -186,18 +188,17 @@ namespace WebMeetingParticipantChecker.Models.Preset
                     if (Directory.GetFiles(targetFolder, "*csv", System.IO.SearchOption.TopDirectoryOnly).Length == 0)
                     {
                         var path = Path.Combine(targetFolder, "テンプレートプリセット1.csv");
-                        using (StreamWriter streamWriter = new StreamWriter(File.Open(path, FileMode.Create), DefEncoding))
-                        {
-                            streamWriter.WriteLine("テンプレート1");
-                            streamWriter.WriteLine("テンプレート2");
-                        }
+                        using StreamWriter streamWriter = new(File.Open(path, FileMode.Create), DefEncoding);
+                        streamWriter.WriteLine("テンプレート1");
+                        streamWriter.WriteLine("テンプレート2");
                         return true;
                     }
                 }
                 return false;
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.Error(ex, "初期ファイル生成失敗");
                 return false;
             }
         }

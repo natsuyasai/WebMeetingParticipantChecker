@@ -23,9 +23,12 @@ namespace WebMeetingParticipantChecker.Models.Monitoring
         /// </summary>
         private readonly MonitoringModel _monitoringModel;
 
-        private MonitoringType.Target _targetType = MonitoringType.Target.Zoom;
-
         private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// 監視対象
+        /// </summary>
+        private MonitoringType.Target _targetType = MonitoringType.Target.Zoom;
 
         /// <summary>
         /// コンストラクタ

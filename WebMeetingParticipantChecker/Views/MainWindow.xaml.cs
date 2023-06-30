@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using NLog;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,8 +13,10 @@ namespace WebMeetingParticipantChecker.Views
     /// </summary>
     public partial class MainWindow : Window
     {
-        private MainWindowViewModel _mainWindowViewModel;
-        private SettingDialog _settingDialog = new SettingDialog();
+        private readonly MainWindowViewModel _mainWindowViewModel;
+        private readonly SettingDialog _settingDialog = new();
+
+        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
         public MainWindow()
         {
@@ -43,6 +46,7 @@ namespace WebMeetingParticipantChecker.Views
 
         private void HandleClose(object sender, RoutedEventArgs e)
         {
+            _logger.Info("終了");
             _settingDialog.Close();
             SystemCommands.CloseWindow(this);
         }
@@ -58,17 +62,17 @@ namespace WebMeetingParticipantChecker.Views
             if (WindowState != WindowState.Maximized)
             {
                 SystemCommands.MaximizeWindow(this);
-                if (sender is Button)
+                if (sender is Button button)
                 {
-                    ((Button)sender).Content = "2";
+                    button.Content = "2";
                 }
             }
             else
             {
                 SystemCommands.RestoreWindow(this);
-                if (sender is Button)
+                if (sender is Button button)
                 {
-                    ((Button)sender).Content = "1";
+                    button.Content = "1";
                 }
             }
         }
@@ -76,7 +80,7 @@ namespace WebMeetingParticipantChecker.Views
         private void WindowStateChanged(object sender, object e)
         {
             // 最大化，縮小に合わせてボタンコンテンツを切り替える
-            if (!(FindName("MaximizeButton") is Button button))
+            if (FindName("MaximizeButton") is not Button button)
             {
                 return;
             }

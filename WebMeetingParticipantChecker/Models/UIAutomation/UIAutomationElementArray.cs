@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UIAutomationClient;
 
 namespace WebMeetingParticipantChecker.Models.UIAutomation
@@ -28,13 +26,13 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
 
         public IUIAutomationElement GetElement(int index)
         {
-            if (_elements.Count() < index)
+            if (_elements.Count < index)
             {
                 throw new ArgumentException("", nameof(index));
             }
             return _elements.ElementAt(index);
         }
 
-        public int Length => _elements.Count();
+        public int Length => _elements.Count;
     }
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WebMeetingParticipantChecker.Models.Config
+﻿namespace WebMeetingParticipantChecker.Models.Config
 {
     internal class ConfigrationParameter
     {

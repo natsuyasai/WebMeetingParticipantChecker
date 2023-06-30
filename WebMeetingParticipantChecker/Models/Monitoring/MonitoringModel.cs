@@ -44,18 +44,18 @@ namespace WebMeetingParticipantChecker.Models.Monitoring
         /// <summary>
         /// 監視情報
         /// </summary>
-        private List<MonitoringInfo> _monitoringInfos = new List<MonitoringInfo>();
-        private List<MonitoringInfo> _searchInfos = new List<MonitoringInfo>();
+        private List<MonitoringInfo> _monitoringInfos = new();
+        private List<MonitoringInfo> _searchInfos = new();
 
         /// <summary>
         /// タスクキャンセル状態管理
         /// </summary>
-        private TaskCancelStatus _taskCancelStatus = new TaskCancelStatus();
+        private readonly TaskCancelStatus _taskCancelStatus = new();
 
         /// <summary>
         /// タスク一時停止用オブジェクト
         /// </summary>
-        private SemaphoreSlim _taskPauseObject = new SemaphoreSlim(1, 1);
+        private readonly SemaphoreSlim _taskPauseObject = new(1, 1);
 
         /// <summary>
         /// タスク待機時間[ms]
@@ -144,9 +144,9 @@ namespace WebMeetingParticipantChecker.Models.Monitoring
                 {
                     _taskPauseObject.Release();
                 }
-                catch
+                catch (Exception ex)
                 {
-                    _logger.Error("開放失敗");
+                    _logger.Error(ex, "開放失敗");
                 }
             }
         }

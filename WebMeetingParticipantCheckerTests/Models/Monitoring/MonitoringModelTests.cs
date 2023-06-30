@@ -39,7 +39,7 @@ namespace WebMeetingParticipantChecker.Models.Monitoring.Tests
             target.RegisterMonitoringTargets(targetUsers);
 
             var monitoringInfos = target.GetMonitoringInfos().ToList();
-            Assert.AreEqual(3, monitoringInfos.Count());
+            Assert.AreEqual(3, monitoringInfos.Count);
             Assert.AreEqual(targetUsers[0], monitoringInfos[0].Name);
             Assert.AreEqual(targetUsers[1], monitoringInfos[1].Name);
             Assert.AreEqual(targetUsers[2], monitoringInfos[2].Name);

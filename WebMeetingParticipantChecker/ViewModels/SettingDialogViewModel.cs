@@ -3,11 +3,9 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using NLog;
 using System;
-using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
-using System.Windows.Shapes;
 using WebMeetingParticipantChecker.Models.Config;
 using ZoomParticipantChecker.Model.Message;
 
@@ -102,11 +100,11 @@ namespace WebMeetingParticipantChecker.ViewModels
             }
             catch (Exception e)
             {
-                _logger.Info(e);
+                _logger.Error(e);
             }
         }
 
-        private ConfigrationParameter? ReadCurrentSetting(string path)
+        private static ConfigrationParameter? ReadCurrentSetting(string path)
         {
             using var reader = new StreamReader(path);
             var json = reader.ReadToEnd();

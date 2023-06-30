@@ -1,21 +1,13 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+using NLog;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Media;
-using System.Windows.Threading;
 using WebMeetingParticipantChecker.Models.Config;
 using WebMeetingParticipantChecker.Models.Monitoring;
 using WebMeetingParticipantChecker.Models.UIAutomation;
 using WebMeetingParticipantChecker.ViewModels;
-using WebMeetingParticipantChecker.Views;
 
 namespace WebMeetingParticipantChecker
 {
@@ -24,6 +16,8 @@ namespace WebMeetingParticipantChecker
     /// </summary>
     partial class App : Application
     {
+        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
+
         public static IServiceProvider Services { get; } = ConfigureServices();
 
         private static IServiceProvider ConfigureServices()
@@ -51,6 +45,7 @@ namespace WebMeetingParticipantChecker
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            _logger.Info("起動");
             base.OnStartup(e);
 
             // テーマ更新
@@ -70,7 +65,7 @@ namespace WebMeetingParticipantChecker
         /// ダークモード：0 ライトモード：1 値がないなどのエラー：-1
         /// using Microsoft.Win32;()
         /// 
-        private int GetAppsUseLightTheme()
+        private static int GetAppsUseLightTheme()
         {
             int getmode = -1;
             string rKeyName = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";

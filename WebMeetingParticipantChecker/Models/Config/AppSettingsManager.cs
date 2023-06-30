@@ -1,9 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using System;
-using System.Configuration;
-using System.IO;
-using System.Linq;
-using System.Text.Json;
 
 namespace WebMeetingParticipantChecker.Models.Config
 {

@@ -67,11 +67,11 @@ namespace WebMeetingParticipantChecker.ViewModels
         /// <summary>
         /// プリセット関連
         /// </summary>
-        private IPreset _presetList { get; set; } = default!;
+        private IPreset _presetService = default!;
         /// <summary>
         /// 監視関連
         /// </summary>
-        private IMonitoring _monitoringFacade { get; set; }
+        private readonly IMonitoring _monitoringService;
 
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace WebMeetingParticipantChecker.ViewModels
 
         #region 表示データ
 
-        public string Title
+        public static string Title
         {
             get
             {
@@ -100,7 +100,7 @@ namespace WebMeetingParticipantChecker.ViewModels
         {
             get
             {
-                return new ObservableCollection<PresetInfo>(_presetList.GetPreset());
+                return new ObservableCollection<PresetInfo>(_presetService.GetPreset());
             }
         }
 
@@ -111,7 +111,7 @@ namespace WebMeetingParticipantChecker.ViewModels
         {
             get
             {
-                return _presetList.GetCurrentPresetDataList();
+                return _presetService.GetCurrentPresetDataList();
             }
         }
 
@@ -165,7 +165,7 @@ namespace WebMeetingParticipantChecker.ViewModels
         {
             get
             {
-                return new ObservableCollection<MonitoringInfo>(_monitoringFacade.GetMonitoringInfos().OrderBy(info => info.IsJoin));
+                return new ObservableCollection<MonitoringInfo>(_monitoringService.GetMonitoringInfos().OrderBy(info => info.IsJoin));
             }
         }
 
@@ -179,8 +179,8 @@ namespace WebMeetingParticipantChecker.ViewModels
             {
                 if (_status == StatusValue.Monitoring || _status == StatusValue.Pause)
                 {
-                    int maxcount = _monitoringFacade.GetMonitoringInfos().Count();
-                    int joincount = _monitoringFacade.GetMonitoringInfos().Count(item => item.IsJoin);
+                    int maxcount = _monitoringService.GetMonitoringInfos().Count();
+                    int joincount = _monitoringService.GetMonitoringInfos().Count(item => item.IsJoin);
                     return StatusString[(int)_status] + $"(参加：{joincount}、未参加：{maxcount - joincount})";
                 }
                 else
@@ -195,10 +195,10 @@ namespace WebMeetingParticipantChecker.ViewModels
         /// </summary>
         public bool IsEnableAutoScroll
         {
-            get { return _monitoringFacade.IsEnableAutoScroll(); }
+            get { return _monitoringService.IsEnableAutoScroll(); }
             set
             {
-                _monitoringFacade.SetEnableAutoScroll(value);
+                _monitoringService.SetEnableAutoScroll(value);
                 OnPropertyChanged(nameof(IsEnableAutoScroll));
             }
         }
@@ -317,10 +317,10 @@ namespace WebMeetingParticipantChecker.ViewModels
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public MainWindowViewModel(IMonitoring monitoringFacade)
+        public MainWindowViewModel(IMonitoring monitoring)
         {
             _status = StatusValue.Init;
-            _monitoringFacade = monitoringFacade;
+            _monitoringService = monitoring;
             OnPropertyChanged(nameof(StatusDisplayString));
         }
 
@@ -331,10 +331,10 @@ namespace WebMeetingParticipantChecker.ViewModels
         {
             await Task.Run(() =>
             {
-                _presetList = new PresetModel();
-                _presetList.Clear();
+                _presetService = new PresetModel();
+                _presetService.Clear();
                 OnPropertyChanged(nameof(PresetNames));
-                _presetList.ReadPresetData(System.AppDomain.CurrentDomain.BaseDirectory, PresetFolderName);
+                _presetService.ReadPresetData(System.AppDomain.CurrentDomain.BaseDirectory, PresetFolderName);
                 OnPropertyChanged(nameof(PresetNames));
             });
         }
@@ -344,7 +344,7 @@ namespace WebMeetingParticipantChecker.ViewModels
         /// </summary>
         private void EditPresetData()
         {
-            Process.Start(new ProcessStartInfo((_presetList.GetCurrntPresetFilePath())) { UseShellExecute = true });
+            Process.Start(new ProcessStartInfo((_presetService.GetCurrntPresetFilePath())) { UseShellExecute = true });
         }
 
         /// <summary>
@@ -353,7 +353,7 @@ namespace WebMeetingParticipantChecker.ViewModels
         /// <param name="presetInfo"></param>
         public void SetSelectedPreset(PresetInfo presetInfo)
         {
-            _presetList.UpdateCurrentIndex(presetInfo.Id);
+            _presetService.UpdateCurrentIndex(presetInfo.Id);
             OnPropertyChanged(nameof(SelectPresetData));
         }
 
@@ -380,12 +380,12 @@ namespace WebMeetingParticipantChecker.ViewModels
             _logger.Info("監視開始");
             // 監視開始
             UpdateStatus(StatusValue.PreparingTargetWindowCaputure);
-            _monitoringFacade.RegisterMonitoringTargets(_presetList.GetCurrentPresetDataList());
+            _monitoringService.RegisterMonitoringTargets(_presetService.GetCurrentPresetDataList());
             OnPropertyChanged(nameof(MonitoringInfos));
 
             // Zoomの参加者ウィンドウ検索開始
             UpdateStatus(StatusValue.TargetWindowCaputure);
-            await _monitoringFacade.SelectZoomParticipantElement(_targetType, OnDetectedTargetElemetCallback);
+            await _monitoringService.SelectZoomParticipantElement(_targetType, OnDetectedTargetElemetCallback);
         }
 
         /// <summary>
@@ -395,7 +395,7 @@ namespace WebMeetingParticipantChecker.ViewModels
         {
             _logger.Info("対象要素検出");
             UpdateMonitoringStates();
-            await _monitoringFacade.StartMonitoring(OnJoinStateChangeCallback);
+            await _monitoringService.StartMonitoring(OnJoinStateChangeCallback);
         }
 
         /// <summary>
@@ -416,7 +416,7 @@ namespace WebMeetingParticipantChecker.ViewModels
             await Task.Run(() =>
             {
                 UpdateStatus(StatusValue.Init);
-                _monitoringFacade.StopMonitoring();
+                _monitoringService.StopMonitoring();
                 OnPropertyChanged(nameof(MonitoringInfos));
             });
         }
@@ -429,7 +429,7 @@ namespace WebMeetingParticipantChecker.ViewModels
             _logger.Info("監視停止(自動判定)");
             await Task.Run(() =>
             {
-                _monitoringFacade.StopMonitoring();
+                _monitoringService.StopMonitoring();
                 OnPropertyChanged(nameof(MonitoringInfos));
             });
         }
@@ -442,13 +442,13 @@ namespace WebMeetingParticipantChecker.ViewModels
             if (_status != StatusValue.Pause)
             {
                 _logger.Info("一時停止");
-                _monitoringFacade.Pause();
+                _monitoringService.Pause();
                 UpdateStatus(StatusValue.Pause);
             }
             else
             {
                 _logger.Info("再開");
-                _monitoringFacade.Resume();
+                _monitoringService.Resume();
                 UpdateMonitoringStates();
             }
         }
@@ -460,7 +460,7 @@ namespace WebMeetingParticipantChecker.ViewModels
         {
             if (target is int @int)
             {
-                _monitoringFacade.SwitchingParticipantState(@int);
+                _monitoringService.SwitchingParticipantState(@int);
                 OnPropertyChanged(nameof(MonitoringInfos));
                 if (_status == StatusValue.Monitoring)
                 {
@@ -482,7 +482,7 @@ namespace WebMeetingParticipantChecker.ViewModels
         {
             if (target is int @int)
             {
-                _monitoringFacade.SetParticipantAuto(@int);
+                _monitoringService.SetParticipantAuto(@int);
                 OnPropertyChanged(nameof(MonitoringInfos));
             }
         }
@@ -492,7 +492,7 @@ namespace WebMeetingParticipantChecker.ViewModels
         /// </summary>
         private void UpdateMonitoringStates()
         {
-            if (_monitoringFacade.IsAllJoin())
+            if (_monitoringService.IsAllJoin())
             {
                 _logger.Info("全員参加済み");
                 UpdateStatus(StatusValue.Complete);

@@ -7,7 +7,7 @@ namespace WebMeetingParticipantChecker.Models.Preset
     /// <summary>
     /// プリセット情報
     /// </summary>
-    internal class PresetInfo
+    internal partial class PresetInfo
     {
         /// <summary>
         /// 識別子 
@@ -53,10 +53,10 @@ namespace WebMeetingParticipantChecker.Models.Preset
         /// 自然順ソート用
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        internal static class SafeNativeMethods
+        internal static partial class SafeNativeMethods
         {
-            [DllImport("shlwapi.dll", CharSet = CharSet.Unicode)]
-            public static extern int StrCmpLogicalW(string psz1, string psz2);
+            [LibraryImport("shlwapi.dll", StringMarshalling = StringMarshalling.Utf16)]
+            public static partial int StrCmpLogicalW(string psz1, string psz2);
         }
 
         public sealed class PresetInfoNaturalStringComparer : IComparer<PresetInfo>

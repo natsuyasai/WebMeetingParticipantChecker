@@ -33,12 +33,12 @@ namespace WebMeetingParticipantChecker.Views
 
         private void HandleTextBoxGotFocus(object sender, RoutedEventArgs e)
         {
-            if (!(sender is TextBox tb)) { return; }
+            if (sender is not TextBox tb) { return; }
             tb.SelectAll();
         }
         private void HandleMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (!(sender is TextBox tb)) { return; }
+            if (sender is not TextBox tb) { return; }
 
             if (tb.IsFocused) { return; }
             tb.Focus();
