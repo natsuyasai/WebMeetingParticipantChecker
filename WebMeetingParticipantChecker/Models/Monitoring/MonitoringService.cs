@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -24,6 +25,8 @@ namespace WebMeetingParticipantChecker.Models.Monitoring
 
         private MonitoringType.Target _targetType = MonitoringType.Target.Zoom;
 
+        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// コンストラクタ
         /// </summary>
@@ -45,7 +48,7 @@ namespace WebMeetingParticipantChecker.Models.Monitoring
             {
                 _automationElementGetter[(int)_targetType].SubscribeToFocusChange(() =>
                 {
-                    Console.WriteLine("対象エレメント検知");
+                    _logger.Info("対象エレメント検知");
                     onDetectedTargetElemetCallback();
                 });
             });
@@ -92,9 +95,10 @@ namespace WebMeetingParticipantChecker.Models.Monitoring
         {
             if (_automationElementGetter[(int)_targetType].TargetElement == null)
             {
+                _logger.Error("対象の要素が見つかっていません");
                 throw new ArgumentException("対象の要素が見つかっていません");
             }
-            Console.WriteLine("タスク開始");
+            _logger.Info("タスク開始");
             await _monitoringModel.StartMonitoring(onJoinStateChangeCallback, GetUserNameElementGetter());
         }
 
@@ -123,7 +127,7 @@ namespace WebMeetingParticipantChecker.Models.Monitoring
         /// </summary>
         public void Pause()
         {
-            Console.WriteLine("タスク一時停止");
+            _logger.Info("タスク一時停止");
             _monitoringModel.Pause();
         }
 
@@ -132,7 +136,7 @@ namespace WebMeetingParticipantChecker.Models.Monitoring
         /// </summary>
         public void Resume()
         {
-            Console.WriteLine("タスク再開");
+            _logger.Info("タスク再開");
             _monitoringModel.Resume();
         }
 
@@ -141,7 +145,7 @@ namespace WebMeetingParticipantChecker.Models.Monitoring
         /// </summary>
         public void StopMonitoring()
         {
-            Console.WriteLine("タスク停止");
+            _logger.Info("タスク停止");
             _automationElementGetter[(int)_targetType].UnsubscribeFocusChange();
             _monitoringModel.StopMonitoring();
         }

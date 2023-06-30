@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NLog;
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using UIAutomationClient;
@@ -38,6 +39,8 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// キーダウンイベントを発生さえる最大回数(1回の更新あたり)
         /// </summary>
         private readonly int KeyDonwMaxCount = 200;
+
+        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// コンストラクタ
@@ -164,7 +167,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
             }
             catch
             {
-                Console.WriteLine("エラー");
+                _logger.Info("エラー");
             }
             return;
         }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualBasic.FileIO;
+using NLog;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -24,6 +25,8 @@ namespace WebMeetingParticipantChecker.Models.Preset
         /// デフォルトエンコード
         /// </summary>
         private readonly Encoding DefEncoding = Encoding.UTF8;
+
+        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// コンストラクタ
@@ -175,6 +178,7 @@ namespace WebMeetingParticipantChecker.Models.Preset
         /// <param name="targetFolder"></param>
         private bool CreateInitFile(string targetFolder)
         {
+            _logger.Info("プリセットファイル生成");
             try
             {
                 if (Directory.Exists(targetFolder))

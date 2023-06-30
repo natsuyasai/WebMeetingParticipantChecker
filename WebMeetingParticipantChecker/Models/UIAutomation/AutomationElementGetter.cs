@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NLog;
+using System;
 using System.Linq;
 using System.Windows.Forms;
 using UIAutomationClient;
@@ -59,6 +60,8 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// <returns></returns>
         protected abstract IUIAutomationCondition GetConditon();
 
+        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// フォーカスイベント購読
         /// </summary>
@@ -91,13 +94,13 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// </summary>
         private void OnFocusChange(IUIAutomationElement element)
         {
-            if (TargetElement != null || element.CurrentName == null)
-            {
-                return;
-            }
             try
             {
-                Console.WriteLine($"name:[{element.CurrentName}]");
+                if (TargetElement != null || element.CurrentName == null)
+                {
+                    return;
+                }
+                _logger.Info($"name:[{element.CurrentName}]");
                 if (element.CurrentName.Contains(GetTargetElementName()))
                 {
                     SetTargetElement(element);
@@ -125,7 +128,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
             }
             catch
             {
-                Console.WriteLine("要素確認失敗");
+                _logger.Error("要素確認失敗");
             }
         }
 

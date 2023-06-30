@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using NLog;
 using System;
 using System.Configuration;
 using System.IO;
@@ -18,6 +19,8 @@ namespace WebMeetingParticipantChecker.ViewModels
     internal class SettingDialogViewModel : ObservableObject
     {
         private readonly string _initMonitoringCycleMs;
+
+        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
         #region 表示データ
 
@@ -80,7 +83,7 @@ namespace WebMeetingParticipantChecker.ViewModels
                 var config = ReadCurrentSetting(path);
                 if (config == null)
                 {
-                    Console.WriteLine("読み込み失敗");
+                    _logger.Error("読み込み失敗");
                     return;
                 }
 
@@ -95,10 +98,11 @@ namespace WebMeetingParticipantChecker.ViewModels
 
                 OnPropertyChanged(nameof(ExistsNotAppliedData));
                 WeakReferenceMessenger.Default.Send(new SettingApplyMessage("設定完了"));
+                _logger.Info("設定変更");
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                _logger.Info(e);
             }
         }
 

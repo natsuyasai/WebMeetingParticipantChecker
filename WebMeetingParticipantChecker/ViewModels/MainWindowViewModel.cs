@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using NLog;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -77,6 +78,8 @@ namespace WebMeetingParticipantChecker.ViewModels
         /// プリセットフォルダ名
         /// </summary>
         private const string PresetFolderName = "Preset";
+
+        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
 
         #region 表示データ
@@ -374,6 +377,7 @@ namespace WebMeetingParticipantChecker.ViewModels
         /// </summary>
         private async Task StartMonitoring()
         {
+            _logger.Info("監視開始");
             // 監視開始
             UpdateStatus(StatusValue.PreparingTargetWindowCaputure);
             _monitoringFacade.RegisterMonitoringTargets(_presetList.GetCurrentPresetDataList());
@@ -389,6 +393,7 @@ namespace WebMeetingParticipantChecker.ViewModels
         /// </summary>
         private async void OnDetectedTargetElemetCallback()
         {
+            _logger.Info("対象要素検出");
             UpdateMonitoringStates();
             await _monitoringFacade.StartMonitoring(OnJoinStateChangeCallback);
         }
@@ -407,6 +412,7 @@ namespace WebMeetingParticipantChecker.ViewModels
         /// </summary>
         private async Task StopMonitoring()
         {
+            _logger.Info("監視停止");
             await Task.Run(() =>
             {
                 UpdateStatus(StatusValue.Init);
@@ -420,6 +426,7 @@ namespace WebMeetingParticipantChecker.ViewModels
         /// </summary>
         private async Task StopMonitoringWhenAutomaticJudgment()
         {
+            _logger.Info("監視停止(自動判定)");
             await Task.Run(() =>
             {
                 _monitoringFacade.StopMonitoring();
@@ -434,11 +441,13 @@ namespace WebMeetingParticipantChecker.ViewModels
         {
             if (_status != StatusValue.Pause)
             {
+                _logger.Info("一時停止");
                 _monitoringFacade.Pause();
                 UpdateStatus(StatusValue.Pause);
             }
             else
             {
+                _logger.Info("再開");
                 _monitoringFacade.Resume();
                 UpdateMonitoringStates();
             }
@@ -485,6 +494,7 @@ namespace WebMeetingParticipantChecker.ViewModels
         {
             if (_monitoringFacade.IsAllJoin())
             {
+                _logger.Info("全員参加済み");
                 UpdateStatus(StatusValue.Complete);
                 _ = StopMonitoringWhenAutomaticJudgment();
             }

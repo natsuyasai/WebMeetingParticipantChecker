@@ -26,13 +26,9 @@ namespace WebMeetingParticipantChecker
     {
         public static IServiceProvider Services { get; } = ConfigureServices();
 
-        private static readonly ILoggerFactory _loggerFactory 
-            = LoggerFactory.Create(builder => builder.SetMinimumLevel(LogLevel.Information));
-
         private static IServiceProvider ConfigureServices()
         {
             var services = new ServiceCollection()
-                .AddSingleton<ILogger>(a => _loggerFactory.CreateLogger<App>())
                 .AddSingleton<AutomationElementGetter[]>(
                 provider => new AutomationElementGetter[] {
                     new AutomationElementGetterForZoom(),
