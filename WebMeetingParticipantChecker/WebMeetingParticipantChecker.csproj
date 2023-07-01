@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="icon.ico" />
+    <Resource Include="icon.ico" />
     <None Update="icon.ico">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
