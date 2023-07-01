@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Windows;
 
 [assembly: ThemeInfo(
@@ -11,16 +12,16 @@ using System.Windows;
 )]
 
 
-//[assembly: AssemblyTitle("Web会議参加者チェックツール")]
-//[assembly: AssemblyDescription("Web会議参加者の自動チェック用ツール")]
-//[assembly: AssemblyConfiguration("")]
-//[assembly: AssemblyCompany("")]
-//[assembly: AssemblyProduct("Web会議参加者チェックツール")]
-//[assembly: AssemblyCopyright("Copyright ©  2022")]
-//[assembly: AssemblyTrademark("")]
-//[assembly: AssemblyCulture("")]
-//[assembly: AssemblyVersion("1.5.0.0")]
-//[assembly: AssemblyFileVersion("1.5.0.0")]
+[assembly: AssemblyTitle("Web会議参加者チェックツール")]
+[assembly: AssemblyDescription("Web会議参加者の自動チェック用ツール")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("Web会議参加者チェックツール")]
+[assembly: AssemblyCopyright("Copyright ©  2023")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
+[assembly: AssemblyVersion("1.1")]
+[assembly: AssemblyFileVersion("1.1")]
 
 
 [assembly: InternalsVisibleTo("WebMeetingParticipantCheckerTests")]
