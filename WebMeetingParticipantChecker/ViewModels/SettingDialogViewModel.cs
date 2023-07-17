@@ -7,7 +7,8 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using WebMeetingParticipantChecker.Models.Config;
-using ZoomParticipantChecker.Model.Message;
+using WebMeetingParticipantChecker.Models.Message;
+using WebMeetingParticipantChecker.Views;
 
 namespace WebMeetingParticipantChecker.ViewModels
 {
@@ -95,7 +96,11 @@ namespace WebMeetingParticipantChecker.ViewModels
                 writer.Write(json);
 
                 OnPropertyChanged(nameof(ExistsNotAppliedData));
-                WeakReferenceMessenger.Default.Send(new SettingApplyMessage("設定完了"));
+                WeakReferenceMessenger.Default.Send(new Message<SettingDialog>(new MessageInfo
+                {
+                    Title = "情報",
+                    Message = "適用しました。設定値は再起動後有効となります。"
+                }));
                 _logger.Info("設定変更");
             }
             catch (Exception e)

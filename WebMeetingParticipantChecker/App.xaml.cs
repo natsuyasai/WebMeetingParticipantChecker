@@ -67,6 +67,7 @@ namespace WebMeetingParticipantChecker
         /// 
         private static int GetAppsUseLightTheme()
         {
+#pragma warning disable CA1416 // プラットフォームの互換性を検証
             int getmode = -1;
             string rKeyName = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
             string rGetValueName = "AppsUseLightTheme";
@@ -82,6 +83,7 @@ namespace WebMeetingParticipantChecker
             {
             }
             return getmode;
+#pragma warning restore CA1416 // プラットフォームの互換性を検証
         }
     }
 }

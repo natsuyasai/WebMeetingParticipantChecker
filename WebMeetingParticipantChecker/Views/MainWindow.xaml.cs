@@ -1,8 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Extensions.DependencyInjection;
 using NLog;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using WebMeetingParticipantChecker.Models.Message;
 using WebMeetingParticipantChecker.Models.Preset;
 using WebMeetingParticipantChecker.ViewModels;
 
@@ -27,6 +29,11 @@ namespace WebMeetingParticipantChecker.Views
             Task.Run(async () =>
             {
                 await _mainWindowViewModel.ReadPresetData();
+            });
+
+            WeakReferenceMessenger.Default.Register<MainWindow, Message<MainWindow>>(this, (s, e) =>
+            {
+                ShowMessage(s, e);
             });
         }
 
@@ -98,6 +105,13 @@ namespace WebMeetingParticipantChecker.Views
         {
             _settingDialog.Owner = this;
             _settingDialog.Show();
+        }
+
+        private void ShowMessage(object sender, Message<MainWindow> message)
+        {
+            var msg = new MessageDialog();
+            msg.Initialize(message.Value.Title, message.Value.Message, this);
+            msg.ShowDialog();
         }
     }
 }
