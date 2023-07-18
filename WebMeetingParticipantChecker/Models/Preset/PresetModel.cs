@@ -138,7 +138,11 @@ namespace WebMeetingParticipantChecker.Models.Preset
                         parser.Delimiters = new string[] { "," };
                         while (!parser.EndOfData)
                         {
-                            data.Add(string.Join(",", parser.ReadFields()!));
+                            var fields = parser.ReadFields();
+                            if (fields?.Length > 0)
+                            {
+                                data.Add(fields[0]);
+                            }
                         }
                     }
                     _preset.Add(new PresetInfo(id, file, Path.GetFileNameWithoutExtension(file), data));
