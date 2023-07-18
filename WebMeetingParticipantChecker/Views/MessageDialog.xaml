@@ -17,7 +17,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="32px" />
             <RowDefinition Height="2px" />
-            <RowDefinition />
+            <RowDefinition Height="*" />
             <RowDefinition Height="32px" />
         </Grid.RowDefinitions>
         <!--  タイトルバー  -->
@@ -50,7 +50,8 @@
             <TextBlock
                 x:Name="Message"
                 Margin="16,16,16,16"
-                Style="{StaticResource TextBlockStyle}" />
+                Style="{StaticResource TextBlockStyle}"
+                TextWrapping="Wrap" />
         </Grid>
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
