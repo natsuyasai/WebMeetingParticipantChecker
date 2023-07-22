@@ -54,7 +54,15 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// </summary>
         public IDictionary<string, string> GetNameList(bool isEnableAutoScroll)
         {
-            return GetAllChildrenName(isEnableAutoScroll);
+            try
+            {
+                return GetAllChildrenName(isEnableAutoScroll);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "監視実行エラー");
+                return new Dictionary<string, string>();
+            }
         }
 
         /// <summary>
@@ -84,59 +92,73 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// </summary>
         private Dictionary<string, string> GetAllChildrenName(bool isEnableAutoScroll)
         {
-            try
+            IUIAutomationElement? beforLastElement = null;
+            IUIAutomationElement? firstElement = null;
+            var isContinue = true;
+            do
             {
-                string? beforLastElement = null;
-                string? firstElement = null;
-                var isContinue = true;
-                do
+                var elementItems = GetNameElements();
+                if (!IsEnableElements(elementItems))
                 {
-                    var elementItems = GetNameElements();
-                    if (elementItems == null || elementItems?.Length == 0)
+                    break;
+                }
+                // 2週目で同じ要素なら終了
+                if (firstElement != null && elementItems!.Contains(firstElement.CurrentName))
+                {
+                    break;
+                }
+                var analysisResult = AnalysisName(elementItems);
+                firstElement ??= analysisResult.firstElement;
+                if (isEnableAutoScroll)
+                {
+                    // 前回の末尾の要素と今回の末尾が一致したら終了
+                    if (analysisResult.lastElement?.CurrentName == beforLastElement?.CurrentName)
                     {
-                        break;
+                        isContinue = false;
                     }
-                    IUIAutomationElement? lastElement = null;
-                    // ひとまず取れた要素全てチェック
-                    for (int i = 0; i < elementItems?.Length; i++)
+                    else
                     {
-                        var item = elementItems.GetElement(i);
-                        // 2週目で同じ要素なら終了
-                        if (firstElement == item?.CurrentName)
-                        {
-                            isContinue = false;
-                            break;
-                        }
-                        if (item?.CurrentName == null || item.CurrentName == "")
-                        {
-                            continue;
-                        }
-                        AddNameInfo(item);
-                        lastElement = item;
-                        firstElement ??= item.CurrentName;
+                        _autoScroll.MoveSearchPotision(analysisResult.lastElement);
+                        beforLastElement = analysisResult.lastElement;
+                        // 無限ループになってしまった場合のため一定回数で抜ける
+                        isContinue = !_autoScroll.IsOverflowScroll();
                     }
-                    if (isEnableAutoScroll)
-                    {
-                        // 前回の末尾の要素と今回の末尾が一致したら終了
-                        if (lastElement?.CurrentName == beforLastElement)
-                        {
-                            isContinue = false;
-                        }
-                        else
-                        {
-                            _autoScroll.MoveSearchPotision(lastElement);
-                            beforLastElement = lastElement?.CurrentName;
-                            // 無限ループになってしまった場合のため一定回数で抜ける
-                            isContinue = !_autoScroll.IsOverflowScroll();
-                        }
-                    }
-                } while (isContinue && isEnableAutoScroll);
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, "監視実行エラー");
-            }
+                }
+            } while (isContinue && isEnableAutoScroll);
             return _nameInfos;
+        }
+
+        /// <summary>
+        /// 名前情報解析
+        /// </summary>
+        /// <param name="elementItems"></param>
+        /// <returns></returns>
+        private (IUIAutomationElement? firstElement, IUIAutomationElement? lastElement) AnalysisName(UIAutomationElementArray? elementItems)
+        {
+            IUIAutomationElement? firstElement = null;
+            IUIAutomationElement? lastElement = null;
+            for (int i = 0; i < elementItems?.Length; i++)
+            {
+                var item = elementItems.GetElement(i);
+                if (item?.CurrentName == null || item.CurrentName == "")
+                {
+                    continue;
+                }
+                AddNameInfo(item);
+                lastElement = item;
+                firstElement ??= item;
+            }
+            return (firstElement, lastElement);
+        }
+
+        /// <summary>
+        /// 有効な要素か
+        /// </summary>
+        /// <param name="elements"></param>
+        /// <returns></returns>
+        private bool IsEnableElements(UIAutomationElementArray? elements)
+        {
+            return (elements != null && elements.Length > 0);
         }
 
         /// <summary>
