@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# CA1822: メンバーを static に設定します
+dotnet_diagnostic.CA1822.severity = none

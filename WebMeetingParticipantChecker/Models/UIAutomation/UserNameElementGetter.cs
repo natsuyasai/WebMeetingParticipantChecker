@@ -35,10 +35,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// </summary>
         protected readonly CUIAutomation _automation;
 
-        /// <summary>
-        /// キーダウンイベントを発生さえる最大回数(1回の更新あたり)
-        /// </summary>
-        private readonly int KeyDonwMaxCount = 200;
+        private readonly ElementScroller _autoScroll;
 
         private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
@@ -49,14 +46,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         {
             _automation = automation;
             _targetElement = element;
-            if (keyDonwMaxCount == null)
-            {
-                KeyDonwMaxCount = AppSettingsManager.KyedownMaxCount;
-            }
-            else
-            {
-                KeyDonwMaxCount = keyDonwMaxCount.Value;
-            }
+            _autoScroll = new ElementScroller(keyDonwMaxCount);
         }
 
         /// <summary>
@@ -98,77 +88,70 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
             {
                 string? beforLastElement = null;
                 string? firstElement = null;
-                var isSearch = true;
-                var downCount = 0;
+                var isContinue = true;
                 do
                 {
                     var elementItems = GetNameElements();
-                    if (elementItems == null)
+                    if (elementItems == null || elementItems?.Length == 0)
                     {
-                        continue;
+                        break;
                     }
                     IUIAutomationElement? lastElement = null;
                     // ひとまず取れた要素全てチェック
-                    for (int i = 0; i < elementItems.Length; i++)
+                    for (int i = 0; i < elementItems?.Length; i++)
                     {
                         var item = elementItems.GetElement(i);
                         // 2週目で同じ要素なら終了
                         if (firstElement == item?.CurrentName)
                         {
-                            isSearch = false;
+                            isContinue = false;
                             break;
                         }
                         if (item?.CurrentName == null || item.CurrentName == "")
                         {
                             continue;
                         }
-                        // 名前の後の「(ホスト,自分)」や操作ボタンの文字もカンマ区切りで取れるため，分割して登録
-                        // (名前にカンマを入れると，先頭要素だけが名前とは限らなくなるため，一応全て保持)
-                        foreach (var str in GetSplittedTargetElementName(item.CurrentName))
-                        {
-                            var addStr = StringUtils.RemoveSpace(str);
-                            _nameInfos[addStr] = item.CurrentName;
-                        }
+                        AddNameInfo(item);
                         lastElement = item;
                         firstElement ??= item.CurrentName;
                     }
-                    // 自動スクロールが許可されていなければ中断
-                    if (!isEnableAutoScroll)
+                    if (isEnableAutoScroll)
                     {
-                        break;
-                    }
-                    if (!isSearch || elementItems.Length == 0)
-                    {
-                        break;
-                    }
-                    // 前回の末尾の要素と今回の末尾が一致したら終了
-                    if (isSearch && lastElement?.CurrentName == beforLastElement)
-                    {
-                        break;
-                    }
-                    if (lastElement != null)
-                    {
-                        // 最後の要素にフォーカスをあて，↓キー押下イベントを送ることで，スクロールが必要な場合に，移動することで表示させる．
-                        beforLastElement = lastElement.CurrentName;
-                        if (lastElement.GetCurrentPattern(UIAutomationIdDefine.UIA_SelectionPatternId) is IUIAutomationSelectionItemPattern pattern)
+                        // 前回の末尾の要素と今回の末尾が一致したら終了
+                        if (lastElement?.CurrentName == beforLastElement)
                         {
-                            pattern.Select();
-                            SendKeys.SendWait("{DOWN}");
+                            isContinue = false;
                         }
-                        downCount++;
+                        else
+                        {
+                            _autoScroll.MoveSearchPotision(lastElement);
+                            beforLastElement = lastElement?.CurrentName;
+                            // 無限ループになってしまった場合のため一定回数で抜ける
+                            isContinue = !_autoScroll.IsOverflowScroll();
+                        }
                     }
-                    // 無限ループになってしまった場合のため，200回で抜ける
-                    if (downCount >= KeyDonwMaxCount)
-                    {
-                        isSearch = false;
-                    }
-                } while (isSearch);
+                } while (isContinue && isEnableAutoScroll);
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, "監視実行エラー");
             }
             return _nameInfos;
+        }
+
+        /// <summary>
+        /// 名前情報追加
+        /// </summary>
+        /// <param name="item"></param>
+        private void AddNameInfo(IUIAutomationElement item)
+        {
+            // 名前の後の「(ホスト,自分)」や操作ボタンの文字もカンマ区切りで取れるため，分割して登録
+            // (名前にカンマを入れると，先頭要素だけが名前とは限らなくなるため，一応全て保持)
+            foreach (var str in GetSplittedTargetElementName(item.CurrentName))
+            {
+                var addStr = StringUtils.RemoveSpace(str);
+                _nameInfos[addStr] = item.CurrentName;
+            }
         }
     }
 }

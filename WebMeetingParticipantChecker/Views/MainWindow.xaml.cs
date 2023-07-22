@@ -42,7 +42,7 @@ namespace WebMeetingParticipantChecker.Views
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void SelectionChangedPreset(object sender, SelectionChangedEventArgs e)
+        private void SelectionChangedPreset(object _, SelectionChangedEventArgs e)
         {
             PresetInfo selectedItem = (PresetInfo)cbPreset.SelectedItem;
             if (selectedItem != null)
@@ -51,14 +51,14 @@ namespace WebMeetingParticipantChecker.Views
             }
         }
 
-        private void HandleClose(object sender, RoutedEventArgs e)
+        private void HandleClose(object _, RoutedEventArgs e)
         {
             _logger.Info("終了");
             _settingDialog.Close();
             SystemCommands.CloseWindow(this);
         }
 
-        private void HandleMinimize(object sender, RoutedEventArgs e)
+        private void HandleMinimize(object _, RoutedEventArgs e)
         {
             SystemCommands.MinimizeWindow(this);
         }
@@ -84,7 +84,7 @@ namespace WebMeetingParticipantChecker.Views
             }
         }
 
-        private void WindowStateChanged(object sender, object e)
+        private void WindowStateChanged(object _, object e)
         {
             // 最大化，縮小に合わせてボタンコンテンツを切り替える
             if (FindName("MaximizeButton") is not Button button)
@@ -101,13 +101,13 @@ namespace WebMeetingParticipantChecker.Views
             }
         }
 
-        private void HandleSetting(object sender, RoutedEventArgs e)
+        private void HandleSetting(object _, RoutedEventArgs e)
         {
             _settingDialog.Owner = this;
             _settingDialog.Show();
         }
 
-        private void ShowMessage(object sender, Message<MainWindow> message)
+        private void ShowMessage(object _, Message<MainWindow> message)
         {
             var msg = new MessageDialog();
             msg.Initialize(message.Value.Title, message.Value.Message, this);

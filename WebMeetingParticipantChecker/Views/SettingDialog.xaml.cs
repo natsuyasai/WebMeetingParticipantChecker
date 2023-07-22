@@ -45,7 +45,7 @@ namespace WebMeetingParticipantChecker.Views
             e.Handled = true;
         }
 
-        private void ShowMessage(object sender, Message<SettingDialog> message)
+        private void ShowMessage(object _, Message<SettingDialog> message)
         {
             var msg = new MessageDialog();
             msg.Initialize(message.Value.Title, message.Value.Message, this);
