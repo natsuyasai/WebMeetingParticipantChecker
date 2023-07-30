@@ -1,4 +1,6 @@
 # Web会議参加者自動チェックツール
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fnatsuyasai%2FWebMeetingParticipantChecker.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fnatsuyasai%2FWebMeetingParticipantChecker?ref=badge_shield)
+
 ## 利用可能なWeb会議ツール
 - Zoom
 - Microsoft Teams
@@ -57,3 +59,7 @@ Zoomのつくり上、参加者が多く参加者リストのスクロールが�
 - 参加状態を自動監視にする  
 手動で状態を変更したユーザを自動監視に戻します。  
 自動に戻した際は一度未参加状態となります。  
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fnatsuyasai%2FWebMeetingParticipantChecker.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fnatsuyasai%2FWebMeetingParticipantChecker?ref=badge_large)
