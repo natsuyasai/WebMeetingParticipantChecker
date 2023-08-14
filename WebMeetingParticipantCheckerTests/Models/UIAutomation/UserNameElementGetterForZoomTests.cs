@@ -7,19 +7,23 @@ using System.Text;
 using System.Threading.Tasks;
 using UIAutomationClient;
 using WebMeetingParticipantCheckerTests.TestUtils;
+using Microsoft.Extensions.Configuration;
+using Moq;
 
 namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
 {
     [TestClass()]
     public class UserNameElementGetterForZoomTests
     {
+        private readonly Mock<IKeyEventSender> _keyEventMock = new();
+
         [TestMethod()]
         [TestCategory("名前情報更新")]
         public void 名前情報更新_自動スクロール無効()
         {
             // 試験対象生成
             var fakeRootElement = new UIAutomationElementFake();
-            var target = new UserNameElementGetterForZoom(new CUIAutomation(), fakeRootElement, 0);
+            var target = new UserNameElementGetterForZoom(new CUIAutomation(), fakeRootElement, _keyEventMock.Object, 0);
 
             // ダミーの要素情報生成
             var elemArrayFake = new UIAutomationElementArrayFake();
@@ -46,6 +50,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
             CollectionAssert.AreEqual(actual.Keys, ret.Keys.ToList());
             UIAutomationElementFake lastItem = (UIAutomationElementFake)fakeRootElement.UIAutomationElementArrayFake.GetElement(fakeRootElement.UIAutomationElementArrayFake.Length - 1);
             Assert.AreEqual(false, lastItem.selectionItemPatternFake.IsSelected);
+            _keyEventMock.Verify(x => x.SendWait(), Times.Never());
         }
 
         [TestMethod()]
@@ -54,7 +59,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
         {
             // 試験対象生成
             var fakeRootElement = new UIAutomationElementFake();
-            var target = new UserNameElementGetterForZoom(new CUIAutomation(), fakeRootElement, 10);
+            var target = new UserNameElementGetterForZoom(new CUIAutomation(), fakeRootElement, _keyEventMock.Object, 10);
 
             // ダミーの要素情報生成
             var elemArrayFake = new UIAutomationElementArrayFake();
@@ -107,6 +112,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
             CollectionAssert.AreEqual(actual.Keys, ret.Keys.ToList());
             Assert.AreEqual(true, lastFakeItem.selectionItemPatternFake.IsSelected);
             Assert.AreEqual(true, lastFakeItem2.selectionItemPatternFake.IsSelected);
+            _keyEventMock.Verify(x => x.SendWait(), Times.Exactly(2));
         }
 
         [TestMethod()]
@@ -115,7 +121,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
         {
             // 試験対象生成
             var fakeRootElement = new UIAutomationElementFake();
-            var target = new UserNameElementGetterForZoom(new CUIAutomation(), fakeRootElement, 10);
+            var target = new UserNameElementGetterForZoom(new CUIAutomation(), fakeRootElement, _keyEventMock.Object, 10);
 
             // ダミーの要素情報生成
             var elemArrayFake = new UIAutomationElementArrayFake();
@@ -167,6 +173,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
             var ret = target.GetNameList(true);
             CollectionAssert.AreEqual(actual.Keys, ret.Keys.ToList());
             Assert.AreEqual(true, lastFakeItem.selectionItemPatternFake.IsSelected);
+            _keyEventMock.Verify(x => x.SendWait(), Times.Exactly(1));
         }
 
 
@@ -177,7 +184,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
             // 試験対象生成
             const int MaxCount = 10;
             var fakeRootElement = new UIAutomationElementFake();
-            var target = new UserNameElementGetterForZoom(new CUIAutomation(), fakeRootElement, MaxCount);
+            var target = new UserNameElementGetterForZoom(new CUIAutomation(), fakeRootElement, _keyEventMock.Object, MaxCount);
 
             // ダミーの要素情報生成
             var elemArrayFake = new UIAutomationElementArrayFake();
@@ -232,6 +239,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
             CollectionAssert.AreEqual(actual.Keys, ret.Keys.ToList());
             Assert.AreEqual(true, lastFakeItem.selectionItemPatternFake.IsSelected);
             Assert.AreEqual(false, lastFakeItem2.selectionItemPatternFake.IsSelected);
+            _keyEventMock.Verify(x => x.SendWait(), Times.Exactly(MaxCount));
         }
     }
 }

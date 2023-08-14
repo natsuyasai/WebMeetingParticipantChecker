@@ -10,8 +10,12 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// </summary>
         private readonly char[] ElementTargetNameSplitChars = new char[] { ',' };
 
-        public UserNameElementGetterForZoom(CUIAutomation automation, IUIAutomationElement element, int? keyDonwMaxCount = null)
-            : base(automation, element, keyDonwMaxCount)
+        public UserNameElementGetterForZoom(
+            CUIAutomation automation, 
+            IUIAutomationElement element,
+            IKeyEventSender keyEventSender,
+            int? keyDonwMaxCount = null)
+            : base(automation, element, keyEventSender, keyDonwMaxCount)
         {
         }
 

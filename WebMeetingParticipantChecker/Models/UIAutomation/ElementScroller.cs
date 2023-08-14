@@ -20,13 +20,16 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// </summary>
         private readonly int KeyDonwMaxCount = 200;
 
+        private readonly IKeyEventSender _arrowDownKeyEventSender;
+
         private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public ElementScroller(int? keyDonwMaxCount = null)
+        public ElementScroller(IKeyEventSender keyEventSender, int? keyDonwMaxCount = null)
         {
+            _arrowDownKeyEventSender = keyEventSender;
             if (keyDonwMaxCount == null)
             {
                 KeyDonwMaxCount = AppSettingsManager.KyedownMaxCount;
@@ -52,7 +55,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
             if (lastElement?.GetCurrentPattern(UIAutomationIdDefine.UIA_SelectionPatternId) is IUIAutomationSelectionItemPattern pattern)
             {
                 pattern.Select();
-                SendKeys.SendWait("{DOWN}");
+                _arrowDownKeyEventSender.SendWait();
             }
             _keyDownCount++;
         }

@@ -35,6 +35,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// </summary>
         protected readonly CUIAutomation _automation;
 
+
         private readonly ElementScroller _autoScroll;
 
         private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
@@ -42,11 +43,15 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public UserNameElementGetter(CUIAutomation automation, IUIAutomationElement element, int? keyDonwMaxCount = null)
+        public UserNameElementGetter(
+            CUIAutomation automation, 
+            IUIAutomationElement element,
+            IKeyEventSender keyEventSender,
+            int? keyDonwMaxCount = null)
         {
             _automation = automation;
             _targetElement = element;
-            _autoScroll = new ElementScroller(keyDonwMaxCount);
+            _autoScroll = new ElementScroller(keyEventSender, keyDonwMaxCount);
         }
 
         /// <summary>
@@ -103,6 +108,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
                     break;
                 }
                 // 2週目で同じ要素なら終了
+
                 if (firstElement != null && elementItems!.Contains(firstElement.CurrentName))
                 {
                     break;

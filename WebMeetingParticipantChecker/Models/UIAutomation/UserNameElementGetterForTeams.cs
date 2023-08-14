@@ -5,8 +5,12 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
 {
     internal class UserNameElementGetterForTeams : UserNameElementGetter
     {
-        public UserNameElementGetterForTeams(CUIAutomation automation, IUIAutomationElement element, int? keyDonwMaxCount = null)
-            : base(automation, element, keyDonwMaxCount)
+        public UserNameElementGetterForTeams(
+            CUIAutomation automation, 
+            IUIAutomationElement element,
+            IKeyEventSender keyEventSender,
+            int? keyDonwMaxCount = null)
+            : base(automation, element, keyEventSender, keyDonwMaxCount)
         {
         }
 

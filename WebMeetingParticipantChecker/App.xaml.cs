@@ -23,6 +23,7 @@ namespace WebMeetingParticipantChecker
         private static IServiceProvider ConfigureServices()
         {
             var services = new ServiceCollection()
+                .AddSingleton<IKeyEventSender, ArrowDownKeyEventSender>()
                 .AddSingleton<AutomationElementGetter[]>(
                 provider => new AutomationElementGetter[] {
                     new AutomationElementGetterForZoom(),
