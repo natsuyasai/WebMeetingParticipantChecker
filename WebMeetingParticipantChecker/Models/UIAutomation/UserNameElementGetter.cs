@@ -35,6 +35,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// </summary>
         protected readonly CUIAutomation _automation;
 
+
         private readonly ElementScroller _autoScroll;
 
         private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
@@ -42,11 +43,15 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public UserNameElementGetter(CUIAutomation automation, IUIAutomationElement element, int? keyDonwMaxCount = null)
+        public UserNameElementGetter(
+            CUIAutomation automation,
+            IUIAutomationElement element,
+            IKeyEventSender keyEventSender,
+            int? keyDonwMaxCount = null)
         {
             _automation = automation;
             _targetElement = element;
-            _autoScroll = new ElementScroller(keyDonwMaxCount);
+            _autoScroll = new ElementScroller(keyEventSender, keyDonwMaxCount);
         }
 
         /// <summary>
@@ -102,12 +107,12 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
                 {
                     break;
                 }
-                // 2週目で同じ要素なら終了
-                if (firstElement != null && elementItems!.Contains(firstElement.CurrentName))
+                var analysisResult = AnalysisName(firstElement, elementItems);
+                // 2週目で同一要素になったので処理終了
+                if (analysisResult.isExit)
                 {
                     break;
                 }
-                var analysisResult = AnalysisName(elementItems);
                 firstElement ??= analysisResult.firstElement;
                 if (isEnableAutoScroll)
                 {
@@ -133,22 +138,28 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// </summary>
         /// <param name="elementItems"></param>
         /// <returns></returns>
-        private (IUIAutomationElement? firstElement, IUIAutomationElement? lastElement) AnalysisName(UIAutomationElementArray? elementItems)
+        private (IUIAutomationElement? firstElement, IUIAutomationElement? lastElement, bool isExit) AnalysisName(
+            IUIAutomationElement? firstElement, UIAutomationElementArray? elementItems)
         {
-            IUIAutomationElement? firstElement = null;
-            IUIAutomationElement? lastElement = null;
+            IUIAutomationElement? currentFirstElement = null;
+            IUIAutomationElement? currentLastElement = null;
             for (int i = 0; i < elementItems?.Length; i++)
             {
                 var item = elementItems.GetElement(i);
+                // 2週目で同じ要素なら終了
+                if (firstElement != null && item.CurrentName == firstElement.CurrentName)
+                {
+                    return (null, null, true);
+                }
                 if (item?.CurrentName == null || item.CurrentName == "")
                 {
                     continue;
                 }
                 AddNameInfo(item);
-                lastElement = item;
-                firstElement ??= item;
+                currentLastElement = item;
+                currentFirstElement ??= item;
             }
-            return (firstElement, lastElement);
+            return (currentFirstElement, currentLastElement, false);
         }
 
         /// <summary>
