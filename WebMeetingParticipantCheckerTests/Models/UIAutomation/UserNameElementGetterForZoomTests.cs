@@ -7,19 +7,23 @@ using System.Text;
 using System.Threading.Tasks;
 using UIAutomationClient;
 using WebMeetingParticipantCheckerTests.TestUtils;
+using Microsoft.Extensions.Configuration;
+using Moq;
 
 namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
 {
     [TestClass()]
     public class UserNameElementGetterForZoomTests
     {
+        private readonly Mock<IKeyEventSender> _keyEventMock = new();
+
         [TestMethod()]
         [TestCategory("名前情報更新")]
-        public void 名前情報更新_自動スクロール無効()
+        public void 名前情報取得を実行したときに取得できる名前情報が全て取得できること()
         {
             // 試験対象生成
             var fakeRootElement = new UIAutomationElementFake();
-            var target = new UserNameElementGetterForZoom(new CUIAutomation(), fakeRootElement, 0);
+            var target = new UserNameElementGetterForZoom(new CUIAutomation(), fakeRootElement, _keyEventMock.Object, 0);
 
             // ダミーの要素情報生成
             var elemArrayFake = new UIAutomationElementArrayFake();
@@ -46,15 +50,16 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
             CollectionAssert.AreEqual(actual.Keys, ret.Keys.ToList());
             UIAutomationElementFake lastItem = (UIAutomationElementFake)fakeRootElement.UIAutomationElementArrayFake.GetElement(fakeRootElement.UIAutomationElementArrayFake.Length - 1);
             Assert.AreEqual(false, lastItem.selectionItemPatternFake.IsSelected);
+            _keyEventMock.Verify(x => x.SendWait(), Times.Never());
         }
 
         [TestMethod()]
         [TestCategory("名前情報更新")]
-        public void 名前情報更新_自動スクロール有効_1回_先頭一致()
+        public void 名前情報取得時に1度スクロールを実行して画面外の要素が取得しきれたあと最初の先頭要素に戻って終了すること()
         {
             // 試験対象生成
             var fakeRootElement = new UIAutomationElementFake();
-            var target = new UserNameElementGetterForZoom(new CUIAutomation(), fakeRootElement, 10);
+            var target = new UserNameElementGetterForZoom(new CUIAutomation(), fakeRootElement, _keyEventMock.Object, 10);
 
             // ダミーの要素情報生成
             var elemArrayFake = new UIAutomationElementArrayFake();
@@ -83,7 +88,8 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
             lastFakeItem.selectionItemPatternFake.OnSelect = () =>
             {
                 var elemArrayFake2 = new UIAutomationElementArrayFake();
-                for (int i = 10; i < 20; i++)
+                // 1度だけスクロール処理をするため、要素は0要素目がなくなって、11要素目が追加される
+                for (int i = 1; i < 11; i++)
                 {
                     var fakeelement = new UIAutomationElementFake
                     {
@@ -107,15 +113,16 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
             CollectionAssert.AreEqual(actual.Keys, ret.Keys.ToList());
             Assert.AreEqual(true, lastFakeItem.selectionItemPatternFake.IsSelected);
             Assert.AreEqual(true, lastFakeItem2.selectionItemPatternFake.IsSelected);
+            _keyEventMock.Verify(x => x.SendWait(), Times.Exactly(2));
         }
 
         [TestMethod()]
         [TestCategory("名前情報更新")]
-        public void 名前情報更新_自動スクロール有効_1回_末尾一致()
+        public void 名前情報取得時に1度スクロールを実行して画面外の要素を取得しきった結果最後に取れた要素が1回目の初回要素なら終了すること()
         {
             // 試験対象生成
             var fakeRootElement = new UIAutomationElementFake();
-            var target = new UserNameElementGetterForZoom(new CUIAutomation(), fakeRootElement, 10);
+            var target = new UserNameElementGetterForZoom(new CUIAutomation(), fakeRootElement, _keyEventMock.Object, 10);
 
             // ダミーの要素情報生成
             var elemArrayFake = new UIAutomationElementArrayFake();
@@ -167,17 +174,18 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
             var ret = target.GetNameList(true);
             CollectionAssert.AreEqual(actual.Keys, ret.Keys.ToList());
             Assert.AreEqual(true, lastFakeItem.selectionItemPatternFake.IsSelected);
+            _keyEventMock.Verify(x => x.SendWait(), Times.Exactly(1));
         }
 
 
         [TestMethod()]
         [TestCategory("名前情報更新")]
-        public void 名前情報更新_自動スクロール有効_カウント上限()
+        public void 名前要素取得時に初回位置を検出出来ず設定上限までスクロールを実施した場合はその時点で終了すること()
         {
             // 試験対象生成
             const int MaxCount = 10;
             var fakeRootElement = new UIAutomationElementFake();
-            var target = new UserNameElementGetterForZoom(new CUIAutomation(), fakeRootElement, MaxCount);
+            var target = new UserNameElementGetterForZoom(new CUIAutomation(), fakeRootElement, _keyEventMock.Object, MaxCount);
 
             // ダミーの要素情報生成
             var elemArrayFake = new UIAutomationElementArrayFake();
@@ -232,6 +240,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
             CollectionAssert.AreEqual(actual.Keys, ret.Keys.ToList());
             Assert.AreEqual(true, lastFakeItem.selectionItemPatternFake.IsSelected);
             Assert.AreEqual(false, lastFakeItem2.selectionItemPatternFake.IsSelected);
+            _keyEventMock.Verify(x => x.SendWait(), Times.Exactly(MaxCount));
         }
     }
 }

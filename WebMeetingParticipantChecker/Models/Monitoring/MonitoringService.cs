@@ -30,6 +30,8 @@ namespace WebMeetingParticipantChecker.Models.Monitoring
         /// </summary>
         private MonitoringType.Target _targetType = MonitoringType.Target.Zoom;
 
+        private readonly IKeyEventSender _arrowDownKeyEventSender;
+
         /// <summary>
         /// コンストラクタ
         /// </summary>
@@ -37,6 +39,7 @@ namespace WebMeetingParticipantChecker.Models.Monitoring
         {
             _automationElementGetter = App.Services.GetService<AutomationElementGetter[]>()!;
             _monitoringModel = App.Services.GetService<MonitoringModel>()!;
+            _arrowDownKeyEventSender = App.Services.GetService<IKeyEventSender>()!;
         }
 
 
@@ -115,13 +118,13 @@ namespace WebMeetingParticipantChecker.Models.Monitoring
             {
                 MonitoringType.Target.Zoom =>
                 new UserNameElementGetterForZoom(
-                    new CUIAutomation(), _automationElementGetter[(int)_targetType].TargetElement!, null),
+                    new CUIAutomation(), _automationElementGetter[(int)_targetType].TargetElement!, _arrowDownKeyEventSender),
                 MonitoringType.Target.Teams =>
                 new UserNameElementGetterForTeams(
-                    new CUIAutomation(), _automationElementGetter[(int)_targetType].TargetElement!, null),
+                    new CUIAutomation(), _automationElementGetter[(int)_targetType].TargetElement!, _arrowDownKeyEventSender),
                 _ =>
                 new UserNameElementGetterForZoom(
-                    new CUIAutomation(), _automationElementGetter[(int)_targetType].TargetElement!, null),
+                    new CUIAutomation(), _automationElementGetter[(int)_targetType].TargetElement!, _arrowDownKeyEventSender),
             };
         }
 

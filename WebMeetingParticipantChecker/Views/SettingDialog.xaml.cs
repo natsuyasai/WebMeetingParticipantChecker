@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
 using System.Windows;
 using System.Windows.Controls;
+using WebMeetingParticipantChecker.Models.Message;
 using WebMeetingParticipantChecker.ViewModels;
-using ZoomParticipantChecker.Model.Message;
 
 namespace WebMeetingParticipantChecker.Views
 {
@@ -20,9 +20,9 @@ namespace WebMeetingParticipantChecker.Views
             settingDialogViewModel = new SettingDialogViewModel();
             DataContext = settingDialogViewModel;
 
-            WeakReferenceMessenger.Default.Register<SettingDialog, SettingApplyMessage>(this, (s, e) =>
+            WeakReferenceMessenger.Default.Register<SettingDialog, Message<SettingDialog>>(this, (s, e) =>
             {
-                ShowApplyMessage();
+                ShowMessage(s, e);
             });
         }
 
@@ -45,10 +45,10 @@ namespace WebMeetingParticipantChecker.Views
             e.Handled = true;
         }
 
-        private void ShowApplyMessage()
+        private void ShowMessage(object _, Message<SettingDialog> message)
         {
             var msg = new MessageDialog();
-            msg.Initialize("情報", "適用しました。設定値は再起動後有効となります。", this);
+            msg.Initialize(message.Value.Title, message.Value.Message, this);
             msg.ShowDialog();
         }
     }
