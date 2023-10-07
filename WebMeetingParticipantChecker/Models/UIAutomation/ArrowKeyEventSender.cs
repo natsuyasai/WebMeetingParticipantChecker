@@ -7,14 +7,12 @@ using System.Windows.Forms;
 
 namespace WebMeetingParticipantChecker.Models.UIAutomation
 {
-    internal class ArrowDownKeyEventSender : IKeyEventSender
+
+    internal class ArrowKeyEventSender : IKeyEventSender
     {
-        private readonly string ArrowDownCode = "{DOWN}";
-
-
-        public void SendWait()
+        public void SendWait(KeyCode code)
         {
-            SendKeys.SendWait(ArrowDownCode);
+            SendKeys.SendWait(code.GetCodeString());
         }
     }
 }

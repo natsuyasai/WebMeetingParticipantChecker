@@ -51,7 +51,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
             CollectionAssert.AreEqual(actual.Keys, ret.Keys.ToList());
             UIAutomationElementFake lastItem = (UIAutomationElementFake)fakeRootElement.UIAutomationElementArrayFake.GetElement(fakeRootElement.UIAutomationElementArrayFake.Length - 1);
             Assert.AreEqual(false, lastItem.selectionItemPatternFake.IsSelected);
-            _keyEventMock.Verify(x => x.SendWait(), Times.Never());
+            _keyEventMock.Verify(x => x.SendWait(KeyCode.Down), Times.Never());
         }
 
         private Mock<CUIAutomation> CreateUIAutomationMock()

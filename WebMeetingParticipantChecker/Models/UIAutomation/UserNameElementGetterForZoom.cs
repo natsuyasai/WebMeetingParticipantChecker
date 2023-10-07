@@ -26,7 +26,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
 
         protected override UIAutomationElementArray? GetNameElements()
         {
-            var items = _targetElement.FindAll(TreeScope.TreeScope_Descendants, GetCondition());
+            var items = _targetElement.FindAll(TreeScope.TreeScope_Children, GetCondition());
             return new UIAutomationElementArray(items);
         }
 
