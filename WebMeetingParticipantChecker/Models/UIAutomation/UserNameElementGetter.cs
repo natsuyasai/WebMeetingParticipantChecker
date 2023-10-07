@@ -98,8 +98,8 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// </summary>
         private Dictionary<string, string> GetAllChildrenName(bool isEnableAutoScroll)
         {
-            IUIAutomationElement? beforLastElement = null;
-            IUIAutomationElement? firstElement = null;
+            IUIAutomationElement? lastElement = null;
+            var beforLastElementName = "";
             var isContinue = true;
             var itemSumCount = 0;
             do
@@ -109,25 +109,21 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
                 {
                     break;
                 }
-                var analysisResult = AnalysisName(firstElement, elementItems);
-                // 2週目で同一要素になったので処理終了
-                if (analysisResult.isExit)
-                {
-                    break;
-                }
+                var currentLastElement = AnalysisName(elementItems);
                 itemSumCount += elementItems?.Length ?? 0;
-                firstElement ??= analysisResult.firstElement;
                 if (isEnableAutoScroll)
                 {
                     // 前回の末尾の要素と今回の末尾が一致したら終了
-                    if (analysisResult.lastElement?.CurrentName == beforLastElement?.CurrentName)
+                    if (currentLastElement?.CurrentName == beforLastElementName)
                     {
                         isContinue = false;
                     }
                     else
                     {
-                        _autoScroll.MoveSearchPotision(analysisResult.lastElement);
-                        beforLastElement = analysisResult.lastElement;
+                        // shalowcopyのため注意
+                        lastElement = currentLastElement;
+                        beforLastElementName = currentLastElement?.CurrentName ?? "";
+                        _autoScroll.MoveSearchPotision(currentLastElement);
                         // 無限ループになってしまった場合のため一定回数で抜ける
                         isContinue = !_autoScroll.IsOverflowScroll();
                     }
@@ -136,7 +132,8 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
 
             if (isEnableAutoScroll)
             {
-                _autoScroll.ReturnScrollPositionToTop(beforLastElement, itemSumCount);
+                // 本処理中にも参加される可能性があるので、少しだけ多めにしておく（値は適当）
+                _autoScroll.ReturnScrollPositionToTop(lastElement, itemSumCount + (itemSumCount/2));
             }
             return _nameInfos;
         }
@@ -146,28 +143,20 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// </summary>
         /// <param name="elementItems"></param>
         /// <returns></returns>
-        private (IUIAutomationElement? firstElement, IUIAutomationElement? lastElement, bool isExit) AnalysisName(
-            IUIAutomationElement? firstElement, UIAutomationElementArray? elementItems)
+        private IUIAutomationElement? AnalysisName(UIAutomationElementArray? elementItems)
         {
-            IUIAutomationElement? currentFirstElement = null;
             IUIAutomationElement? currentLastElement = null;
             for (int i = 0; i < elementItems?.Length; i++)
             {
                 var item = elementItems.GetElement(i);
-                // 2週目で同じ要素なら終了
-                if (firstElement != null && item.CurrentName == firstElement.CurrentName)
-                {
-                    return (null, null, true);
-                }
                 if (item?.CurrentName == null || item.CurrentName == "")
                 {
                     continue;
                 }
                 AddNameInfo(item);
                 currentLastElement = item;
-                currentFirstElement ??= item;
             }
-            return (currentFirstElement, currentLastElement, false);
+            return currentLastElement;
         }
 
         /// <summary>

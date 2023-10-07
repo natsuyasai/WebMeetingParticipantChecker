@@ -27,7 +27,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
 
             // ダミーの要素情報生成
             var elemArrayFake = new UIAutomationElementArrayFake();
-            var actual = new Dictionary<string, string>();
+            var expected = new Dictionary<string, string>();
             for (int i = 0; i < 10; i++)
             {
                 var fakeelement = new UIAutomationElementFake
@@ -35,8 +35,8 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
                     CurrentName = ("ユーザ" + (i + 1) + ",テスト,テスト,テスト,テスト")
                 };
                 elemArrayFake.elements.Add(fakeelement);
-                actual["ユーザ" + (i + 1)] = fakeelement.CurrentName;
-                actual["テスト"] = fakeelement.CurrentName;
+                expected["ユーザ" + (i + 1)] = fakeelement.CurrentName;
+                expected["テスト"] = fakeelement.CurrentName;
             }
             var fakeelementEmpty = new UIAutomationElementFake
             {
@@ -47,10 +47,11 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
 
             // 実行
             var ret = target.GetNameList(false);
-            CollectionAssert.AreEqual(actual.Keys, ret.Keys.ToList());
+            CollectionAssert.AreEqual(expected.Keys, ret.Keys.ToList());
             UIAutomationElementFake lastItem = (UIAutomationElementFake)fakeRootElement.UIAutomationElementArrayFake.GetElement(fakeRootElement.UIAutomationElementArrayFake.Length - 1);
             Assert.AreEqual(false, lastItem.selectionItemPatternFake.IsSelected);
             _keyEventMock.Verify(x => x.SendWait(KeyCode.Down), Times.Never());
+            _keyEventMock.Verify(x => x.SendWait(KeyCode.Up), Times.Never());
         }
 
         [TestMethod()]
@@ -63,12 +64,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
 
             // ダミーの要素情報生成
             var elemArrayFake = new UIAutomationElementArrayFake();
-            var actual = new Dictionary<string, string>();
-            var fakeelementEmpty = new UIAutomationElementFake
-            {
-                CurrentName = ""
-            };
-            elemArrayFake.elements.Add(fakeelementEmpty);
+            var expected = new Dictionary<string, string>();
             var lastFakeItem = new UIAutomationElementFake();
             for (int i = 0; i < 10; i++)
             {
@@ -77,8 +73,8 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
                     CurrentName = ("ユーザ" + (i + 1) + ",テスト,テスト,テスト,テスト")
                 };
                 elemArrayFake.elements.Add(fakeelement);
-                actual["ユーザ" + (i + 1)] = fakeelement.CurrentName;
-                actual["テスト"] = fakeelement.CurrentName;
+                expected["ユーザ" + (i + 1)] = fakeelement.CurrentName;
+                expected["テスト"] = fakeelement.CurrentName;
                 lastFakeItem = fakeelement;
             }
             fakeRootElement.UIAutomationElementArrayFake = elemArrayFake;
@@ -96,85 +92,22 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
                         CurrentName = ("ユーザ" + (i + 1) + ",テスト,テスト,テスト,テスト")
                     };
                     elemArrayFake2.elements.Add(fakeelement);
-                    actual["ユーザ" + (i + 1)] = fakeelement.CurrentName;
-                    actual["テスト"] = fakeelement.CurrentName;
+                    expected["ユーザ" + (i + 1)] = fakeelement.CurrentName;
+                    expected["テスト"] = fakeelement.CurrentName;
                     lastFakeItem2 = fakeelement;
                 }
                 fakeRootElement.UIAutomationElementArrayFake = elemArrayFake2;
-                // 2週目の末尾選択で再度1週目の要素に戻す
-                lastFakeItem2.selectionItemPatternFake.OnSelect = () =>
-                {
-                    fakeRootElement.UIAutomationElementArrayFake = elemArrayFake;
-                };
             };
 
             // 実行
             var ret = target.GetNameList(true);
-            CollectionAssert.AreEqual(actual.Keys, ret.Keys.ToList());
+
+            CollectionAssert.AreEqual(expected.Keys, ret.Keys.ToList());
             Assert.AreEqual(true, lastFakeItem.selectionItemPatternFake.IsSelected);
             Assert.AreEqual(true, lastFakeItem2.selectionItemPatternFake.IsSelected);
             _keyEventMock.Verify(x => x.SendWait(KeyCode.Down), Times.Exactly(2));
-        }
-
-        [TestMethod()]
-        [TestCategory("名前情報更新")]
-        public void 名前情報取得時に1度スクロールを実行して画面外の要素を取得しきった結果最後に取れた要素が1回目の初回要素なら終了すること()
-        {
-            // 試験対象生成
-            var fakeRootElement = new UIAutomationElementFake();
-            var target = new UserNameElementGetterForZoom(new CUIAutomation(), fakeRootElement, _keyEventMock.Object, 10);
-
-            // ダミーの要素情報生成
-            var elemArrayFake = new UIAutomationElementArrayFake();
-            var actual = new Dictionary<string, string>();
-            var fakeelementEmpty = new UIAutomationElementFake
-            {
-                CurrentName = ""
-            };
-            elemArrayFake.elements.Add(fakeelementEmpty);
-            var lastFakeItem = new UIAutomationElementFake();
-            for (int i = 0; i < 10; i++)
-            {
-                var fakeelement = new UIAutomationElementFake
-                {
-                    CurrentName = ("ユーザ" + (i + 1) + ",テスト,テスト,テスト,テスト")
-                };
-                elemArrayFake.elements.Add(fakeelement);
-                actual["ユーザ" + (i + 1)] = fakeelement.CurrentName;
-                actual["テスト"] = fakeelement.CurrentName;
-                lastFakeItem = fakeelement;
-            }
-            fakeRootElement.UIAutomationElementArrayFake = elemArrayFake;
-
-            // 末尾が選択されたら次の要素を用意
-            var lastFakeItem2 = new UIAutomationElementFake();
-            lastFakeItem.selectionItemPatternFake.OnSelect = () =>
-            {
-                var elemArrayFake2 = new UIAutomationElementArrayFake();
-                for (int i = 1; i < 10; i++)
-                {
-                    var fakeelement = new UIAutomationElementFake
-                    {
-                        CurrentName = ("ユーザ" + (i + 1) + ",テスト,テスト,テスト,テスト")
-                    };
-                    elemArrayFake2.elements.Add(fakeelement);
-                    actual["ユーザ" + (i + 1)] = fakeelement.CurrentName;
-                    actual["テスト"] = fakeelement.CurrentName;
-                    lastFakeItem2 = fakeelement;
-                }
-                fakeRootElement.UIAutomationElementArrayFake = elemArrayFake2;
-                // 2週目の末尾選択で再度1週目の要素に戻す
-                lastFakeItem2.selectionItemPatternFake.OnSelect = () =>
-                {
-                    fakeRootElement.UIAutomationElementArrayFake = elemArrayFake;
-                };
-            };
-
-            // 実行
-            var ret = target.GetNameList(true);
-            CollectionAssert.AreEqual(actual.Keys, ret.Keys.ToList());
-            Assert.AreEqual(true, lastFakeItem.selectionItemPatternFake.IsSelected);
-            _keyEventMock.Verify(x => x.SendWait(KeyCode.Down), Times.Exactly(1));
+            // 要素数+補正値分上に戻す
+            _keyEventMock.Verify(x => x.SendWait(KeyCode.Up), Times.Exactly(30 + (30/2)));
         }
 
 
@@ -189,12 +122,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
 
             // ダミーの要素情報生成
             var elemArrayFake = new UIAutomationElementArrayFake();
-            var actual = new Dictionary<string, string>();
-            var fakeelementEmpty = new UIAutomationElementFake
-            {
-                CurrentName = ""
-            };
-            elemArrayFake.elements.Add(fakeelementEmpty);
+            var expected = new Dictionary<string, string>();
             var lastFakeItem = new UIAutomationElementFake();
             for (int i = 0; i < 10; i++)
             {
@@ -203,8 +131,8 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
                     CurrentName = ("ユーザ" + (i + 1) + ",テスト,テスト,テスト,テスト")
                 };
                 elemArrayFake.elements.Add(fakeelement);
-                actual["ユーザ" + (i + 1)] = fakeelement.CurrentName;
-                actual["テスト"] = fakeelement.CurrentName;
+                expected["ユーザ" + (i + 1)] = fakeelement.CurrentName;
+                expected["テスト"] = fakeelement.CurrentName;
                 lastFakeItem = fakeelement;
             }
             fakeRootElement.UIAutomationElementArrayFake = elemArrayFake;
@@ -222,10 +150,10 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
                         CurrentName = ("ユーザ" + (i + 1) + ",テスト,テスト,テスト,テスト")
                     };
                     elemArrayFake2.elements.Add(fakeelement);
-                    if (shiftCount != MaxCount)
+                    if (shiftCount < MaxCount)
                     {
-                        actual["ユーザ" + (i + 1)] = fakeelement.CurrentName;
-                        actual["テスト"] = fakeelement.CurrentName;
+                        expected["ユーザ" + (i + 1)] = fakeelement.CurrentName;
+                        expected["テスト"] = fakeelement.CurrentName;
                     }
                     lastFakeItem2 = fakeelement;
                 }
@@ -237,10 +165,14 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
 
             // 実行
             var ret = target.GetNameList(true);
-            CollectionAssert.AreEqual(actual.Keys, ret.Keys.ToList());
+
+            CollectionAssert.AreEqual(expected.Keys, ret.Keys.ToList());
             Assert.AreEqual(true, lastFakeItem.selectionItemPatternFake.IsSelected);
             Assert.AreEqual(false, lastFakeItem2.selectionItemPatternFake.IsSelected);
             _keyEventMock.Verify(x => x.SendWait(KeyCode.Down), Times.Exactly(MaxCount));
+            var upCount = MaxCount*10;
+            upCount += (upCount / 2);
+            _keyEventMock.Verify(x => x.SendWait(KeyCode.Up), Times.Exactly(upCount));
         }
     }
 }
