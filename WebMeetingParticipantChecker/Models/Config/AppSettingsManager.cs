@@ -36,7 +36,7 @@ namespace WebMeetingParticipantChecker.Models.Config
                 {
                     return value;
                 }
-                return 200;
+                return 500;
             }
         }
 

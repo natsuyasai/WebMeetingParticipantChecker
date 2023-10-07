@@ -50,7 +50,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
             CollectionAssert.AreEqual(actual.Keys, ret.Keys.ToList());
             UIAutomationElementFake lastItem = (UIAutomationElementFake)fakeRootElement.UIAutomationElementArrayFake.GetElement(fakeRootElement.UIAutomationElementArrayFake.Length - 1);
             Assert.AreEqual(false, lastItem.selectionItemPatternFake.IsSelected);
-            _keyEventMock.Verify(x => x.SendWait(), Times.Never());
+            _keyEventMock.Verify(x => x.SendWait(KeyCode.Down), Times.Never());
         }
 
         [TestMethod()]
@@ -113,7 +113,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
             CollectionAssert.AreEqual(actual.Keys, ret.Keys.ToList());
             Assert.AreEqual(true, lastFakeItem.selectionItemPatternFake.IsSelected);
             Assert.AreEqual(true, lastFakeItem2.selectionItemPatternFake.IsSelected);
-            _keyEventMock.Verify(x => x.SendWait(), Times.Exactly(2));
+            _keyEventMock.Verify(x => x.SendWait(KeyCode.Down), Times.Exactly(2));
         }
 
         [TestMethod()]
@@ -174,7 +174,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
             var ret = target.GetNameList(true);
             CollectionAssert.AreEqual(actual.Keys, ret.Keys.ToList());
             Assert.AreEqual(true, lastFakeItem.selectionItemPatternFake.IsSelected);
-            _keyEventMock.Verify(x => x.SendWait(), Times.Exactly(1));
+            _keyEventMock.Verify(x => x.SendWait(KeyCode.Down), Times.Exactly(1));
         }
 
 
@@ -240,7 +240,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
             CollectionAssert.AreEqual(actual.Keys, ret.Keys.ToList());
             Assert.AreEqual(true, lastFakeItem.selectionItemPatternFake.IsSelected);
             Assert.AreEqual(false, lastFakeItem2.selectionItemPatternFake.IsSelected);
-            _keyEventMock.Verify(x => x.SendWait(), Times.Exactly(MaxCount));
+            _keyEventMock.Verify(x => x.SendWait(KeyCode.Down), Times.Exactly(MaxCount));
         }
     }
 }

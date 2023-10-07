@@ -7,8 +7,27 @@ using System.Windows.Forms;
 
 namespace WebMeetingParticipantChecker.Models.UIAutomation
 {
+    internal enum KeyCode
+    {
+        Down = 0,
+        Up
+    }
+
+    internal static class KeyCodeExt
+    {
+        private static readonly string[] Code =
+        {
+            "{DOWN}",
+            "{UP}"
+        };
+        public static string GetCodeString(this KeyCode code)
+        {
+            return Code[(int)code];
+        }
+    }
+
     internal interface IKeyEventSender
     {
-        public void SendWait();
+        public void SendWait(KeyCode code);
     }
 }

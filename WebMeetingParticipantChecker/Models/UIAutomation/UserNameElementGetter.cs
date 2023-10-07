@@ -61,7 +61,8 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         {
             try
             {
-                return GetAllChildrenName(isEnableAutoScroll);
+                var result = GetAllChildrenName(isEnableAutoScroll);
+                return result;
             }
             catch (Exception ex)
             {
@@ -100,6 +101,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
             IUIAutomationElement? beforLastElement = null;
             IUIAutomationElement? firstElement = null;
             var isContinue = true;
+            var itemSumCount = 0;
             do
             {
                 var elementItems = GetNameElements();
@@ -113,6 +115,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
                 {
                     break;
                 }
+                itemSumCount += elementItems?.Length ?? 0;
                 firstElement ??= analysisResult.firstElement;
                 if (isEnableAutoScroll)
                 {
@@ -130,6 +133,11 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
                     }
                 }
             } while (isContinue && isEnableAutoScroll);
+
+            if (isEnableAutoScroll)
+            {
+                _autoScroll.ReturnScrollPositionToTop(beforLastElement, itemSumCount);
+            }
             return _nameInfos;
         }
 
