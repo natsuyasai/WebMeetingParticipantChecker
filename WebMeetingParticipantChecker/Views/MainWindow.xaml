@@ -150,12 +150,19 @@
                                     Margin="4,0,2,0"
                                     HorizontalAlignment="Stretch"
                                     VerticalContentAlignment="Center"
-                                    DisplayMemberPath="Name"
                                     IsSynchronizedWithCurrentItem="True"
                                     ItemsSource="{Binding Path=PresetNames}"
                                     SelectedValuePath="Id"
                                     SelectionChanged="SelectionChangedPreset"
                                     Style="{StaticResource FlatComboBox}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock
+                                                Margin="4px,4px,16px,4px"
+                                                Text="{Binding Name}"
+                                                TextTrimming="CharacterEllipsis" />
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
                                     <ComboBox.ItemContainerStyle>
                                         <Style TargetType="ComboBoxItem">
                                             <Setter Property="Height" Value="32px" />
