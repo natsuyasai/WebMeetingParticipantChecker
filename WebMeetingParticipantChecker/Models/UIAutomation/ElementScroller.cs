@@ -18,11 +18,9 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// <summary>
         /// キーダウンイベントを発生さえる最大回数(1回の更新あたり)
         /// </summary>
-        private readonly int KeyDonwMaxCount = 200;
+        private readonly int KeyEventMaxCount = 500;
 
         private readonly IKeyEventSender _arrowDownKeyEventSender;
-
-        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// コンストラクタ
@@ -32,17 +30,17 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
             _arrowDownKeyEventSender = keyEventSender;
             if (keyDonwMaxCount == null)
             {
-                KeyDonwMaxCount = AppSettingsManager.KyedownMaxCount;
+                KeyEventMaxCount = AppSettingsManager.KyedownMaxCount;
             }
             else
             {
-                KeyDonwMaxCount = keyDonwMaxCount.Value;
+                KeyEventMaxCount = keyDonwMaxCount.Value;
             }
         }
 
         public bool IsOverflowScroll()
         {
-            return _keyDownCount >= KeyDonwMaxCount;
+            return _keyDownCount >= KeyEventMaxCount;
         }
 
         /// <summary>
@@ -55,9 +53,26 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
             if (lastElement?.GetCurrentPattern(UIAutomationIdDefine.UIA_SelectionPatternId) is IUIAutomationSelectionItemPattern pattern)
             {
                 pattern.Select();
-                _arrowDownKeyEventSender.SendWait();
+                _arrowDownKeyEventSender.SendWait(KeyCode.Down);
             }
             _keyDownCount++;
+        }
+
+        /// <summary>
+        /// スクロール位置を先頭に戻す
+        /// </summary>
+        public void ReturnScrollPositionToTop(IUIAutomationElement? lastElement, int moveCount)
+        {
+            // zoomが下キー入力連打しても一番下で止まってしまうようになっているため、
+            // 一番上まで戻せるようにする
+            if (lastElement?.GetCurrentPattern(UIAutomationIdDefine.UIA_SelectionPatternId) is IUIAutomationSelectionItemPattern pattern)
+            {
+                pattern.Select();
+                for (int i = 0; i < moveCount; i++)
+                {
+                    _arrowDownKeyEventSender.SendWait(KeyCode.Up);
+                }
+            }
         }
     }
 }
