@@ -429,6 +429,7 @@ namespace WebMeetingParticipantChecker.ViewModels
             _logger.Info("監視停止(自動判定)");
             await Task.Run(() =>
             {
+                UpdateStatus(StatusValue.Init);
                 _monitoringService.StopMonitoring();
                 OnPropertyChanged(nameof(MonitoringInfos));
             });
