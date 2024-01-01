@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using WebMeetingParticipantChecker.Models.Theme;
 
 namespace WebMeetingParticipantChecker.Models.Config
 {
@@ -59,6 +60,30 @@ namespace WebMeetingParticipantChecker.Models.Config
             get
             {
                 return _configuration?["TeamsParticipantListName"] ?? "出席者";
+            }
+        }
+
+        public static int ThemeId
+        {
+            get
+            {
+                if (int.TryParse(_configuration?["ThemeId"], out var value))
+                {
+                    return value;
+                }
+                return ThemeDefine.MaxThemeId;
+            }
+        }
+
+        public static int? ThemeIdNotReturnDefault
+        {
+            get
+            {
+                if (int.TryParse(_configuration?["ThemeId"], out var value))
+                {
+                    return value;
+                }
+                return null;
             }
         }
     }

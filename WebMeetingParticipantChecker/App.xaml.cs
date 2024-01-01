@@ -6,6 +6,7 @@ using System.IO;
 using System.Windows;
 using WebMeetingParticipantChecker.Models.Config;
 using WebMeetingParticipantChecker.Models.Monitoring;
+using WebMeetingParticipantChecker.Models.Theme;
 using WebMeetingParticipantChecker.Models.UIAutomation;
 using WebMeetingParticipantChecker.ViewModels;
 
@@ -68,6 +69,12 @@ namespace WebMeetingParticipantChecker
         /// 
         private static int GetAppsUseLightTheme()
         {
+            var currentThemeId = AppSettingsManager.ThemeIdNotReturnDefault;
+            if (currentThemeId != null && IsDefaultThemeValue((int)currentThemeId))
+            {
+                return (int)currentThemeId;
+            }
+
 #pragma warning disable CA1416 // プラットフォームの互換性を検証
             int getmode = -1;
             string rKeyName = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
@@ -85,6 +92,11 @@ namespace WebMeetingParticipantChecker
             }
             return getmode;
 #pragma warning restore CA1416 // プラットフォームの互換性を検証
+        }
+
+        private static bool IsDefaultThemeValue(int currentThemeId)
+        {
+            return (currentThemeId == 0 || currentThemeId == 1);
         }
     }
 }

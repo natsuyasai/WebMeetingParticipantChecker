@@ -6,5 +6,6 @@
         public string? KyedownMaxCount { get; set; }
         public string? ZoomParticipantListName { get; set; }
         public string? TeamsParticipantListName { get; set; }
+        public string? ThemeId { get; set; }
     }
 }
