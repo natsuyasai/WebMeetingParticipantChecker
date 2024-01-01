@@ -26,6 +26,10 @@
 
   <ItemGroup>
     <None Remove="icon.png" />
+    <None Remove="Resources\Images\join.png" />
+    <None Remove="Resources\Images\manual_join.png" />
+    <None Remove="Resources\Images\manual_unjoin.png" />
+    <None Remove="Resources\Images\unjoin.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,6 +42,21 @@
       <Isolated>false</Isolated>
       <EmbedInteropTypes>true</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\Images\join.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\manual_join.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\manual_unjoin.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\unjoin.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

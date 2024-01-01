@@ -20,6 +20,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <converter:TargetTypeConverter x:Key="TargetTypeToBoolean" />
+            <converter:JoinStateConverter x:Key="JoinStateToIcon" />
         </ResourceDictionary>
     </Window.Resources>
     <Grid Margin="0,0,0,0">
@@ -334,26 +335,14 @@
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
                                         <!--  接続状態  -->
-                                        <Label Width="40px">
-                                            <Label.Style>
-                                                <Style TargetType="Label">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding IsJoin, Mode=OneWay}" Value="False">
-                                                            <Setter Property="Foreground" Value="Red" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding IsJoin, Mode=OneWay}" Value="True">
-                                                            <Setter Property="Foreground" Value="#32cd32" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding IsManual, Mode=OneWay}" Value="True">
-                                                            <Setter Property="Content" Value="手動" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding IsManual, Mode=OneWay}" Value="False">
-                                                            <Setter Property="Content" Value="●" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Label.Style>
-                                        </Label>
+                                        <TextBlock
+                                            Width="40px"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center">
+                                            <InlineUIContainer>
+                                                <Image Width="24px" Source="{Binding Path=TargetState, Converter={StaticResource JoinStateToIcon}}" />
+                                            </InlineUIContainer>
+                                        </TextBlock>
                                         <!--  ユーザ  -->
                                         <TextBlock
                                             VerticalAlignment="Center"
