@@ -3,11 +3,15 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using NLog;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Windows.Documents;
 using WebMeetingParticipantChecker.Models.Config;
 using WebMeetingParticipantChecker.Models.Message;
+using WebMeetingParticipantChecker.Models.Theme;
 using WebMeetingParticipantChecker.Views;
 
 namespace WebMeetingParticipantChecker.ViewModels
@@ -18,15 +22,16 @@ namespace WebMeetingParticipantChecker.ViewModels
     internal class SettingDialogViewModel : ObservableObject
     {
         private readonly string _initMonitoringCycleMs;
+        private readonly int? _initThemeId;
 
         private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
         #region 表示データ
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private string _monitoringCycleMs = "";
+    /// <summary>
+    /// 
+    /// </summary>
+    private string _monitoringCycleMs = "";
         public string MonitoringCycleMs
         {
             get { return _monitoringCycleMs; }
@@ -37,11 +42,28 @@ namespace WebMeetingParticipantChecker.ViewModels
             }
         }
 
+        private Theme _selectedTheme = ThemeDefine.ThemeDefault.ElementAt(2);
+        public Theme SelectedTheme
+        {
+            get { return _selectedTheme; }
+            set
+            {
+                SetProperty(ref _selectedTheme, value);
+                OnPropertyChanged(nameof(SelectedTheme));
+            }
+        }
+        private IEnumerable<Theme> _theme = ThemeDefine.ThemeDefault;
+        public ObservableCollection<Theme> Theme
+        {
+            get { return new ObservableCollection<Theme>(_theme); }
+        }
+
         public string ExistsNotAppliedData
         {
             get
             {
-                if (_initMonitoringCycleMs != _monitoringCycleMs)
+                if (_initMonitoringCycleMs != _monitoringCycleMs
+                    || _initThemeId != _selectedTheme.Id)
                 {
                     return "※ 変更適用後再起動されていません。";
                 }
@@ -71,6 +93,10 @@ namespace WebMeetingParticipantChecker.ViewModels
         {
             _monitoringCycleMs = AppSettingsManager.MonitoringCycleMs.ToString();
             _initMonitoringCycleMs = _monitoringCycleMs;
+            var currentThemeId = AppSettingsManager.ThemeId;
+            _selectedTheme = (ThemeDefine.IsContaine(currentThemeId)) 
+                ? ThemeDefine.ThemeDefault.ElementAt(currentThemeId) : ThemeDefine.ThemeDefault.ElementAt(2);
+            _initThemeId = currentThemeId;
         }
 
         private void Apply()
@@ -86,10 +112,8 @@ namespace WebMeetingParticipantChecker.ViewModels
                     return;
                 }
 
-                var props = typeof(ConfigrationParameter).GetProperties();
-
-                var targetProp = props.FirstOrDefault(item => item.Name == "MonitoringCycleMs");
-                targetProp?.SetValue(config, _monitoringCycleMs);
+                UpdateProperty(ref config, "MonitoringCycleMs", _monitoringCycleMs);
+                UpdateProperty(ref config, "ThemeId", _selectedTheme.Id.ToString());
 
                 using var writer = new StreamWriter(path);
                 var json = JsonSerializer.Serialize(config);
@@ -107,6 +131,13 @@ namespace WebMeetingParticipantChecker.ViewModels
             {
                 _logger.Error(e);
             }
+        }
+
+        private void UpdateProperty(ref ConfigrationParameter config, string key, string value)
+        {
+            var props = typeof(ConfigrationParameter).GetProperties();
+            var targetProp = props.FirstOrDefault(item => item.Name == key);
+            targetProp?.SetValue(config, value);
         }
 
         private static ConfigrationParameter? ReadCurrentSetting(string path)
