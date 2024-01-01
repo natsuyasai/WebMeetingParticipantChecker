@@ -13,10 +13,10 @@ namespace WebMeetingParticipantChecker.Views.Converter
     {
         private readonly string[] JoinStatusImage = new string[(int)JoinState.Max]
         {
-            "../Resources/Images/join.png",
-            "../Resources/Images/unjoin.png",
-            "../Resources/Images/manual_join.png",
-            "../Resources/Images/manual_unjoin.png",
+            "/Resources/Images/join.png",
+            "/Resources/Images/unjoin.png",
+            "/Resources/Images/manual_join.png",
+            "/Resources/Images/manual_unjoin.png",
         };
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
