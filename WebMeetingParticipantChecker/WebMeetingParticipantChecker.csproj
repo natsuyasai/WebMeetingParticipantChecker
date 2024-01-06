@@ -27,8 +27,10 @@
   <ItemGroup>
     <None Remove="icon.png" />
     <None Remove="Resources\Images\join.png" />
-    <None Remove="Resources\Images\manual_join.png" />
-    <None Remove="Resources\Images\manual_unjoin.png" />
+    <None Remove="Resources\Images\manual_join0.png" />
+    <None Remove="Resources\Images\manual_join1.png" />
+    <None Remove="Resources\Images\manual_unjoin0.png" />
+    <None Remove="Resources\Images\manual_unjoin1.png" />
     <None Remove="Resources\Images\unjoin.png" />
   </ItemGroup>
 
@@ -48,10 +50,16 @@
     <Resource Include="Resources\Images\join.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Images\manual_join.png">
+    <Resource Include="Resources\Images\manual_join0.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Images\manual_unjoin.png">
+    <Resource Include="Resources\Images\manual_join1.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\manual_unjoin0.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\manual_unjoin1.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\unjoin.png">

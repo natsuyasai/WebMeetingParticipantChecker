@@ -63,6 +63,9 @@ namespace WebMeetingParticipantChecker.Models.Config
             }
         }
 
+        /// <summary>
+        /// テーマID（補正あり）
+        /// </summary>
         public static int ThemeId
         {
             get
@@ -75,6 +78,10 @@ namespace WebMeetingParticipantChecker.Models.Config
             }
         }
 
+        /// <summary>
+        /// テーマID
+        /// 補正なし。データがなければnull
+        /// </summary>
         public static int? ThemeIdNotReturnDefault
         {
             get
@@ -84,6 +91,22 @@ namespace WebMeetingParticipantChecker.Models.Config
                     return value;
                 }
                 return null;
+            }
+        }
+
+        /// <summary>
+        /// 現在のテーマ
+        /// </summary>
+        private static int? _currentTheme = null;
+        public static int? CurrentThemeId
+        {
+            get
+            {
+                return _currentTheme;
+            }
+            set
+            {
+                _currentTheme ??= value;
             }
         }
     }

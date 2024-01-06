@@ -51,7 +51,9 @@ namespace WebMeetingParticipantChecker
             base.OnStartup(e);
 
             // テーマ更新
-            string dicPath = (GetAppsUseLightTheme() == 0) ? @"Resources\Dark.xaml" : @"Resources\Light.xaml";
+            var currentTheme = GetAppsUseLightTheme();
+            string dicPath = (currentTheme == 0) ? @"Resources\Dark.xaml" : @"Resources\Light.xaml";
+            AppSettingsManager.CurrentThemeId = currentTheme;
             var dic = new ResourceDictionary
             {
                 Source = new Uri(dicPath, UriKind.Relative)
@@ -70,7 +72,7 @@ namespace WebMeetingParticipantChecker
         private static int GetAppsUseLightTheme()
         {
             var currentThemeId = AppSettingsManager.ThemeIdNotReturnDefault;
-            if (currentThemeId != null && IsDefaultThemeValue((int)currentThemeId))
+            if (currentThemeId != null && ThemeDefine.IsDefaultThemeValue((int)currentThemeId))
             {
                 return (int)currentThemeId;
             }
@@ -92,11 +94,6 @@ namespace WebMeetingParticipantChecker
             }
             return getmode;
 #pragma warning restore CA1416 // プラットフォームの互換性を検証
-        }
-
-        private static bool IsDefaultThemeValue(int currentThemeId)
-        {
-            return (currentThemeId == 0 || currentThemeId == 1);
         }
     }
 }
