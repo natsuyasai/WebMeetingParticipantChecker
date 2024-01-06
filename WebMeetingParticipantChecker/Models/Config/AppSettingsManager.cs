@@ -48,7 +48,11 @@ namespace WebMeetingParticipantChecker.Models.Config
         {
             get
             {
-                return _configuration?["ZoomParticipantListName"] ?? "参加者リスト";
+                if (string.IsNullOrEmpty(_configuration?["ZoomParticipantListName"]))
+                {
+                    return "参加者リスト";
+                }
+                return _configuration["ZoomParticipantListName"]!;
             }
         }
 
@@ -59,7 +63,11 @@ namespace WebMeetingParticipantChecker.Models.Config
         {
             get
             {
-                return _configuration?["TeamsParticipantListName"] ?? "出席者";
+                if (string.IsNullOrEmpty(_configuration?["TeamsParticipantListName"]))
+                {
+                    return "出席者";
+                }
+                return _configuration["TeamsParticipantListName"]!;
             }
         }
 
