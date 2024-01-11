@@ -10,6 +10,7 @@
     Height="202"
     d:DataContext="{d:DesignInstance {x:Type viewmodel:SettingDialogViewModel}}"
     BorderThickness="4"
+    FontSize="13"
     ResizeMode="NoResize"
     Style="{StaticResource WindowStyle}"
     WindowStartupLocation="CenterOwner"
@@ -57,10 +58,10 @@
             <Grid Grid.Column="0">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="32px" />
-                        <RowDefinition Height="32px" />
-                        <RowDefinition Height="32px" />
-                        <RowDefinition Height="32px" />
+                        <RowDefinition Height="40px" />
+                        <RowDefinition Height="40px" />
+                        <RowDefinition Height="40px" />
+                        <RowDefinition Height="40px" />
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0">
                         <TextBlock
@@ -82,16 +83,18 @@
                 <Grid Grid.Column="0">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="32px" />
-                            <RowDefinition Height="32px" />
-                            <RowDefinition Height="32px" />
-                            <RowDefinition Height="32px" />
+                            <RowDefinition Height="40px" />
+                            <RowDefinition Height="40px" />
+                            <RowDefinition Height="40px" />
+                            <RowDefinition Height="40px" />
                         </Grid.RowDefinitions>
                         <Grid Grid.Row="0">
                             <TextBox
                                 Margin="0,4,4,4"
                                 Padding="8,2,0,0"
+                                HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch"
+                                VerticalContentAlignment="Center"
                                 GotFocus="HandleTextBoxGotFocus"
                                 PreviewMouseLeftButtonDown="HandleMouseLeftButtonDown"
                                 Style="{StaticResource TextBoxStyle}"

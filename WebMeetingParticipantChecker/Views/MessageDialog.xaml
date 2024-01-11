@@ -8,6 +8,7 @@
     Width="320px"
     MinHeight="120px"
     BorderThickness="4"
+    FontSize="13"
     ResizeMode="NoResize"
     Style="{StaticResource WindowStyle}"
     WindowStartupLocation="CenterOwner"
