@@ -123,9 +123,9 @@
         <!--  メインコンテンツ  -->
         <Grid Grid.Row="2" Style="{StaticResource GridStyle}">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.5*" />
-                <ColumnDefinition Width="2px" />
-                <ColumnDefinition Width="0.5*" />
+                <ColumnDefinition Width="*" MinWidth="120px" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" MinWidth="200px" />
             </Grid.ColumnDefinitions>
             <!--  プリセット選択領域  -->
             <Grid
@@ -135,43 +135,43 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="32px" />
+                        <RowDefinition Height="32px" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <!--  プリセット選択  -->
                     <Grid Grid.Row="0">
-                        <Grid>
+                        <ComboBox
+                            x:Name="cbPreset"
+                            Margin="4,0,2,0"
+                            HorizontalAlignment="Stretch"
+                            VerticalContentAlignment="Center"
+                            IsSynchronizedWithCurrentItem="True"
+                            ItemsSource="{Binding Path=PresetNames}"
+                            SelectedValuePath="Id"
+                            SelectionChanged="SelectionChangedPreset"
+                            Style="{StaticResource FlatComboBox}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        Margin="4px,4px,16px,4px"
+                                        Text="{Binding Name}"
+                                        TextTrimming="CharacterEllipsis" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                            <ComboBox.ItemContainerStyle>
+                                <Style TargetType="ComboBoxItem">
+                                    <Setter Property="Height" Value="32px" />
+                                </Style>
+                            </ComboBox.ItemContainerStyle>
+                        </ComboBox>
+                    </Grid>
+                    <Grid Grid.Row="1" Margin="0,4,0,4">
+                        <Grid HorizontalAlignment="Stretch">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="48px" />
-                                <ColumnDefinition Width="72px" />
+                                <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <Grid Grid.Column="0">
-                                <ComboBox
-                                    x:Name="cbPreset"
-                                    Margin="4,0,2,0"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalContentAlignment="Center"
-                                    IsSynchronizedWithCurrentItem="True"
-                                    ItemsSource="{Binding Path=PresetNames}"
-                                    SelectedValuePath="Id"
-                                    SelectionChanged="SelectionChangedPreset"
-                                    Style="{StaticResource FlatComboBox}">
-                                    <ComboBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock
-                                                Margin="4px,4px,16px,4px"
-                                                Text="{Binding Name}"
-                                                TextTrimming="CharacterEllipsis" />
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate>
-                                    <ComboBox.ItemContainerStyle>
-                                        <Style TargetType="ComboBoxItem">
-                                            <Setter Property="Height" Value="32px" />
-                                        </Style>
-                                    </ComboBox.ItemContainerStyle>
-                                </ComboBox>
-                            </Grid>
-                            <Grid Grid.Column="1">
                                 <Button
                                     Margin="2,0,2,0"
                                     HorizontalAlignment="Stretch"
@@ -180,7 +180,7 @@
                                     Content="編集"
                                     Style="{StaticResource FlatButton}" />
                             </Grid>
-                            <Grid Grid.Column="2">
+                            <Grid Grid.Column="1">
                                 <Button
                                     Margin="2,0,4,0"
                                     HorizontalAlignment="Stretch"
@@ -192,7 +192,7 @@
                         </Grid>
                     </Grid>
                     <!--  対象ユーザ情報  -->
-                    <Grid Grid.Row="1">
+                    <Grid Grid.Row="2">
                         <ListView
                             d:ItemsSource="{d:SampleData ItemCount=5}"
                             BorderBrush="{x:Null}"
@@ -219,9 +219,13 @@
                 </Grid>
             </Grid>
             <!--  区切り線  -->
-            <Grid Grid.Column="1">
-                <Border BorderBrush="Gray" BorderThickness="1,1,1,1" />
-            </Grid>
+            <GridSplitter
+                Grid.Column="1"
+                Width="4"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Stretch"
+                Background="Gray"
+                ShowsPreview="False" />
             <!--  接続監視領域  -->
             <Grid
                 Grid.Column="2"
@@ -281,8 +285,7 @@
                     <Grid Grid.Row="1" Style="{StaticResource GridStyle}">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="200px" />
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="0.7*" />
                             </Grid.ColumnDefinitions>
                             <Grid Grid.Column="0">
                                 <CheckBox
