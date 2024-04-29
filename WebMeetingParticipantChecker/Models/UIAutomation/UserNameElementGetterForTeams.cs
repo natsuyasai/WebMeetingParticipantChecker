@@ -30,20 +30,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
                 {
                     continue;
                 }
-                // 2要素目の子の子が名前の要素のため、そこまでたどる
-                var walker = _automation.CreateTreeWalker(GetConditionForChildren());
-                var firstChild = walker.GetFirstChildElement(item);
-                if (firstChild?.CurrentName == null)
-                {
-                    continue;
-                }
-                var secondChild = walker.GetNextSiblingElement(firstChild);
-                if (secondChild?.CurrentName == null)
-                {
-                    continue;
-                }
-                var secondChildsChild = walker.GetFirstChildElement(secondChild);
-                elements.Add(secondChildsChild ?? item);
+                elements.Add(item);
             }
             return new UIAutomationElementArray(elements);
         }
