@@ -85,11 +85,12 @@
             </Grid>
             <Button
                 Grid.Column="3"
-                Width="48px"
+                Width="24px"
                 Margin="0,0,16,0"
                 Click="HandleSetting"
-                Content="設定"
-                Style="{StaticResource HeaderButton}" />
+                Style="{StaticResource HeaderButton}">
+                <Image Width="24px" Source="../Resources/images/Action/settings_FILL0_wght400_GRAD0_opsz24.png" />
+            </Button>
             <Button
                 Grid.Column="4"
                 Width="32px"
@@ -177,8 +178,9 @@
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="Stretch"
                                     Command="{Binding EditPresetCommand}"
-                                    Content="編集"
-                                    Style="{StaticResource FlatButton}" />
+                                    Style="{StaticResource FlatButton}">
+                                    <Image Width="24px" Source="../Resources/images/Action/edit_FILL0_wght400_GRAD0_opsz24.png" />
+                                </Button>
                             </Grid>
                             <Grid Grid.Column="1">
                                 <Button
@@ -186,8 +188,9 @@
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="Stretch"
                                     Command="{Binding ReloadPresetCommand}"
-                                    Content="再読込"
-                                    Style="{StaticResource FlatButton}" />
+                                    Style="{StaticResource FlatButton}">
+                                    <Image Width="24px" Source="../Resources/images/Action/refresh_FILL0_wght400_GRAD0_opsz24.png" />
+                                </Button>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -253,9 +256,10 @@
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="Stretch"
                                     Command="{Binding StartCommand, Mode=OneWay}"
-                                    Content="開始"
                                     IsEnabled="{Binding CanStart}"
-                                    Style="{StaticResource FlatButton}" />
+                                    Style="{StaticResource FlatButton}">
+                                    <Image Width="24px" Source="../Resources/images/Action/play_arrow_FILL0_wght400_GRAD0_opsz24.png" />
+                                </Button>
                             </Grid>
                             <!--  一時停止/再開ボタン  -->
                             <Grid Grid.Column="1">
@@ -275,9 +279,10 @@
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="Stretch"
                                     Command="{Binding StopCommand, Mode=OneWay}"
-                                    Content="停止"
                                     IsEnabled="{Binding CanStop}"
-                                    Style="{StaticResource FlatButton}" />
+                                    Style="{StaticResource FlatButton}">
+                                    <Image Width="24px" Source="../Resources/images/Action/stop_FILL0_wght400_GRAD0_opsz24.png" />
+                                </Button>
                             </Grid>
                         </Grid>
                     </Grid>
