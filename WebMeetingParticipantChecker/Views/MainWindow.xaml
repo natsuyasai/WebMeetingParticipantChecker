@@ -268,9 +268,10 @@
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="Stretch"
                                     Command="{Binding PauseCommand, Mode=OneWay}"
-                                    Content="{Binding PauseButtonString}"
                                     IsEnabled="{Binding CanPauseAndResume}"
-                                    Style="{StaticResource FlatButton}" />
+                                    Style="{StaticResource FlatButton}">
+                                    <Image Width="24px" Source="{Binding PauseButtonIcon}" />
+                                </Button>
                             </Grid>
                             <!--  停止ボタン  -->
                             <Grid Grid.Column="2">

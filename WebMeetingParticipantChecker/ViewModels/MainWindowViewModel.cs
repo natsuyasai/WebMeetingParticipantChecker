@@ -125,6 +125,16 @@ namespace WebMeetingParticipantChecker.ViewModels
                 return _status == StatusValue.Pause ? "再開" : "一時停止";
             }
         }
+        public string PauseButtonIcon
+        {
+            get
+            {
+                return _status == StatusValue.Pause ?
+                    "../Resources/images/Action/resume_FILL0_wght400_GRAD0_opsz24.png" :
+                    "../Resources/images/Action/pause_FILL0_wght400_GRAD0_opsz24.png";
+            }
+        }
+
 
         /// <summary>
         /// 実行可能か
