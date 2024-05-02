@@ -92,6 +92,9 @@
                 Click="HandleSetting"
                 Style="{StaticResource HeaderButton}">
                 <Image Width="24px" Source="{Binding Converter={StaticResource ImageConverter}, ConverterParameter=settings_FILL0_wght400_GRAD0_opsz24.png}" />
+                <Button.ToolTip>
+                    <TextBlock>設定</TextBlock>
+                </Button.ToolTip>
             </Button>
             <Button
                 Grid.Column="4"
@@ -182,6 +185,9 @@
                                     Command="{Binding EditPresetCommand}"
                                     Style="{StaticResource FlatButton}">
                                     <Image Width="24px" Source="{Binding Converter={StaticResource ImageConverter}, ConverterParameter=edit_FILL0_wght400_GRAD0_opsz24.png}" />
+                                    <Button.ToolTip>
+                                        <TextBlock>編集</TextBlock>
+                                    </Button.ToolTip>
                                 </Button>
                             </Grid>
                             <Grid Grid.Column="1">
@@ -192,6 +198,9 @@
                                     Command="{Binding ReloadPresetCommand}"
                                     Style="{StaticResource FlatButton}">
                                     <Image Width="24px" Source="{Binding Converter={StaticResource ImageConverter}, ConverterParameter=refresh_FILL0_wght400_GRAD0_opsz24.png}" />
+                                    <Button.ToolTip>
+                                        <TextBlock>再読込</TextBlock>
+                                    </Button.ToolTip>
                                 </Button>
                             </Grid>
                         </Grid>
@@ -261,11 +270,18 @@
                                     IsEnabled="{Binding CanStart}"
                                     Style="{StaticResource FlatButton}">
                                     <Image Width="24px" Source="{Binding Converter={StaticResource ImageConverter}, ConverterParameter=play_arrow_FILL0_wght400_GRAD0_opsz24.png}" />
+                                    <Button.ToolTip>
+                                        <TextBlock>開始</TextBlock>
+                                    </Button.ToolTip>
                                 </Button>
                                 <Rectangle
                                     Panel.ZIndex="2"
                                     Style="{StaticResource ButtonDisableLayer}"
-                                    Visibility="{Binding CanStart, Converter={StaticResource BoolToVisible}, ConverterParameter=!}" />
+                                    Visibility="{Binding CanStart, Converter={StaticResource BoolToVisible}, ConverterParameter=!}">
+                                    <Rectangle.ToolTip>
+                                        <TextBlock>開始</TextBlock>
+                                    </Rectangle.ToolTip>
+                                </Rectangle>
                             </Grid>
                             <!--  一時停止/再開ボタン  -->
                             <Grid Grid.Column="1">
@@ -277,11 +293,18 @@
                                     IsEnabled="{Binding CanPauseAndResume}"
                                     Style="{StaticResource FlatButton}">
                                     <Image Width="24px" Source="{Binding Path=PauseButtonIcon, Converter={StaticResource ImageConverter}, ConverterParameter=''}" />
+                                    <Button.ToolTip>
+                                        <TextBlock>一時停止/再開</TextBlock>
+                                    </Button.ToolTip>
                                 </Button>
                                 <Rectangle
                                     Panel.ZIndex="2"
                                     Style="{StaticResource ButtonDisableLayer}"
-                                    Visibility="{Binding CanPauseAndResume, Converter={StaticResource BoolToVisible}, ConverterParameter=!}" />
+                                    Visibility="{Binding CanPauseAndResume, Converter={StaticResource BoolToVisible}, ConverterParameter=!}">
+                                    <Rectangle.ToolTip>
+                                        <TextBlock>一時停止/再開</TextBlock>
+                                    </Rectangle.ToolTip>
+                                </Rectangle>
                             </Grid>
                             <!--  停止ボタン  -->
                             <Grid Grid.Column="2">
@@ -293,11 +316,18 @@
                                     IsEnabled="{Binding CanStop}"
                                     Style="{StaticResource FlatButton}">
                                     <Image Width="24px" Source="{Binding Converter={StaticResource ImageConverter}, ConverterParameter=stop_FILL0_wght400_GRAD0_opsz24.png}" />
+                                    <Button.ToolTip>
+                                        <TextBlock>停止</TextBlock>
+                                    </Button.ToolTip>
                                 </Button>
                                 <Rectangle
                                     Panel.ZIndex="2"
                                     Style="{StaticResource ButtonDisableLayer}"
-                                    Visibility="{Binding CanStop, Converter={StaticResource BoolToVisible}, ConverterParameter=!}" />
+                                    Visibility="{Binding CanStop, Converter={StaticResource BoolToVisible}, ConverterParameter=!}">
+                                    <Rectangle.ToolTip>
+                                        <TextBlock>停止</TextBlock>
+                                    </Rectangle.ToolTip>
+                                </Rectangle>
                             </Grid>
                         </Grid>
                     </Grid>
