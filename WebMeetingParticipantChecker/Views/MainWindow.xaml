@@ -19,6 +19,7 @@
     mc:Ignorable="d">
     <Window.Resources>
         <ResourceDictionary>
+            <converter:ImageResourceConverter x:Key="ImageConverter" />
             <converter:TargetTypeConverter x:Key="TargetTypeToBoolean" />
             <converter:JoinStateConverter x:Key="JoinStateToIcon" />
         </ResourceDictionary>
@@ -89,7 +90,7 @@
                 Margin="0,0,16,0"
                 Click="HandleSetting"
                 Style="{StaticResource HeaderButton}">
-                <Image Width="24px" Source="../Resources/images/Action/settings_FILL0_wght400_GRAD0_opsz24.png" />
+                <Image Width="24px" Source="{Binding Converter={StaticResource ImageConverter}, ConverterParameter=settings_FILL0_wght400_GRAD0_opsz24.png}" />
             </Button>
             <Button
                 Grid.Column="4"
@@ -179,7 +180,7 @@
                                     VerticalAlignment="Stretch"
                                     Command="{Binding EditPresetCommand}"
                                     Style="{StaticResource FlatButton}">
-                                    <Image Width="24px" Source="../Resources/images/Action/edit_FILL0_wght400_GRAD0_opsz24.png" />
+                                    <Image Width="24px" Source="{Binding Converter={StaticResource ImageConverter}, ConverterParameter=edit_FILL0_wght400_GRAD0_opsz24.png}" />
                                 </Button>
                             </Grid>
                             <Grid Grid.Column="1">
@@ -189,7 +190,7 @@
                                     VerticalAlignment="Stretch"
                                     Command="{Binding ReloadPresetCommand}"
                                     Style="{StaticResource FlatButton}">
-                                    <Image Width="24px" Source="../Resources/images/Action/refresh_FILL0_wght400_GRAD0_opsz24.png" />
+                                    <Image Width="24px" Source="{Binding Converter={StaticResource ImageConverter}, ConverterParameter=refresh_FILL0_wght400_GRAD0_opsz24.png}" />
                                 </Button>
                             </Grid>
                         </Grid>
@@ -258,7 +259,7 @@
                                     Command="{Binding StartCommand, Mode=OneWay}"
                                     IsEnabled="{Binding CanStart}"
                                     Style="{StaticResource FlatButton}">
-                                    <Image Width="24px" Source="../Resources/images/Action/play_arrow_FILL0_wght400_GRAD0_opsz24.png" />
+                                    <Image Width="24px" Source="{Binding Converter={StaticResource ImageConverter}, ConverterParameter=play_arrow_FILL0_wght400_GRAD0_opsz24.png}" />
                                 </Button>
                             </Grid>
                             <!--  一時停止/再開ボタン  -->
@@ -270,7 +271,7 @@
                                     Command="{Binding PauseCommand, Mode=OneWay}"
                                     IsEnabled="{Binding CanPauseAndResume}"
                                     Style="{StaticResource FlatButton}">
-                                    <Image Width="24px" Source="{Binding PauseButtonIcon}" />
+                                    <Image Width="24px" Source="{Binding Path=PauseButtonIcon, Converter={StaticResource ImageConverter}, ConverterParameter=''}" />
                                 </Button>
                             </Grid>
                             <!--  停止ボタン  -->
@@ -282,7 +283,7 @@
                                     Command="{Binding StopCommand, Mode=OneWay}"
                                     IsEnabled="{Binding CanStop}"
                                     Style="{StaticResource FlatButton}">
-                                    <Image Width="24px" Source="../Resources/images/Action/stop_FILL0_wght400_GRAD0_opsz24.png" />
+                                    <Image Width="24px" Source="{Binding Converter={StaticResource ImageConverter}, ConverterParameter=stop_FILL0_wght400_GRAD0_opsz24.png}" />
                                 </Button>
                             </Grid>
                         </Grid>

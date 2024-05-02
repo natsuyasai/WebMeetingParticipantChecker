@@ -26,6 +26,13 @@
 
   <ItemGroup>
     <None Remove="icon.png" />
+    <None Remove="Resources\Images\Action\Dark\edit_FILL0_wght400_GRAD0_opsz24.png" />
+    <None Remove="Resources\Images\Action\Dark\pause_FILL0_wght400_GRAD0_opsz24.png" />
+    <None Remove="Resources\Images\Action\Dark\play_arrow_FILL0_wght400_GRAD0_opsz24.png" />
+    <None Remove="Resources\Images\Action\Dark\refresh_FILL0_wght400_GRAD0_opsz24.png" />
+    <None Remove="Resources\Images\Action\Dark\resume_FILL0_wght400_GRAD0_opsz24.png" />
+    <None Remove="Resources\Images\Action\Dark\settings_FILL0_wght400_GRAD0_opsz24.png" />
+    <None Remove="Resources\Images\Action\Dark\stop_FILL0_wght400_GRAD0_opsz24.png" />
     <None Remove="Resources\Images\Action\edit_FILL0_wght400_GRAD0_opsz24.png" />
     <None Remove="Resources\Images\Action\pause_FILL0_wght400_GRAD0_opsz24.png" />
     <None Remove="Resources\Images\Action\play_arrow_FILL0_wght400_GRAD0_opsz24.png" />
@@ -54,13 +61,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\Images\Action\edit_FILL0_wght400_GRAD0_opsz24.png" />
-    <Resource Include="Resources\Images\Action\pause_FILL0_wght400_GRAD0_opsz24.png" />
-    <Resource Include="Resources\Images\Action\play_arrow_FILL0_wght400_GRAD0_opsz24.png" />
-    <Resource Include="Resources\Images\Action\refresh_FILL0_wght400_GRAD0_opsz24.png" />
-    <Resource Include="Resources\Images\Action\resume_FILL0_wght400_GRAD0_opsz24.png" />
-    <Resource Include="Resources\Images\Action\settings_FILL0_wght400_GRAD0_opsz24.png" />
-    <Resource Include="Resources\Images\Action\stop_FILL0_wght400_GRAD0_opsz24.png" />
+    <Resource Include="Resources\Images\Action\Dark\edit_FILL0_wght400_GRAD0_opsz24.png" />
+    <Resource Include="Resources\Images\Action\Dark\pause_FILL0_wght400_GRAD0_opsz24.png" />
+    <Resource Include="Resources\Images\Action\Dark\play_arrow_FILL0_wght400_GRAD0_opsz24.png" />
+    <Resource Include="Resources\Images\Action\Dark\refresh_FILL0_wght400_GRAD0_opsz24.png" />
+    <Resource Include="Resources\Images\Action\Dark\resume_FILL0_wght400_GRAD0_opsz24.png" />
+    <Resource Include="Resources\Images\Action\Dark\settings_FILL0_wght400_GRAD0_opsz24.png" />
+    <Resource Include="Resources\Images\Action\Dark\stop_FILL0_wght400_GRAD0_opsz24.png" />
+    <Resource Include="Resources\Images\Action\Light\edit_FILL0_wght400_GRAD0_opsz24.png" />
+    <Resource Include="Resources\Images\Action\Light\pause_FILL0_wght400_GRAD0_opsz24.png" />
+    <Resource Include="Resources\Images\Action\Light\play_arrow_FILL0_wght400_GRAD0_opsz24.png" />
+    <Resource Include="Resources\Images\Action\Light\refresh_FILL0_wght400_GRAD0_opsz24.png" />
+    <Resource Include="Resources\Images\Action\Light\resume_FILL0_wght400_GRAD0_opsz24.png" />
+    <Resource Include="Resources\Images\Action\Light\settings_FILL0_wght400_GRAD0_opsz24.png" />
+    <Resource Include="Resources\Images\Action\Light\stop_FILL0_wght400_GRAD0_opsz24.png" />
     <Resource Include="Resources\Images\join.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>

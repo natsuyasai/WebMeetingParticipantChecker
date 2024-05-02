@@ -130,8 +130,8 @@ namespace WebMeetingParticipantChecker.ViewModels
             get
             {
                 return _status == StatusValue.Pause ?
-                    "../Resources/images/Action/resume_FILL0_wght400_GRAD0_opsz24.png" :
-                    "../Resources/images/Action/pause_FILL0_wght400_GRAD0_opsz24.png";
+                    "resume_FILL0_wght400_GRAD0_opsz24.png" :
+                    "pause_FILL0_wght400_GRAD0_opsz24.png";
             }
         }
 
