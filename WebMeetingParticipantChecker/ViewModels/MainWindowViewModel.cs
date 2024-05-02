@@ -376,6 +376,7 @@ namespace WebMeetingParticipantChecker.ViewModels
             _status = value;
             OnPropertyChanged(nameof(StatusDisplayString));
             OnPropertyChanged(nameof(PauseButtonString));
+            OnPropertyChanged(nameof(PauseButtonIcon));
             OnPropertyChanged(nameof(CanStart));
             OnPropertyChanged(nameof(CanStop));
             OnPropertyChanged(nameof(CanPauseAndResume));
