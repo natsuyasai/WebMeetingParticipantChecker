@@ -57,6 +57,11 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+    <!--  ボタンの無効化用  -->
+    <Style x:Key="ButtonDisableLayer" TargetType="Rectangle">
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="Fill" Value="#7f000000" />
+    </Style>
     <!--  ヘッダボタン用  -->
     <Style
         x:Key="HeaderButton"

@@ -22,6 +22,7 @@
             <converter:ImageResourceConverter x:Key="ImageConverter" />
             <converter:TargetTypeConverter x:Key="TargetTypeToBoolean" />
             <converter:JoinStateConverter x:Key="JoinStateToIcon" />
+            <converter:BooleanToVisibilityConverter x:Key="BoolToVisible" />
         </ResourceDictionary>
     </Window.Resources>
     <Grid Margin="0,0,0,0">
@@ -261,6 +262,10 @@
                                     Style="{StaticResource FlatButton}">
                                     <Image Width="24px" Source="{Binding Converter={StaticResource ImageConverter}, ConverterParameter=play_arrow_FILL0_wght400_GRAD0_opsz24.png}" />
                                 </Button>
+                                <Rectangle
+                                    Panel.ZIndex="2"
+                                    Style="{StaticResource ButtonDisableLayer}"
+                                    Visibility="{Binding CanStart, Converter={StaticResource BoolToVisible}, ConverterParameter=!}" />
                             </Grid>
                             <!--  一時停止/再開ボタン  -->
                             <Grid Grid.Column="1">
@@ -273,6 +278,10 @@
                                     Style="{StaticResource FlatButton}">
                                     <Image Width="24px" Source="{Binding Path=PauseButtonIcon, Converter={StaticResource ImageConverter}, ConverterParameter=''}" />
                                 </Button>
+                                <Rectangle
+                                    Panel.ZIndex="2"
+                                    Style="{StaticResource ButtonDisableLayer}"
+                                    Visibility="{Binding CanPauseAndResume, Converter={StaticResource BoolToVisible}, ConverterParameter=!}" />
                             </Grid>
                             <!--  停止ボタン  -->
                             <Grid Grid.Column="2">
@@ -285,6 +294,10 @@
                                     Style="{StaticResource FlatButton}">
                                     <Image Width="24px" Source="{Binding Converter={StaticResource ImageConverter}, ConverterParameter=stop_FILL0_wght400_GRAD0_opsz24.png}" />
                                 </Button>
+                                <Rectangle
+                                    Panel.ZIndex="2"
+                                    Style="{StaticResource ButtonDisableLayer}"
+                                    Visibility="{Binding CanStop, Converter={StaticResource BoolToVisible}, ConverterParameter=!}" />
                             </Grid>
                         </Grid>
                     </Grid>
