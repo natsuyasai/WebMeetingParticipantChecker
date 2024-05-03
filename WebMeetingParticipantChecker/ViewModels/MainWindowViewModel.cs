@@ -125,6 +125,16 @@ namespace WebMeetingParticipantChecker.ViewModels
                 return _status == StatusValue.Pause ? "再開" : "一時停止";
             }
         }
+        public string PauseButtonIcon
+        {
+            get
+            {
+                return _status == StatusValue.Pause ?
+                    "resume_FILL0_wght400_GRAD0_opsz24.png" :
+                    "pause_FILL0_wght400_GRAD0_opsz24.png";
+            }
+        }
+
 
         /// <summary>
         /// 実行可能か
@@ -366,6 +376,7 @@ namespace WebMeetingParticipantChecker.ViewModels
             _status = value;
             OnPropertyChanged(nameof(StatusDisplayString));
             OnPropertyChanged(nameof(PauseButtonString));
+            OnPropertyChanged(nameof(PauseButtonIcon));
             OnPropertyChanged(nameof(CanStart));
             OnPropertyChanged(nameof(CanStop));
             OnPropertyChanged(nameof(CanPauseAndResume));
