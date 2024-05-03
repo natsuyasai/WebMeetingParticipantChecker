@@ -31,7 +31,7 @@ namespace WebMeetingParticipantChecker
                     new AutomationElementGetterForTeams() })
                 .AddSingleton<MonitoringModel>()
                 .AddSingleton<IMonitoring, MonitoringService>()
-                .AddTransient<MainWindowViewModel>();
+                .AddSingleton<MainWindowViewModel>();
 
             return services.BuildServiceProvider();
         }

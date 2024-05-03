@@ -37,20 +37,6 @@ namespace WebMeetingParticipantChecker.Views
             });
         }
 
-        /// <summary>
-        /// プリセット選択
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void SelectionChangedPreset(object _, SelectionChangedEventArgs e)
-        {
-            PresetInfo selectedItem = (PresetInfo)cbPreset.SelectedItem;
-            if (selectedItem != null)
-            {
-                _mainWindowViewModel.SetSelectedPreset(selectedItem);
-            }
-        }
-
         private void HandleClose(object _, RoutedEventArgs e)
         {
             _logger.Info("終了");
