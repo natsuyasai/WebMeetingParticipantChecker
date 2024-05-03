@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewmodel="clr-namespace:WebMeetingParticipantChecker.ViewModels"
     Title="{Binding Title}"
-    Width="720"
+    Width="480"
     Height="480"
     MinWidth="320"
     MinHeight="140"
@@ -60,7 +60,7 @@
                 Style="{StaticResource LablelStyle}" />
             <Grid
                 Grid.Column="2"
-                Margin="8,0,8,0"
+                Margin="0,0,0,0"
                 Style="{StaticResource GridStyle}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -68,7 +68,7 @@
                 </Grid.ColumnDefinitions>
                 <RadioButton
                     Grid.Column="0"
-                    Width="48px"
+                    Width="36px"
                     Margin="0,0,4,0"
                     Content="Zoom"
                     GroupName="TargetType"
@@ -77,8 +77,8 @@
                     Style="{StaticResource RadioToggleButton}" />
                 <RadioButton
                     Grid.Column="1"
-                    Width="48px"
-                    Margin="4,0,16,0"
+                    Width="36px"
+                    Margin="4,0,8,0"
                     Content="Teams"
                     GroupName="TargetType"
                     IsChecked="{Binding Path=CheckTarget, Mode=TwoWay, Converter={StaticResource TargetTypeToBoolean}, ConverterParameter=Teams, UpdateSourceTrigger=PropertyChanged}"
@@ -88,7 +88,7 @@
             <Button
                 Grid.Column="3"
                 Width="24px"
-                Margin="0,0,16,0"
+                Margin="0,0,8,0"
                 Click="HandleSetting"
                 Style="{StaticResource HeaderButton}">
                 <Image Width="24px" Source="{Binding Converter={StaticResource ImageConverter}, ConverterParameter=settings_FILL0_wght400_GRAD0_opsz24.png}" />
@@ -100,7 +100,7 @@
                 Grid.Column="4"
                 Width="32px"
                 Height="32px"
-                HorizontalAlignment="Right"
+                HorizontalAlignment="Center"
                 Click="HandleMinimize"
                 Content="0"
                 Style="{StaticResource HeaderSystemButton}" />
@@ -109,7 +109,7 @@
                 Grid.Column="5"
                 Width="32px"
                 Height="32px"
-                HorizontalAlignment="Right"
+                HorizontalAlignment="Center"
                 Click="HandleMaximizeOrRestoreWindow"
                 Content="1"
                 Style="{StaticResource HeaderSystemButton}" />
@@ -117,7 +117,7 @@
                 Grid.Column="56"
                 Width="32px"
                 Height="32px"
-                HorizontalAlignment="Right"
+                HorizontalAlignment="Center"
                 Click="HandleClose"
                 Content="r"
                 Style="{StaticResource HeaderCloseSystemButton}" />
