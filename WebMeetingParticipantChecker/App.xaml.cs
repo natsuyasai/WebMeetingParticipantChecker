@@ -26,7 +26,7 @@ namespace WebMeetingParticipantChecker
         {
             var services = new ServiceCollection()
                 .AddTransient<IKeyEventSender, ArrowKeyEventSender>()
-                .AddSingleton<AutomationElementGetter[]>(
+                .AddSingleton<IAutomationElementGetter[]>(
                 provider => new AutomationElementGetter[] {
                     new AutomationElementGetterForZoom(),
                     new AutomationElementGetterForTeams() })
