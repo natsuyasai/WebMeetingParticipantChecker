@@ -16,20 +16,23 @@ using Microsoft.Extensions.Configuration;
 namespace WebMeetingParticipantChecker.ViewModels.Tests
 {
     [TestClass()]
-    public class MainWindowViewModelTests
+    public class MonitoringViewModelTests
     {
-        private Mock<IPreset> _presetMoq;
+        private readonly Mock<IPreset> _presetMoq;
+
+        public MonitoringViewModelTests()
+        {
+            _presetMoq = new Mock<IPreset>();
+            _presetMoq.Setup(x => x.GetCurrentPresetDataList())
+                .Returns(new List<string>() { "テンプレート1", "テンプレート2" });
+        }
+
         [TestInitialize]
         public void TestInitialize()
         {
             var moq = new Mock<IConfigurationRoot>();
             moq.SetupGet(x => x["MonitoringCycleMs"]).Returns("100");
             AppSettingsManager.Intialization(moq.Object);
-
-            _presetMoq = new Mock<IPreset>();
-            _presetMoq.Setup(x => x.GetCurrentPresetDataList())
-                .Returns(new List<string>() { "テンプレート1", "テンプレート2" });
-
         }
 
         [TestMethod()]
@@ -40,11 +43,11 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
             moq.Setup(x => x.GetMonitoringInfos())
                 .Returns(new List<MonitoringInfo>()
                 {
-                    new MonitoringInfo(0, "テンプレート1"),
-                    new MonitoringInfo(1, "テンプレート2")
+                    new(0, "テンプレート1"),
+                    new(1, "テンプレート2")
                 });
 
-            var target = new MainWindowViewModel(moq.Object, _presetMoq.Object);
+            var target = new MonitoringViewModel(moq.Object, _presetMoq.Object);
 
             target.StartCommand.Execute(null);
 
@@ -67,8 +70,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
         public void 監視開始_Zoomウィンドウ捕捉完了_監視中状態()
         {
             var moq = new Mock<IMonitoring>();
-            var _presetMoq = new Mock<IPreset>();
-            var target = new MainWindowViewModel(moq.Object, _presetMoq.Object);
+            var target = new MonitoringViewModel(moq.Object, _presetMoq.Object);
             SetMonitoringFacadeMock(ref moq, target);
             moq.Setup(x => x.StartMonitoring(It.IsAny<Action>()))
                 .Callback<Action>(action =>
@@ -96,8 +98,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
         public void 監視停止()
         {
             var moq = new Mock<IMonitoring>();
-            var _presetMoq = new Mock<IPreset>();
-            var target = new MainWindowViewModel(moq.Object, _presetMoq.Object);
+            var target = new MonitoringViewModel(moq.Object, _presetMoq.Object);
             SetMonitoringFacadeMock(ref moq, target);
 
             target.StopCommand.Execute(null);
@@ -123,8 +124,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
         public void 監視中に一時停止にして再開させる()
         {
             var moq = new Mock<IMonitoring>();
-            var _presetMoq = new Mock<IPreset>();
-            var target = new MainWindowViewModel(moq.Object, _presetMoq.Object);
+            var target = new MonitoringViewModel(moq.Object, _presetMoq.Object);
             SetMonitoringFacadeMock(ref moq, target);
             target.StartCommand.Execute(null);
 
@@ -157,8 +157,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
         public void 監視中_参加状態を手動で参加状態に切り替え()
         {
             var moq = new Mock<IMonitoring>();
-            var _presetMoq = new Mock<IPreset>();
-            var target = new MainWindowViewModel(moq.Object, _presetMoq.Object);
+            var target = new MonitoringViewModel(moq.Object, _presetMoq.Object);
             SetMonitoringFacadeMock(ref moq, target);
             target.StartCommand.Execute(null);
 
@@ -187,8 +186,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
         public void 一時停止中_参加状態を手動で参加状態に切り替え()
         {
             var moq = new Mock<IMonitoring>();
-            var _presetMoq = new Mock<IPreset>();
-            var target = new MainWindowViewModel(moq.Object, _presetMoq.Object);
+            var target = new MonitoringViewModel(moq.Object, _presetMoq.Object);
             SetMonitoringFacadeMock(ref moq, target);
             target.StartCommand.Execute(null);
             target.PauseCommand.Execute(null);
@@ -218,8 +216,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
         public void 参加状態を自動に切り替え()
         {
             var moq = new Mock<IMonitoring>();
-            var _presetMoq = new Mock<IPreset>();
-            var target = new MainWindowViewModel(moq.Object, _presetMoq.Object);
+            var target = new MonitoringViewModel(moq.Object, _presetMoq.Object);
             SetMonitoringFacadeMock(ref moq, target);
             target.StartCommand.Execute(null);
 
@@ -257,11 +254,10 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
 
         [TestMethod()]
         [TestCategory("参加監視")]
-        public void 全員参加()
+        public async Task 全員参加()
         {
             var moq = new Mock<IMonitoring>();
-            var _presetMoq = new Mock<IPreset>();
-            var target = new MainWindowViewModel(moq.Object, _presetMoq.Object);
+            var target = new MonitoringViewModel(moq.Object, _presetMoq.Object);
             SetMonitoringFacadeMock(ref moq, target);
             target.StartCommand.Execute(null);
 
@@ -287,14 +283,18 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
             Assert.IsTrue(target.MonitoringInfos[1].IsJoin);
             Assert.IsTrue(target.MonitoringInfos[1].IsManual);
 
-            Assert.AreEqual("対象者参加済み", target.StatusDisplayString);
+            // 監視完了直後は"対象者参加済み"状態だが、すぐに未監視に更新される
+            // Task内で実行されるため、テストのタイミング次第でどちらかの状態になってしまう
+            // そのため一時的にテストで待ちを発生させることで、確実に未監視状態になってから検証を行うようにする
+            await Task.Delay(0);
+            Assert.AreEqual("未監視", target.StatusDisplayString);
             Assert.AreEqual("一時停止", target.PauseButtonString);
             Assert.IsTrue(target.CanStart);
             Assert.IsFalse(target.CanStop);
             Assert.IsFalse(target.CanPauseAndResume);
         }
 
-        private void SetMonitoringFacadeMock(ref Mock<IMonitoring> moq, MainWindowViewModel target)
+        private void SetMonitoringFacadeMock(ref Mock<IMonitoring> moq, MonitoringViewModel target)
         {
             moq.Setup(x => x.SelectZoomParticipantElement(It.IsAny<MonitoringType.Target>(), It.IsAny<Action>()))
                 .Callback<MonitoringType.Target, Action>((_, action) =>
@@ -309,8 +309,8 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
             moq.Setup(x => x.GetMonitoringInfos())
                 .Returns(new List<MonitoringInfo>()
                 {
-                    new MonitoringInfo(0, "テンプレート1"),
-                    new MonitoringInfo(1, "テンプレート2")
+                    new(0, "テンプレート1"),
+                    new(1, "テンプレート2")
                 });
 
 

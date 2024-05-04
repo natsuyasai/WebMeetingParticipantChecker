@@ -34,6 +34,7 @@ namespace WebMeetingParticipantChecker
                 .AddSingleton<IMonitoring, MonitoringService>()
                 .AddSingleton<IPreset, PresetModel>()
                 .AddTransient<PresetViewModel>()
+                .AddTransient<MonitoringViewModel>()
                 .AddSingleton<MainWindowViewModel>();
 
             return services.BuildServiceProvider();

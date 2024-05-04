@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WebMeetingParticipantChecker.ViewModels;
 
 namespace WebMeetingParticipantChecker.Views
 {
@@ -20,9 +22,12 @@ namespace WebMeetingParticipantChecker.Views
     /// </summary>
     public partial class Monitoring : UserControl
     {
+        private readonly MonitoringViewModel _monitoringViewModel;
         public Monitoring()
         {
             InitializeComponent();
+            _monitoringViewModel = App.Services.GetService<MonitoringViewModel>()!;
+            DataContext = _monitoringViewModel;
         }
     }
 }
