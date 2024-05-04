@@ -24,10 +24,11 @@
                 <RowDefinition Height="32px" />
                 <RowDefinition Height="32px" />
                 <RowDefinition Height="32px" />
+                <RowDefinition Height="32px" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <!--  開始停止ボタン  -->
-            <Grid Grid.Row="0">
+            <Grid Grid.Row="1">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="0.3*" />
@@ -37,6 +38,7 @@
                     <!--  開始ボタン  -->
                     <Grid Grid.Column="0">
                         <Button
+                            Height="24px"
                             Margin="4,0,2,0"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
@@ -49,6 +51,7 @@
                             </Button.ToolTip>
                         </Button>
                         <Rectangle
+                            Height="24px"
                             Panel.ZIndex="2"
                             Style="{StaticResource ButtonDisableLayer}"
                             Visibility="{Binding CanStart, Converter={StaticResource BoolToVisible}, ConverterParameter=!}">
@@ -60,6 +63,7 @@
                     <!--  一時停止/再開ボタン  -->
                     <Grid Grid.Column="1">
                         <Button
+                            Height="24px"
                             Margin="2,0,2,0"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
@@ -72,6 +76,7 @@
                             </Button.ToolTip>
                         </Button>
                         <Rectangle
+                            Height="24px"
                             Panel.ZIndex="2"
                             Style="{StaticResource ButtonDisableLayer}"
                             Visibility="{Binding CanPauseAndResume, Converter={StaticResource BoolToVisible}, ConverterParameter=!}">
@@ -83,6 +88,7 @@
                     <!--  停止ボタン  -->
                     <Grid Grid.Column="2">
                         <Button
+                            Height="24px"
                             Margin="2,0,4,0"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
@@ -95,6 +101,7 @@
                             </Button.ToolTip>
                         </Button>
                         <Rectangle
+                            Height="24px"
                             Panel.ZIndex="2"
                             Style="{StaticResource ButtonDisableLayer}"
                             Visibility="{Binding CanStop, Converter={StaticResource BoolToVisible}, ConverterParameter=!}">
@@ -106,7 +113,7 @@
                 </Grid>
             </Grid>
             <!--  チェックボックス  -->
-            <Grid Grid.Row="1" Style="{StaticResource GridStyle}">
+            <Grid Grid.Row="2" Style="{StaticResource GridStyle}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="0.7*" />
@@ -131,27 +138,17 @@
                 </Grid>
             </Grid>
             <!--  接続結果  -->
-            <Grid Grid.Row="2" Style="{StaticResource GridStyle}">
+            <Grid Grid.Row="3" Style="{StaticResource GridStyle}">
                 <StackPanel Orientation="Horizontal">
                     <Label
                         Margin="8,0,0,0"
                         VerticalAlignment="Center"
                         Content="{Binding Path=StatusDisplayString}"
-                        Style="{StaticResource LablelStyle}">
-                        <!--<Label.Style>
-                                <Style TargetType="Label">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsJoin}" Value="true">
-                                            <Setter Property="Foreground" Value="LightGreen"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Label.Style>-->
-                    </Label>
+                        Style="{StaticResource LablelStyle}" />
                 </StackPanel>
             </Grid>
             <!--  接続状況  -->
-            <Grid Grid.Row="3">
+            <Grid Grid.Row="4">
                 <ListView
                     d:ItemsSource="{d:SampleData ItemCount=5}"
                     BorderBrush="{x:Null}"

@@ -52,7 +52,7 @@
                     </ComboBox.ItemContainerStyle>
                 </ComboBox>
             </Grid>
-            <Grid Grid.Row="1" Margin="0,4,0,4">
+            <Grid Grid.Row="1">
                 <Grid HorizontalAlignment="Stretch">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -60,7 +60,8 @@
                     </Grid.ColumnDefinitions>
                     <Grid Grid.Column="0">
                         <Button
-                            Margin="2,0,2,0"
+                            Height="24px"
+                            Margin="4,0,2,0"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
                             Command="{Binding EditPresetCommand}"
@@ -73,6 +74,7 @@
                     </Grid>
                     <Grid Grid.Column="1">
                         <Button
+                            Height="24px"
                             Margin="2,0,4,0"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"

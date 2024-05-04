@@ -8,7 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewmodel="clr-namespace:WebMeetingParticipantChecker.ViewModels"
     Title="{Binding Title}"
-    Width="480"
+    Width="420"
     Height="480"
     MinWidth="320"
     MinHeight="140"
@@ -130,14 +130,14 @@
         <!--  メインコンテンツ  -->
         <Grid Grid.Row="2" Style="{StaticResource GridStyle}">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" MinWidth="120px" />
+                <ColumnDefinition Width="180px" MinWidth="120px" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" MinWidth="200px" />
             </Grid.ColumnDefinitions>
             <!--  プリセット選択領域  -->
             <Grid
                 Grid.Column="0"
-                Margin="0,4,0,0"
+                Margin="0,0,0,0"
                 Style="{StaticResource GridStyle}" />
             <local:Preset />
             <!--  区切り線  -->
@@ -151,7 +151,7 @@
             <!--  接続監視領域  -->
             <Grid
                 Grid.Column="2"
-                Margin="0,4,0,0"
+                Margin="0,0,0,0"
                 Style="{StaticResource GridStyle}">
                 <local:Monitoring />
             </Grid>
