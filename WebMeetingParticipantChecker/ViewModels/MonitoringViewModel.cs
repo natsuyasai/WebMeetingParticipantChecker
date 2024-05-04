@@ -68,7 +68,7 @@ namespace WebMeetingParticipantChecker.ViewModels
         /// <summary>
         /// プリセット関連
         /// </summary>
-        private readonly IPreset _preset;
+        private readonly IPresetProvider _preset;
 
         private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
@@ -263,7 +263,7 @@ namespace WebMeetingParticipantChecker.ViewModels
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public MonitoringViewModel(IMonitoring monitoring, IPreset preset)
+        public MonitoringViewModel(IMonitoring monitoring, IPresetProvider preset)
         {
             _status = StatusValue.Init;
             _monitoringService = monitoring;

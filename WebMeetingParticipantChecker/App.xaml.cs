@@ -25,17 +25,17 @@ namespace WebMeetingParticipantChecker
         private static IServiceProvider ConfigureServices()
         {
             var services = new ServiceCollection()
-                .AddSingleton<IKeyEventSender, ArrowKeyEventSender>()
+                .AddTransient<IKeyEventSender, ArrowKeyEventSender>()
                 .AddSingleton<AutomationElementGetter[]>(
                 provider => new AutomationElementGetter[] {
                     new AutomationElementGetterForZoom(),
                     new AutomationElementGetterForTeams() })
                 .AddSingleton<MonitoringModel>()
                 .AddSingleton<IMonitoring, MonitoringService>()
-                .AddSingleton<IPreset, PresetModel>()
+                .AddSingleton<IPresetProvider, PresetModel>()
                 .AddTransient<PresetViewModel>()
                 .AddTransient<MonitoringViewModel>()
-                .AddSingleton<MainWindowViewModel>();
+                .AddTransient<MainWindowViewModel>();
 
             return services.BuildServiceProvider();
         }

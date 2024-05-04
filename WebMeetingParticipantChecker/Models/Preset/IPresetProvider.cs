@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace WebMeetingParticipantChecker.Models.Preset
 {
-    internal interface IPreset
+    internal interface IPresetProvider
     {
         void Clear();
         IEnumerable<string> GetCurrentPresetDataList();

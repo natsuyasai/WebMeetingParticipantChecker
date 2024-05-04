@@ -10,7 +10,7 @@ using static WebMeetingParticipantChecker.Models.Preset.PresetInfo;
 
 namespace WebMeetingParticipantChecker.Models.Preset
 {
-    internal class PresetModel : IPreset
+    internal class PresetModel : IPresetProvider
     {
         /// <summary>
         /// プリセット

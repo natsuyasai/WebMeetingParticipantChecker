@@ -18,11 +18,11 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
     [TestClass()]
     public class MonitoringViewModelTests
     {
-        private readonly Mock<IPreset> _presetMoq;
+        private readonly Mock<IPresetProvider> _presetMoq;
 
         public MonitoringViewModelTests()
         {
-            _presetMoq = new Mock<IPreset>();
+            _presetMoq = new Mock<IPresetProvider>();
             _presetMoq.Setup(x => x.GetCurrentPresetDataList())
                 .Returns(new List<string>() { "テンプレート1", "テンプレート2" });
         }

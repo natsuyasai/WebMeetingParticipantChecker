@@ -18,7 +18,7 @@ namespace WebMeetingParticipantChecker.ViewModels
         /// <summary>
         /// プリセット関連
         /// </summary>
-        private readonly IPreset _preset;
+        private readonly IPresetProvider _preset;
 
         /// <summary>
         /// プリセットフォルダ名
@@ -27,7 +27,7 @@ namespace WebMeetingParticipantChecker.ViewModels
 
         private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
-        public PresetViewModel(IPreset preset)
+        public PresetViewModel(IPresetProvider preset)
         {
             _preset = preset;
         }
