@@ -59,33 +59,6 @@
                 VerticalAlignment="Center"
                 Content="{Binding Title}"
                 Style="{StaticResource LablelStyle}" />
-            <Grid
-                Grid.Column="2"
-                Margin="0,0,0,0"
-                Style="{StaticResource GridStyle}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <RadioButton
-                    Grid.Column="0"
-                    Width="36px"
-                    Margin="0,0,4,0"
-                    Content="Zoom"
-                    GroupName="TargetType"
-                    IsChecked="{Binding Path=CheckTarget, Mode=TwoWay, Converter={StaticResource TargetTypeToBoolean}, ConverterParameter=Zoom, UpdateSourceTrigger=PropertyChanged}"
-                    IsEnabled="{Binding Path=IsEnableTargetTypeRadio}"
-                    Style="{StaticResource RadioToggleButton}" />
-                <RadioButton
-                    Grid.Column="1"
-                    Width="36px"
-                    Margin="4,0,8,0"
-                    Content="Teams"
-                    GroupName="TargetType"
-                    IsChecked="{Binding Path=CheckTarget, Mode=TwoWay, Converter={StaticResource TargetTypeToBoolean}, ConverterParameter=Teams, UpdateSourceTrigger=PropertyChanged}"
-                    IsEnabled="{Binding Path=IsEnableTargetTypeRadio}"
-                    Style="{StaticResource RadioToggleButton}" />
-            </Grid>
             <Button
                 Grid.Column="3"
                 Width="24px"
