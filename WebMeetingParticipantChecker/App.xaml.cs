@@ -31,7 +31,6 @@ namespace WebMeetingParticipantChecker
                     new AutomationElementGetterForZoom(),
                     new AutomationElementGetterForTeams() })
                 .AddSingleton<MonitoringModel>()
-                .AddSingleton<IMonitoring, MonitoringService>()
                 .AddSingleton<IPresetProvider, PresetModel>()
                 .AddTransient<PresetViewModel>()
                 .AddTransient<MonitoringViewModel>()
