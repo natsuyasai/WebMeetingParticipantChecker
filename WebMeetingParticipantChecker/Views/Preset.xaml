@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewmodel="clr-namespace:WebMeetingParticipantChecker.ViewModels"
-    d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel}"
+    d:DataContext="{d:DesignInstance Type=viewmodel:PresetViewModel}"
     d:DesignHeight="408"
     d:DesignWidth="240"
     mc:Ignorable="d">
