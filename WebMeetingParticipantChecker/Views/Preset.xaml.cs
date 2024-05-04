@@ -23,12 +23,17 @@ namespace WebMeetingParticipantChecker.Views
     /// </summary>
     public partial class Preset : UserControl
     {
-        private readonly MainWindowViewModel _mainWindowViewModel;
+        private readonly PresetViewModel _presetViewModel;
 
         public Preset()
         {
             InitializeComponent();
-            _mainWindowViewModel = App.Services.GetService<MainWindowViewModel>()!;
+            _presetViewModel = App.Services.GetService<PresetViewModel>()!;
+            DataContext = _presetViewModel;
+            Task.Run(async () =>
+            {
+                await _presetViewModel.ReadPresetData();
+            });
         }
 
         /// <summary>
@@ -41,7 +46,7 @@ namespace WebMeetingParticipantChecker.Views
             PresetInfo selectedItem = (PresetInfo)cbPreset.SelectedItem;
             if (selectedItem != null)
             {
-                _mainWindowViewModel.SetSelectedPreset(selectedItem);
+                _presetViewModel.SetSelectedPreset(selectedItem);
             }
         }
     }

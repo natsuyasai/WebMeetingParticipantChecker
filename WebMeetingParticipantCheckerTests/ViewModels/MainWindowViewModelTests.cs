@@ -18,50 +18,23 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
     [TestClass()]
     public class MainWindowViewModelTests
     {
+        private Mock<IPreset> _presetMoq;
         [TestInitialize]
         public void TestInitialize()
         {
             var moq = new Mock<IConfigurationRoot>();
             moq.SetupGet(x => x["MonitoringCycleMs"]).Returns("100");
             AppSettingsManager.Intialization(moq.Object);
-        }
 
-        [TestMethod()]
-        [TestCategory("プリセットデータ読み込み")]
-        public async Task プリセットデータ読み込み()
-        {
-            var target = new MainWindowViewModel(new Mock<IMonitoring>().Object);
+            _presetMoq = new Mock<IPreset>();
+            _presetMoq.Setup(x => x.GetCurrentPresetDataList())
+                .Returns(new List<string>() { "テンプレート1", "テンプレート2" });
 
-            await target.ReadPresetData();
-
-            var targetFilePath1 = System.AppDomain.CurrentDomain.BaseDirectory + @"\Preset\" + "テンプレートプリセット1.csv";
-            var expectedNames = new List<PresetInfo>()
-            {
-                new PresetInfo(0, targetFilePath1, "テンプレートプリセット1", new List<string>(){ "テンプレート1","テンプレート2"})
-            };
-            var expected = new ObservableCollection<PresetInfo>(expectedNames);
-            Assert.AreEqual(expected[0].Id, target.PresetNames[0].Id);
-            Assert.AreEqual(expected[0].Name, target.PresetNames[0].Name);
-            Assert.AreEqual(expected[0].FilePath, target.PresetNames[0].FilePath);
-            CollectionAssert.AreEqual(expected[0].Data.ToList(), target.PresetNames[0].Data.ToList());
-        }
-
-        [TestMethod()]
-        [TestCategory("プリセット選択アイテム設定")]
-        public async Task 選択したプリセットを保持する()
-        {
-            var target = new MainWindowViewModel(new Mock<IMonitoring>().Object);
-            var selectedPreset = new PresetInfo(0, "", "テンプレートプリセット1", new List<string>() { "テンプレート1", "テンプレート2" });
-            await target.ReadPresetData();
-
-            target.SetSelectedPreset(selectedPreset);
-
-            CollectionAssert.AreEqual(selectedPreset.Data.ToList(), target.SelectPresetData.ToList());
         }
 
         [TestMethod()]
         [TestCategory("監視開始")]
-        public async Task 監視開始_捕捉中()
+        public void 監視開始_捕捉中()
         {
             var moq = new Mock<IMonitoring>();
             moq.Setup(x => x.GetMonitoringInfos())
@@ -70,8 +43,8 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
                     new MonitoringInfo(0, "テンプレート1"),
                     new MonitoringInfo(1, "テンプレート2")
                 });
-            var target = new MainWindowViewModel(moq.Object);
-            await target.ReadPresetData();
+
+            var target = new MainWindowViewModel(moq.Object, _presetMoq.Object);
 
             target.StartCommand.Execute(null);
 
@@ -91,16 +64,16 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
 
         [TestMethod()]
         [TestCategory("監視開始")]
-        public async Task 監視開始_Zoomウィンドウ捕捉完了_監視中状態()
+        public void 監視開始_Zoomウィンドウ捕捉完了_監視中状態()
         {
             var moq = new Mock<IMonitoring>();
-            var target = new MainWindowViewModel(moq.Object);
+            var _presetMoq = new Mock<IPreset>();
+            var target = new MainWindowViewModel(moq.Object, _presetMoq.Object);
             SetMonitoringFacadeMock(ref moq, target);
             moq.Setup(x => x.StartMonitoring(It.IsAny<Action>()))
                 .Callback<Action>(action =>
                 {
                 });
-            await target.ReadPresetData();
 
             target.StartCommand.Execute(null);
 
@@ -120,12 +93,12 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
 
         [TestMethod()]
         [TestCategory("監視停止")]
-        public async Task 監視停止()
+        public void 監視停止()
         {
             var moq = new Mock<IMonitoring>();
-            var target = new MainWindowViewModel(moq.Object);
+            var _presetMoq = new Mock<IPreset>();
+            var target = new MainWindowViewModel(moq.Object, _presetMoq.Object);
             SetMonitoringFacadeMock(ref moq, target);
-            await target.ReadPresetData();
 
             target.StopCommand.Execute(null);
 
@@ -147,12 +120,12 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
 
         [TestMethod()]
         [TestCategory("一時停止/再開")]
-        public async Task 監視中に一時停止にして再開させる()
+        public void 監視中に一時停止にして再開させる()
         {
             var moq = new Mock<IMonitoring>();
-            var target = new MainWindowViewModel(moq.Object);
+            var _presetMoq = new Mock<IPreset>();
+            var target = new MainWindowViewModel(moq.Object, _presetMoq.Object);
             SetMonitoringFacadeMock(ref moq, target);
-            await target.ReadPresetData();
             target.StartCommand.Execute(null);
 
 
@@ -181,12 +154,12 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
 
         [TestMethod()]
         [TestCategory("参加状態手動切り替え")]
-        public async Task 監視中_参加状態を手動で参加状態に切り替え()
+        public void 監視中_参加状態を手動で参加状態に切り替え()
         {
             var moq = new Mock<IMonitoring>();
-            var target = new MainWindowViewModel(moq.Object);
+            var _presetMoq = new Mock<IPreset>();
+            var target = new MainWindowViewModel(moq.Object, _presetMoq.Object);
             SetMonitoringFacadeMock(ref moq, target);
-            await target.ReadPresetData();
             target.StartCommand.Execute(null);
 
 
@@ -211,12 +184,12 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
 
         [TestMethod()]
         [TestCategory("参加状態手動切り替え")]
-        public async Task 一時停止中_参加状態を手動で参加状態に切り替え()
+        public void 一時停止中_参加状態を手動で参加状態に切り替え()
         {
             var moq = new Mock<IMonitoring>();
-            var target = new MainWindowViewModel(moq.Object);
+            var _presetMoq = new Mock<IPreset>();
+            var target = new MainWindowViewModel(moq.Object, _presetMoq.Object);
             SetMonitoringFacadeMock(ref moq, target);
-            await target.ReadPresetData();
             target.StartCommand.Execute(null);
             target.PauseCommand.Execute(null);
 
@@ -242,12 +215,12 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
 
         [TestMethod()]
         [TestCategory("参加状態を自動に切り替え")]
-        public async Task 参加状態を自動に切り替え()
+        public void 参加状態を自動に切り替え()
         {
             var moq = new Mock<IMonitoring>();
-            var target = new MainWindowViewModel(moq.Object);
+            var _presetMoq = new Mock<IPreset>();
+            var target = new MainWindowViewModel(moq.Object, _presetMoq.Object);
             SetMonitoringFacadeMock(ref moq, target);
-            await target.ReadPresetData();
             target.StartCommand.Execute(null);
 
 
@@ -284,12 +257,12 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
 
         [TestMethod()]
         [TestCategory("参加監視")]
-        public async Task 全員参加()
+        public void 全員参加()
         {
             var moq = new Mock<IMonitoring>();
-            var target = new MainWindowViewModel(moq.Object);
+            var _presetMoq = new Mock<IPreset>();
+            var target = new MainWindowViewModel(moq.Object, _presetMoq.Object);
             SetMonitoringFacadeMock(ref moq, target);
-            await target.ReadPresetData();
             target.StartCommand.Execute(null);
 
             Assert.AreEqual("テンプレート1", target.MonitoringInfos[0].Name);

@@ -1,9 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using NLog;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -64,20 +62,16 @@ namespace WebMeetingParticipantChecker.ViewModels
         "一時停止中",
         };
 
-        /// <summary>
-        /// プリセット関連
-        /// </summary>
-        private IPreset _presetService = default!;
+
         /// <summary>
         /// 監視関連
         /// </summary>
         private readonly IMonitoring _monitoringService;
 
-
         /// <summary>
-        /// プリセットフォルダ名
+        /// プリセット関連
         /// </summary>
-        private const string PresetFolderName = "Preset";
+        private readonly IPreset _preset;
 
         private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
@@ -90,28 +84,6 @@ namespace WebMeetingParticipantChecker.ViewModels
             {
                 var assembly = Assembly.GetExecutingAssembly();
                 return $"Web会議参加者チェック - ver{assembly.GetName().Version}";
-            }
-        }
-
-        /// <summary>
-        /// プリセット名一覧
-        /// </summary>
-        public ObservableCollection<PresetInfo> PresetNames
-        {
-            get
-            {
-                return new ObservableCollection<PresetInfo>(_presetService.GetPreset());
-            }
-        }
-
-        /// <summary>
-        /// 選択中のプリセットデータ
-        /// </summary>
-        public IEnumerable<string> SelectPresetData
-        {
-            get
-            {
-                return _presetService.GetCurrentPresetDataList();
             }
         }
 
@@ -240,30 +212,6 @@ namespace WebMeetingParticipantChecker.ViewModels
         #region コマンド
 
         /// <summary>
-        /// プリセット再読込コマンド
-        /// </summary>
-        private AsyncRelayCommand? _reloadPresetCommand;
-        public AsyncRelayCommand ReloadPresetCommand
-        {
-            get
-            {
-                return _reloadPresetCommand ??= new AsyncRelayCommand(ReadPresetData);
-            }
-        }
-
-        /// <summary>
-        /// プリセット編集コマンド
-        /// </summary>
-        private RelayCommand? _editPresetCommand;
-        public RelayCommand EditPresetCommand
-        {
-            get
-            {
-                return _editPresetCommand ??= new RelayCommand(EditPresetData);
-            }
-        }
-
-        /// <summary>
         /// 開始コマンド
         /// </summary>
         private AsyncRelayCommand? _startCommand;
@@ -327,44 +275,12 @@ namespace WebMeetingParticipantChecker.ViewModels
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public MainWindowViewModel(IMonitoring monitoring)
+        public MainWindowViewModel(IMonitoring monitoring, IPreset preset)
         {
             _status = StatusValue.Init;
             _monitoringService = monitoring;
+            _preset = preset;
             OnPropertyChanged(nameof(StatusDisplayString));
-        }
-
-        /// <summary>
-        /// プリセットデータ読み込み
-        /// </summary>
-        public async Task ReadPresetData()
-        {
-            await Task.Run(() =>
-            {
-                _presetService = new PresetModel();
-                _presetService.Clear();
-                OnPropertyChanged(nameof(PresetNames));
-                _presetService.ReadPresetData(System.AppDomain.CurrentDomain.BaseDirectory, PresetFolderName);
-                OnPropertyChanged(nameof(PresetNames));
-            });
-        }
-
-        /// <summary>
-        /// プリセット編集
-        /// </summary>
-        private void EditPresetData()
-        {
-            Process.Start(new ProcessStartInfo((_presetService.GetCurrntPresetFilePath())) { UseShellExecute = true });
-        }
-
-        /// <summary>
-        /// プリセット選択アイテム設定
-        /// </summary>
-        /// <param name="presetInfo"></param>
-        public void SetSelectedPreset(PresetInfo presetInfo)
-        {
-            _presetService.UpdateCurrentIndex(presetInfo.Id);
-            OnPropertyChanged(nameof(SelectPresetData));
         }
 
         /// <summary>
@@ -391,7 +307,7 @@ namespace WebMeetingParticipantChecker.ViewModels
             _logger.Info("監視開始");
             // 監視開始
             UpdateStatus(StatusValue.PreparingTargetWindowCaputure);
-            _monitoringService.RegisterMonitoringTargets(_presetService.GetCurrentPresetDataList());
+            _monitoringService.RegisterMonitoringTargets(_preset.GetCurrentPresetDataList());
             OnPropertyChanged(nameof(MonitoringInfos));
 
             // Zoomの参加者ウィンドウ検索開始

@@ -26,10 +26,6 @@ namespace WebMeetingParticipantChecker.Views
 
             _mainWindowViewModel = App.Services.GetService<MainWindowViewModel>()!;
             DataContext = _mainWindowViewModel;
-            Task.Run(async () =>
-            {
-                await _mainWindowViewModel.ReadPresetData();
-            });
 
             WeakReferenceMessenger.Default.Register<MainWindow, Message<MainWindow>>(this, (s, e) =>
             {

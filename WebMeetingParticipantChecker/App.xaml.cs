@@ -6,6 +6,7 @@ using System.IO;
 using System.Windows;
 using WebMeetingParticipantChecker.Models.Config;
 using WebMeetingParticipantChecker.Models.Monitoring;
+using WebMeetingParticipantChecker.Models.Preset;
 using WebMeetingParticipantChecker.Models.Theme;
 using WebMeetingParticipantChecker.Models.UIAutomation;
 using WebMeetingParticipantChecker.ViewModels;
@@ -31,6 +32,8 @@ namespace WebMeetingParticipantChecker
                     new AutomationElementGetterForTeams() })
                 .AddSingleton<MonitoringModel>()
                 .AddSingleton<IMonitoring, MonitoringService>()
+                .AddSingleton<IPreset, PresetModel>()
+                .AddTransient<PresetViewModel>()
                 .AddSingleton<MainWindowViewModel>();
 
             return services.BuildServiceProvider();
