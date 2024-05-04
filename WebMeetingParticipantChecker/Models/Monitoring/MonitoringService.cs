@@ -35,11 +35,11 @@ namespace WebMeetingParticipantChecker.Models.Monitoring
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public MonitoringService()
+        public MonitoringService(AutomationElementGetter[] automationElementGetter, MonitoringModel monitoringModel, IKeyEventSender arrowDownKeyEventSender)
         {
-            _automationElementGetter = App.Services.GetService<AutomationElementGetter[]>()!;
-            _monitoringModel = App.Services.GetService<MonitoringModel>()!;
-            _arrowDownKeyEventSender = App.Services.GetService<IKeyEventSender>()!;
+            _automationElementGetter = automationElementGetter;
+            _monitoringModel = monitoringModel;
+            _arrowDownKeyEventSender = arrowDownKeyEventSender;
         }
 
 
