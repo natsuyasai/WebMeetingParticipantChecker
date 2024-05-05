@@ -64,7 +64,7 @@ namespace WebMeetingParticipantChecker.ViewModels
         /// <summary>
         /// プリセット関連
         /// </summary>
-        private readonly IPresetProvider _preset;
+        private readonly IReadOnlyPreset _preset;
 
         /// <summary>
         /// 参加者リスト取得

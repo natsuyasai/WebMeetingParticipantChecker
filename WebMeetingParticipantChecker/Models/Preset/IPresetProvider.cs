@@ -3,14 +3,9 @@ using System.Threading.Tasks;
 
 namespace WebMeetingParticipantChecker.Models.Preset
 {
-    internal interface IPresetProvider
+    internal interface IPresetProvider : IReadOnlyPreset
     {
         void Clear();
-        IEnumerable<string> GetCurrentPresetDataList();
-        string GetCurrntPresetFilePath();
-        IEnumerable<PresetInfo> GetPreset();
-        IEnumerable<string> GetPresetDataList(int index);
-        IEnumerable<string> GetPresetNameList();
         Task<bool> ReadPresetData(string rootPath, string targetFolderName);
         void UpdateCurrentIndex(int id);
     }
