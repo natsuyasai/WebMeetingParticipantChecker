@@ -91,7 +91,7 @@ jobs:
     - name: Execute unit tests
       uses: microsoft/vstest-action@v1.0.0
       with: 
-        testAssembly: $env:Test_Dll
+        testAssembly: WebMeetingParticipantCheckerTests.dll
         searchFolder: .\WebMeetingParticipantCheckerTests\bin\${{ matrix.configuration }}\
         runInParallel: true
 
