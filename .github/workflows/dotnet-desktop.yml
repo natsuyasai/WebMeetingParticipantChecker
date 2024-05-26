@@ -79,10 +79,10 @@ jobs:
       uses: microsoft/setup-msbuild@v1.0.2
 
     - name: Build project restore
-      run: MSBuild.exe /t:restore /p:RestorePackagesConfig=true $env:Solution_Name
+      run: MSBuild.exe /t:restore /p:RestorePackagesConfig=true /p:Configuration=${{ matrix.configuration }} $env:Solution_Name
 
     - name: Build project
-      run: MSBuild.exe /p:RestorePackagesConfig=true $env:Solution_Name
+      run: MSBuild.exe /p:RestorePackagesConfig=true /p:Configuration=${{ matrix.configuration }} $env:Solution_Name
 
     # Execute all unit tests in the solution
     - name: pwd
