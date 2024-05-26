@@ -10,6 +10,10 @@ using static WebMeetingParticipantChecker.Models.Preset.PresetInfo;
 
 namespace WebMeetingParticipantChecker.Models.Preset
 {
+    /// <summary>
+    /// プリセット情報
+    /// システムで一意とする（DIコンテナの指定でAddSingletonとする）
+    /// </summary>
     internal class PresetModel : IPresetProvider
     {
         /// <summary>

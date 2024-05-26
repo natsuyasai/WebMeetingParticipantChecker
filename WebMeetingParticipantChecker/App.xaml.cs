@@ -30,9 +30,9 @@ namespace WebMeetingParticipantChecker
                 provider => new AutomationElementGetter[] {
                     new AutomationElementGetterForZoom(),
                     new AutomationElementGetterForTeams() })
-                .AddSingleton<MonitoringModel>()
-                .AddSingleton<IPresetProvider, PresetModel>()
-                .AddSingleton<IReadOnlyPreset>(provider => provider.GetService<IPresetProvider>()!)
+                .AddTransient<MonitoringModel>()
+                .AddSingleton<IPresetProvider, PresetModel>() // プリセット情報はシステムで一意とする
+                .AddSingleton<IReadOnlyPreset>(provider => provider.GetService<IPresetProvider>()!) // 読み取り専用プリセット情報
                 .AddTransient<PresetViewModel>()
                 .AddTransient<MonitoringViewModel>()
                 .AddTransient<MainWindowViewModel>();
