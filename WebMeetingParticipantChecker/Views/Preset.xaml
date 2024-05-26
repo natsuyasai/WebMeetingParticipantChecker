@@ -1,0 +1,118 @@
+﻿<UserControl
+    x:Class="WebMeetingParticipantChecker.Views.Preset"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converter="clr-namespace:WebMeetingParticipantChecker.Views.Converter"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodel="clr-namespace:WebMeetingParticipantChecker.ViewModels"
+    d:DataContext="{d:DesignInstance Type=viewmodel:PresetViewModel}"
+    d:DesignHeight="408"
+    d:DesignWidth="240"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <converter:ImageResourceConverter x:Key="ImageConverter" />
+            <converter:TargetTypeConverter x:Key="TargetTypeToBoolean" />
+            <converter:JoinStateConverter x:Key="JoinStateToIcon" />
+            <converter:BooleanToVisibilityConverter x:Key="BoolToVisible" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid Style="{StaticResource GridStyle}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="32px" />
+                <RowDefinition Height="32px" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <!--  プリセット選択  -->
+            <Grid Grid.Row="0">
+                <ComboBox
+                    x:Name="cbPreset"
+                    Margin="4,0,2,0"
+                    HorizontalAlignment="Stretch"
+                    VerticalContentAlignment="Center"
+                    IsSynchronizedWithCurrentItem="True"
+                    ItemsSource="{Binding Path=PresetNames}"
+                    SelectedValuePath="Id"
+                    SelectionChanged="SelectionChangedPreset"
+                    Style="{StaticResource FlatComboBox}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                Margin="4px,4px,16px,4px"
+                                Text="{Binding Name}"
+                                TextTrimming="CharacterEllipsis" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                    <ComboBox.ItemContainerStyle>
+                        <Style TargetType="ComboBoxItem">
+                            <Setter Property="Height" Value="32px" />
+                        </Style>
+                    </ComboBox.ItemContainerStyle>
+                </ComboBox>
+            </Grid>
+            <Grid Grid.Row="1">
+                <Grid HorizontalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <Button
+                            Height="24px"
+                            Margin="4,0,2,0"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            Command="{Binding EditPresetCommand}"
+                            Style="{StaticResource FlatButton}">
+                            <Image Width="24px" Source="{Binding Converter={StaticResource ImageConverter}, ConverterParameter=edit_FILL0_wght400_GRAD0_opsz24.png}" />
+                            <Button.ToolTip>
+                                <TextBlock>編集</TextBlock>
+                            </Button.ToolTip>
+                        </Button>
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <Button
+                            Height="24px"
+                            Margin="2,0,4,0"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            Command="{Binding ReloadPresetCommand}"
+                            Style="{StaticResource FlatButton}">
+                            <Image Width="24px" Source="{Binding Converter={StaticResource ImageConverter}, ConverterParameter=refresh_FILL0_wght400_GRAD0_opsz24.png}" />
+                            <Button.ToolTip>
+                                <TextBlock>再読込</TextBlock>
+                            </Button.ToolTip>
+                        </Button>
+                    </Grid>
+                </Grid>
+            </Grid>
+            <!--  対象ユーザ情報  -->
+            <Grid Grid.Row="2">
+                <ListView
+                    d:ItemsSource="{d:SampleData ItemCount=5}"
+                    BorderBrush="{x:Null}"
+                    ItemsSource="{Binding Path=SelectPresetData}"
+                    Style="{StaticResource ListViewStyle}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock
+                                    Margin="8,0,8,0"
+                                    VerticalAlignment="Center"
+                                    Style="{StaticResource TextBlockStyle}"
+                                    Text="{Binding}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Height" Value="32px" />
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                </ListView>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

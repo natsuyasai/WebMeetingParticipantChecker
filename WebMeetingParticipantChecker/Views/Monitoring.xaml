@@ -1,0 +1,235 @@
+﻿<UserControl
+    x:Class="WebMeetingParticipantChecker.Views.Monitoring"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converter="clr-namespace:WebMeetingParticipantChecker.Views.Converter"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodel="clr-namespace:WebMeetingParticipantChecker.ViewModels"
+    d:DataContext="{d:DesignInstance Type=viewmodel:MonitoringViewModel}"
+    d:DesignHeight="240"
+    d:DesignWidth="480"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <converter:ImageResourceConverter x:Key="ImageConverter" />
+            <converter:TargetTypeConverter x:Key="TargetTypeToBoolean" />
+            <converter:JoinStateConverter x:Key="JoinStateToIcon" />
+            <converter:BooleanToVisibilityConverter x:Key="BoolToVisible" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid Style="{StaticResource GridStyle}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="32px" />
+                <RowDefinition Height="32px" />
+                <RowDefinition Height="32px" />
+                <RowDefinition Height="32px" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <!--  監視対象切り替え  -->
+            <Grid
+                Grid.Column="0"
+                Margin="4,0,0,0"
+                HorizontalAlignment="Center"
+                Style="{StaticResource GridStyle}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <RadioButton
+                    Grid.Column="0"
+                    Margin="0,0,4,0"
+                    Content="Zoom"
+                    FontSize="16px"
+                    GroupName="TargetType"
+                    IsChecked="{Binding Path=CheckTarget, Mode=TwoWay, Converter={StaticResource TargetTypeToBoolean}, ConverterParameter=Zoom, UpdateSourceTrigger=PropertyChanged}"
+                    IsEnabled="{Binding Path=IsEnableTargetTypeRadio}"
+                    Style="{StaticResource RadioToggleButton}" />
+                <RadioButton
+                    Grid.Column="1"
+                    Margin="4,0,8,0"
+                    Content="Teams"
+                    FontSize="16px"
+                    GroupName="TargetType"
+                    IsChecked="{Binding Path=CheckTarget, Mode=TwoWay, Converter={StaticResource TargetTypeToBoolean}, ConverterParameter=Teams, UpdateSourceTrigger=PropertyChanged}"
+                    IsEnabled="{Binding Path=IsEnableTargetTypeRadio}"
+                    Style="{StaticResource RadioToggleButton}" />
+            </Grid>
+            <!--  開始停止ボタン  -->
+            <Grid Grid.Row="1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.3*" />
+                        <ColumnDefinition Width="0.3*" />
+                        <ColumnDefinition Width="0.3*" />
+                    </Grid.ColumnDefinitions>
+                    <!--  開始ボタン  -->
+                    <Grid Grid.Column="0">
+                        <Button
+                            Height="24px"
+                            Margin="4,0,2,0"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            Command="{Binding StartCommand, Mode=OneWay}"
+                            IsEnabled="{Binding CanStart}"
+                            Style="{StaticResource FlatButton}">
+                            <Image Width="24px" Source="{Binding Converter={StaticResource ImageConverter}, ConverterParameter=play_arrow_FILL0_wght400_GRAD0_opsz24.png}" />
+                            <Button.ToolTip>
+                                <TextBlock>開始</TextBlock>
+                            </Button.ToolTip>
+                        </Button>
+                        <Rectangle
+                            Height="24px"
+                            Panel.ZIndex="2"
+                            Style="{StaticResource ButtonDisableLayer}"
+                            Visibility="{Binding CanStart, Converter={StaticResource BoolToVisible}, ConverterParameter=!}">
+                            <Rectangle.ToolTip>
+                                <TextBlock>開始</TextBlock>
+                            </Rectangle.ToolTip>
+                        </Rectangle>
+                    </Grid>
+                    <!--  一時停止/再開ボタン  -->
+                    <Grid Grid.Column="1">
+                        <Button
+                            Height="24px"
+                            Margin="2,0,2,0"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            Command="{Binding PauseCommand, Mode=OneWay}"
+                            IsEnabled="{Binding CanPauseAndResume}"
+                            Style="{StaticResource FlatButton}">
+                            <Image Width="24px" Source="{Binding Path=PauseButtonIcon, Converter={StaticResource ImageConverter}, ConverterParameter=''}" />
+                            <Button.ToolTip>
+                                <TextBlock>一時停止/再開</TextBlock>
+                            </Button.ToolTip>
+                        </Button>
+                        <Rectangle
+                            Height="24px"
+                            Panel.ZIndex="2"
+                            Style="{StaticResource ButtonDisableLayer}"
+                            Visibility="{Binding CanPauseAndResume, Converter={StaticResource BoolToVisible}, ConverterParameter=!}">
+                            <Rectangle.ToolTip>
+                                <TextBlock>一時停止/再開</TextBlock>
+                            </Rectangle.ToolTip>
+                        </Rectangle>
+                    </Grid>
+                    <!--  停止ボタン  -->
+                    <Grid Grid.Column="2">
+                        <Button
+                            Height="24px"
+                            Margin="2,0,4,0"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            Command="{Binding StopCommand, Mode=OneWay}"
+                            IsEnabled="{Binding CanStop}"
+                            Style="{StaticResource FlatButton}">
+                            <Image Width="24px" Source="{Binding Converter={StaticResource ImageConverter}, ConverterParameter=stop_FILL0_wght400_GRAD0_opsz24.png}" />
+                            <Button.ToolTip>
+                                <TextBlock>停止</TextBlock>
+                            </Button.ToolTip>
+                        </Button>
+                        <Rectangle
+                            Height="24px"
+                            Panel.ZIndex="2"
+                            Style="{StaticResource ButtonDisableLayer}"
+                            Visibility="{Binding CanStop, Converter={StaticResource BoolToVisible}, ConverterParameter=!}">
+                            <Rectangle.ToolTip>
+                                <TextBlock>停止</TextBlock>
+                            </Rectangle.ToolTip>
+                        </Rectangle>
+                    </Grid>
+                </Grid>
+            </Grid>
+            <!--  チェックボックス  -->
+            <Grid Grid.Row="2" Style="{StaticResource GridStyle}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.7*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <CheckBox
+                            Margin="8,0,8,0"
+                            VerticalContentAlignment="Center"
+                            Content="自動スクロールによる監視を許可"
+                            IsChecked="{Binding IsEnableAutoScroll}"
+                            IsEnabled="{Binding Path=CheckTarget, Mode=OneWay, Converter={StaticResource TargetTypeToBoolean}, ConverterParameter=Zoom}"
+                            Style="{StaticResource CheckBoxStyle}"
+                            ToolTipService.ShowDuration="30000">
+                            <CheckBox.ToolTip>
+                                <TextBlock>
+                                    監視中状態時、監視周期毎に参加者リストにフォーカスがあたるとともに、↓キーの入力が発生します。<LineBreak />
+                                    少人数でスクロールが不要ならOFF、多人数でスクロールが必要ならONとしてください。<LineBreak />
+                                    ※ 有効な場合、監視中のときのみ他の操作が阻害されます。</TextBlock>
+                            </CheckBox.ToolTip>
+                        </CheckBox>
+                    </Grid>
+                </Grid>
+            </Grid>
+            <!--  接続結果  -->
+            <Grid Grid.Row="3" Style="{StaticResource GridStyle}">
+                <StackPanel Orientation="Horizontal">
+                    <Label
+                        Margin="8,0,0,0"
+                        VerticalAlignment="Center"
+                        Content="{Binding Path=StatusDisplayString}"
+                        Style="{StaticResource LablelStyle}" />
+                </StackPanel>
+            </Grid>
+            <!--  接続状況  -->
+            <Grid Grid.Row="4">
+                <ListView
+                    d:ItemsSource="{d:SampleData ItemCount=5}"
+                    BorderBrush="{x:Null}"
+                    ItemsSource="{Binding Path=MonitoringInfos}"
+                    Style="{StaticResource ListViewStyle}"
+                    Tag="{Binding DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <!--  接続状態  -->
+                                <TextBlock
+                                    Width="40px"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center">
+                                    <InlineUIContainer>
+                                        <Image Width="24px" Source="{Binding Path=TargetState, Converter={StaticResource JoinStateToIcon}}" />
+                                    </InlineUIContainer>
+                                </TextBlock>
+                                <!--  ユーザ  -->
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    Style="{StaticResource TextBlockStyle}"
+                                    Text="{Binding Name, Mode=OneWay}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    <!--  リスト要素のコンテキストメニュー  -->
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Height" Value="32px" />
+                            <!--  コンテキストメニューでViewModelを参照できるように指定  -->
+                            <Setter Property="Tag" Value="{Binding DataContext, RelativeSource={RelativeSource AncestorType=ListView}}" />
+                            <Setter Property="ContextMenu">
+                                <Setter.Value>
+                                    <ContextMenu DataContext="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
+                                        <MenuItem
+                                            Command="{Binding SwitchingParticipantStateCommand}"
+                                            CommandParameter="{Binding PlacementTarget.Content.Id, Mode=OneWay, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Header="参加状態を手動で切り替える"
+                                            Style="{StaticResource MenuItemStyle}" />
+                                        <MenuItem
+                                            Command="{Binding SetParticipantAutoCommand}"
+                                            CommandParameter="{Binding PlacementTarget.Content.Id, Mode=OneWay, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Header="参加状態を自動監視にする"
+                                            Style="{StaticResource MenuItemStyle}" />
+                                    </ContextMenu>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                </ListView>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>
