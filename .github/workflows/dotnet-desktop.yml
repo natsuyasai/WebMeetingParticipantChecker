@@ -80,10 +80,12 @@ jobs:
 
     - name: Build project
       run: MSBuild.exe  /t:restore /p:RestorePackagesConfig=true $env:Solution_Name
-        
+
     # Execute all unit tests in the solution
     - name: Execute unit tests
-      run: vstest.console $env:Test_Dll
+      uses: microsoft-approved-actions/vstest@master
+      with: 
+        testAssembly: $env:Test_Dll
 
     # Restore the application to populate the obj folder with RuntimeIdentifiers
     - name: Restore the application
