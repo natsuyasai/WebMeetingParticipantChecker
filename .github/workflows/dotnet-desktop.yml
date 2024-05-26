@@ -58,7 +58,7 @@ jobs:
     env:
       Solution_Name: WebMeetingParticipantChecker.sln
       Test_Project_Path: WebMeetingParticipantCheckerTests\WebMeetingParticipantCheckerTests.csproj
-      Test_Dll: WebMeetingParticipantCheckerTests\bin\Debug\net7.0-windows8.0\WebMeetingParticipantCheckerTests.dll
+      Test_Dll: WebMeetingParticipantCheckerTests\bin\.*\WebMeetingParticipantCheckerTests.dll
       #Wap_Project_Directory: your-wap-project-directory-name    # Replace with the Wap project directory relative to the solution, i.e. MyWpfApp.Package.
       #Wap_Project_Path: your-wap-project-path                   # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
 
