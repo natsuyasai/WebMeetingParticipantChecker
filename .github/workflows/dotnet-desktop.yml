@@ -83,7 +83,7 @@ jobs:
 
     # Execute all unit tests in the solution
     - name: pwd
-      run: pwd
+      run: dir /s /b
 
     - name: Execute unit tests
       uses: microsoft/vstest-action@v1.0.0
