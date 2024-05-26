@@ -92,7 +92,7 @@ jobs:
       uses: microsoft/vstest-action@v1.0.0
       with: 
         testAssembly: $env:Test_Dll
-        searchFolder: .\WebMeetingParticipantCheckerTests\bin
+        searchFolder: .\WebMeetingParticipantCheckerTests\bin\${{ matrix.configuration }}\
         runInParallel: true
 
     # Restore the application to populate the obj folder with RuntimeIdentifiers
