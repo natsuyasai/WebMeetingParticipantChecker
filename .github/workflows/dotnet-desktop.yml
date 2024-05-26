@@ -86,7 +86,7 @@ jobs:
       uses: microsoft/vstest-action@v1.0.0
       with: 
         testAssembly: |
-          **\${{ matrix.configuration }}\WebMeetingParticipantCheckerTests.dll
+          **\${{ matrix.configuration }}\**\WebMeetingParticipantCheckerTests.dll
           !**\obj\**
 
     # Restore the application to populate the obj folder with RuntimeIdentifiers
