@@ -78,6 +78,9 @@ jobs:
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v1.0.2
 
+    - name: Build project restore
+      run: MSBuild.exe /t:restore /p:RestorePackagesConfig=true $env:Solution_Name
+
     - name: Build project
       run: MSBuild.exe /p:RestorePackagesConfig=true $env:Solution_Name
 
