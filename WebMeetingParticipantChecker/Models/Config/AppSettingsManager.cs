@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using WebMeetingParticipantChecker.Models.Theme;
 
 namespace WebMeetingParticipantChecker.Models.Config
 {
@@ -47,7 +48,11 @@ namespace WebMeetingParticipantChecker.Models.Config
         {
             get
             {
-                return _configuration?["ZoomParticipantListName"] ?? "参加者リスト";
+                if (string.IsNullOrEmpty(_configuration?["ZoomParticipantListName"]))
+                {
+                    return "参加者リスト";
+                }
+                return _configuration["ZoomParticipantListName"]!;
             }
         }
 
@@ -58,7 +63,58 @@ namespace WebMeetingParticipantChecker.Models.Config
         {
             get
             {
-                return _configuration?["TeamsParticipantListName"] ?? "出席者";
+                if (string.IsNullOrEmpty(_configuration?["TeamsParticipantListName"]))
+                {
+                    return "出席者";
+                }
+                return _configuration["TeamsParticipantListName"]!;
+            }
+        }
+
+        /// <summary>
+        /// テーマID（補正あり）
+        /// </summary>
+        public static int ThemeId
+        {
+            get
+            {
+                if (int.TryParse(_configuration?["ThemeId"], out var value))
+                {
+                    return value;
+                }
+                return ThemeDefine.MaxThemeId;
+            }
+        }
+
+        /// <summary>
+        /// テーマID
+        /// 補正なし。データがなければnull
+        /// </summary>
+        public static int? ThemeIdNotReturnDefault
+        {
+            get
+            {
+                if (int.TryParse(_configuration?["ThemeId"], out var value))
+                {
+                    return value;
+                }
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 現在のテーマ
+        /// </summary>
+        private static int? _currentTheme = null;
+        public static int? CurrentThemeId
+        {
+            get
+            {
+                return _currentTheme;
+            }
+            set
+            {
+                _currentTheme ??= value;
             }
         }
     }

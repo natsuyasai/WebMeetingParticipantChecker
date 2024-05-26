@@ -10,6 +10,7 @@
     Height="202"
     d:DataContext="{d:DesignInstance {x:Type viewmodel:SettingDialogViewModel}}"
     BorderThickness="4"
+    FontSize="13"
     ResizeMode="NoResize"
     Style="{StaticResource WindowStyle}"
     WindowStartupLocation="CenterOwner"
@@ -57,16 +58,24 @@
             <Grid Grid.Column="0">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="32px" />
-                        <RowDefinition Height="32px" />
-                        <RowDefinition Height="32px" />
-                        <RowDefinition Height="32px" />
+                        <RowDefinition Height="40px" />
+                        <RowDefinition Height="40px" />
+                        <RowDefinition Height="40px" />
+                        <RowDefinition Height="40px" />
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0">
-                        <Label
+                        <TextBlock
                             HorizontalAlignment="Right"
-                            Content="監視周期[ms]："
-                            Style="{StaticResource LablelStyle}" />
+                            VerticalAlignment="Center"
+                            Style="{StaticResource TextBlockStyle}"
+                            Text="監視周期[ms]：" />
+                    </Grid>
+                    <Grid Grid.Row="1">
+                        <TextBlock
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource TextBlockStyle}"
+                            Text="テーマ：" />
                     </Grid>
                 </Grid>
             </Grid>
@@ -74,19 +83,48 @@
                 <Grid Grid.Column="0">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="32px" />
-                            <RowDefinition Height="32px" />
-                            <RowDefinition Height="32px" />
-                            <RowDefinition Height="32px" />
+                            <RowDefinition Height="40px" />
+                            <RowDefinition Height="40px" />
+                            <RowDefinition Height="40px" />
+                            <RowDefinition Height="40px" />
                         </Grid.RowDefinitions>
                         <Grid Grid.Row="0">
                             <TextBox
-                                Margin="0,0,4,0"
-                                VerticalAlignment="Center"
+                                Margin="0,4,4,4"
+                                Padding="8,2,0,0"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                VerticalContentAlignment="Center"
                                 GotFocus="HandleTextBoxGotFocus"
                                 PreviewMouseLeftButtonDown="HandleMouseLeftButtonDown"
                                 Style="{StaticResource TextBoxStyle}"
                                 Text="{Binding MonitoringCycleMs, Mode=TwoWay}" />
+                        </Grid>
+                        <Grid Grid.Row="1">
+                            <ComboBox
+                                Height="32px"
+                                Margin="0,0,4,0"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                IsSynchronizedWithCurrentItem="True"
+                                ItemsSource="{Binding Path=Theme}"
+                                SelectedItem="{Binding SelectedTheme}"
+                                SelectedValuePath="Id"
+                                Style="{StaticResource FlatComboBox}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock
+                                            Margin="4px,4px,16px,4px"
+                                            Text="{Binding Name}"
+                                            TextTrimming="CharacterEllipsis" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                                <ComboBox.ItemContainerStyle>
+                                    <Style TargetType="ComboBoxItem">
+                                        <Setter Property="Height" Value="32px" />
+                                    </Style>
+                                </ComboBox.ItemContainerStyle>
+                            </ComboBox>
                         </Grid>
                     </Grid>
                 </Grid>

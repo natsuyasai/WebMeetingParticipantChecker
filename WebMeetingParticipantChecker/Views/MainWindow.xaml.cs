@@ -26,29 +26,11 @@ namespace WebMeetingParticipantChecker.Views
 
             _mainWindowViewModel = App.Services.GetService<MainWindowViewModel>()!;
             DataContext = _mainWindowViewModel;
-            Task.Run(async () =>
-            {
-                await _mainWindowViewModel.ReadPresetData();
-            });
 
             WeakReferenceMessenger.Default.Register<MainWindow, Message<MainWindow>>(this, (s, e) =>
             {
                 ShowMessage(s, e);
             });
-        }
-
-        /// <summary>
-        /// プリセット選択
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void SelectionChangedPreset(object _, SelectionChangedEventArgs e)
-        {
-            PresetInfo selectedItem = (PresetInfo)cbPreset.SelectedItem;
-            if (selectedItem != null)
-            {
-                _mainWindowViewModel.SetSelectedPreset(selectedItem);
-            }
         }
 
         private void HandleClose(object _, RoutedEventArgs e)

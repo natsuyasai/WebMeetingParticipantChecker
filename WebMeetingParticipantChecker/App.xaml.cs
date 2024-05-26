@@ -6,6 +6,8 @@ using System.IO;
 using System.Windows;
 using WebMeetingParticipantChecker.Models.Config;
 using WebMeetingParticipantChecker.Models.Monitoring;
+using WebMeetingParticipantChecker.Models.Preset;
+using WebMeetingParticipantChecker.Models.Theme;
 using WebMeetingParticipantChecker.Models.UIAutomation;
 using WebMeetingParticipantChecker.ViewModels;
 
@@ -23,13 +25,16 @@ namespace WebMeetingParticipantChecker
         private static IServiceProvider ConfigureServices()
         {
             var services = new ServiceCollection()
-                .AddSingleton<IKeyEventSender, ArrowKeyEventSender>()
-                .AddSingleton<AutomationElementGetter[]>(
+                .AddTransient<IKeyEventSender, ArrowKeyEventSender>()
+                .AddTransient<IAutomationElementGetter[]>(
                 provider => new AutomationElementGetter[] {
                     new AutomationElementGetterForZoom(),
                     new AutomationElementGetterForTeams() })
-                .AddSingleton<MonitoringModel>()
-                .AddSingleton<IMonitoring, MonitoringService>()
+                .AddTransient<MonitoringModel>()
+                .AddSingleton<IPresetProvider, PresetModel>() // プリセット情報はシステムで一意とする
+                .AddSingleton<IReadOnlyPreset>(provider => provider.GetService<IPresetProvider>()!) // 読み取り専用プリセット情報
+                .AddTransient<PresetViewModel>()
+                .AddTransient<MonitoringViewModel>()
                 .AddTransient<MainWindowViewModel>();
 
             return services.BuildServiceProvider();
@@ -50,7 +55,9 @@ namespace WebMeetingParticipantChecker
             base.OnStartup(e);
 
             // テーマ更新
-            string dicPath = (GetAppsUseLightTheme() == 0) ? @"Resources\Dark.xaml" : @"Resources\Light.xaml";
+            var currentTheme = GetAppsUseLightTheme();
+            string dicPath = (currentTheme == 0) ? @"Resources\Dark.xaml" : @"Resources\Light.xaml";
+            AppSettingsManager.CurrentThemeId = currentTheme;
             var dic = new ResourceDictionary
             {
                 Source = new Uri(dicPath, UriKind.Relative)
@@ -68,6 +75,12 @@ namespace WebMeetingParticipantChecker
         /// 
         private static int GetAppsUseLightTheme()
         {
+            var currentThemeId = AppSettingsManager.ThemeIdNotReturnDefault;
+            if (currentThemeId != null && ThemeDefine.IsDefaultThemeValue((int)currentThemeId))
+            {
+                return (int)currentThemeId;
+            }
+
 #pragma warning disable CA1416 // プラットフォームの互換性を検証
             int getmode = -1;
             string rKeyName = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";

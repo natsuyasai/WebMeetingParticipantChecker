@@ -11,12 +11,12 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
     /// https://docs.microsoft.com/ja-jp/dotnet/framework/ui-automation/subscribe-to-ui-automation-events
     /// https://docs.microsoft.com/ja-jp/windows/win32/winauto/uiauto-eventsforclients
     /// </remarks>
-    internal abstract class AutomationElementGetter
+    internal abstract class AutomationElementGetter : IAutomationElementGetter
     {
         /// <summary>
         /// 対象の要素
         /// </summary>
-        public IUIAutomationElement? TargetElement { get; private set; } = null;
+        private IUIAutomationElement? _targetElement { get; set; } = null;
 
         /// <summary>
         /// フォーカスイベントハンドラ
@@ -62,7 +62,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// </summary>
         public void SubscribeToFocusChange(Action onDetectedTargetElemetCallback)
         {
-            TargetElement = null;
+            _targetElement = null;
             _onDetectedTargetElemetCallback = onDetectedTargetElemetCallback;
             if (_focusHandler != null)
             {
@@ -85,13 +85,22 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         }
 
         /// <summary>
+        /// 対象要素取得
+        /// </summary>
+        /// <returns></returns>
+        public IUIAutomationElement? GetTargetElement()
+        {
+            return _targetElement;
+        }
+
+        /// <summary>
         /// フォーカスイベント
         /// </summary>
         private void OnFocusChange(IUIAutomationElement element)
         {
             try
             {
-                if (TargetElement != null || element.CurrentName == null)
+                if (_targetElement != null || element.CurrentName == null)
                 {
                     return;
                 }
@@ -146,7 +155,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// <param name="element"></param>
         private void SetTargetElement(IUIAutomationElement element)
         {
-            TargetElement = element;
+            _targetElement = element;
             _onDetectedTargetElemetCallback?.Invoke();
             UnsubscribeFocusChange();
         }

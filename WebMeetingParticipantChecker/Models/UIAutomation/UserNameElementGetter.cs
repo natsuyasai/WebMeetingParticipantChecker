@@ -100,7 +100,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         {
             IUIAutomationElement? lastElement = null;
             var beforLastElementName = "";
-            var isContinue = true;
+            var isContinue = isEnableAutoScroll;
             var itemSumCount = 0;
             do
             {
@@ -128,7 +128,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
                         isContinue = !_autoScroll.IsOverflowScroll();
                     }
                 }
-            } while (isContinue && isEnableAutoScroll);
+            } while (isContinue);
 
             if (isEnableAutoScroll)
             {

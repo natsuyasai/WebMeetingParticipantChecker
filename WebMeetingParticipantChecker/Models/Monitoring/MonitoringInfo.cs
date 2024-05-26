@@ -5,6 +5,15 @@
     /// </summary>
     class MonitoringInfo
     {
+        internal enum JoinState
+        {
+            AutoJoin = 0,
+            AutoNotJoin,
+            ManualJoin,
+            ManualNotJoin,
+            Max
+        }
+
         /// <summary>
         /// 識別子 
         /// </summary>
@@ -21,6 +30,24 @@
         /// 手動更新
         /// </summary>
         public bool IsManual { get; private set; } = false;
+
+        /// <summary>
+        /// 参加状態
+        /// </summary>
+        public JoinState TargetState
+        {
+            get
+            {
+                if (IsManual)
+                {
+                    return IsJoin ? JoinState.ManualJoin : JoinState.ManualNotJoin;
+                }
+                else
+                {
+                    return IsJoin ? JoinState.AutoJoin : JoinState.AutoNotJoin;
+                }
+            }
+        }
 
         /// <summary>
         /// コンストラクタ

@@ -1,4 +1,5 @@
 ﻿{
     "MonitoringCycleMs": "2000",
-    "KyedownMaxCount": "200"
+    "KyedownMaxCount": "200",
+    "ThemeId": "2"
 }
