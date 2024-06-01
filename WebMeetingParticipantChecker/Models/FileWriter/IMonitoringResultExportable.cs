@@ -9,6 +9,6 @@ namespace WebMeetingParticipantChecker.Models.FileWriter
 {
     internal interface IMonitoringResultExportable
     {
-        public bool Export(IReadOnlyCollection<UserState> userStates);
+        public bool Export(string fileName, IEnumerable<UserState> userStates);
     }
 }

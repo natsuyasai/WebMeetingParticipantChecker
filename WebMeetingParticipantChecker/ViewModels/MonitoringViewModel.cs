@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using NLog;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 using UIAutomationClient;
 using WebMeetingParticipantChecker.Models.Config;
 using WebMeetingParticipantChecker.Models.FileWriter;
+using WebMeetingParticipantChecker.Models.Message;
 using WebMeetingParticipantChecker.Models.Monitoring;
 using WebMeetingParticipantChecker.Models.Preset;
 using WebMeetingParticipantChecker.Models.UIAutomation;
@@ -260,6 +262,15 @@ namespace WebMeetingParticipantChecker.ViewModels
             }
         }
 
+        private RelayCommand? _exportResultCommand;
+        public RelayCommand ExportResultCommand
+        {
+            get
+            {
+                return _exportResultCommand ??= new RelayCommand(ExportResult);
+            }
+        }
+
         /// <summary>
         /// 参加状態自動監視コマンド
         /// </summary>
@@ -475,6 +486,43 @@ namespace WebMeetingParticipantChecker.ViewModels
             else
             {
                 UpdateStatus(StatusValue.Monitoring);
+            }
+        }
+
+        /// <summary>
+        /// 結果出力
+        /// </summary>
+        private void ExportResult()
+        {
+            var filename = _preset.GetCurrentPresetName();
+            if (!_monitoringModel.GetUserStates().Any())
+            {
+                WeakReferenceMessenger.Default.Send(new Message<MainWindow>(
+                    new MessageInfo
+                    {
+                        Title = "情報",
+                        Message = "出力する結果がありません。"
+                    }));
+                return;
+            }
+            var result = _resultExporter.Export(filename, _monitoringModel.GetUserStates());
+            if (result)
+            {
+                WeakReferenceMessenger.Default.Send(new Message<MainWindow>(
+                    new MessageInfo
+                    {
+                        Title = "情報",
+                        Message = $"出力しました。\r\nファイル名：{filename}"
+                    }));
+            }
+            else
+            {
+                WeakReferenceMessenger.Default.Send(new Message<MainWindow>(
+                    new MessageInfo
+                    {
+                        Title = "エラー",
+                        Message = $"出力に失敗しました。"
+                    }));
             }
         }
     }

@@ -68,6 +68,7 @@
                     Margin="8,2,8,2"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
+                    Command="{Binding ExportResultCommand, Mode=OneWay}"
                     Content="結果出力"
                     Style="{StaticResource FlatButton}" />
             </Grid>

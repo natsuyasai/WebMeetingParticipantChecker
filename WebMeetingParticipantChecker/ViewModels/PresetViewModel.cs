@@ -97,7 +97,7 @@ namespace WebMeetingParticipantChecker.ViewModels
         /// </summary>
         private void EditPresetData()
         {
-            Process.Start(new ProcessStartInfo((_preset.GetCurrntPresetFilePath())) { UseShellExecute = true });
+            Process.Start(new ProcessStartInfo((_preset.GetCurrentPresetFilePath())) { UseShellExecute = true });
         }
 
         /// <summary>

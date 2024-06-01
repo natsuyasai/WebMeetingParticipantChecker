@@ -9,7 +9,8 @@ namespace WebMeetingParticipantChecker.Models.Preset
     internal interface IReadOnlyPreset
     {
         IEnumerable<string> GetCurrentPresetUsers();
-        string GetCurrntPresetFilePath();
+        string GetCurrentPresetFilePath();
+        string GetCurrentPresetName();
         IEnumerable<PresetInfo> GetPreset();
         IEnumerable<string> GetPresetUsers(int index);
         IEnumerable<string> GetPresetNames();
