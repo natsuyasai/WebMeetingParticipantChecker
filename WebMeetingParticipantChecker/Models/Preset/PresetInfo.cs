@@ -24,7 +24,7 @@ namespace WebMeetingParticipantChecker.Models.Preset
         /// <summary>
         /// プリセットデータ
         /// </summary>
-        public IEnumerable<string> Data { get; private set; }
+        public IEnumerable<string> UserNames { get; private set; }
 
         /// <summary>
         /// コンストラクタ
@@ -32,13 +32,13 @@ namespace WebMeetingParticipantChecker.Models.Preset
         /// <param name="id"></param>
         /// <param name="filepath"></param>
         /// <param name="name"></param>
-        /// <param name="data"></param>
-        public PresetInfo(int id, string filepath, string name, IEnumerable<string> data)
+        /// <param name="userNames"></param>
+        public PresetInfo(int id, string filepath, string name, IEnumerable<string> userNames)
         {
             Id = id;
             FilePath = filepath;
             Name = name;
-            Data = data;
+            UserNames = userNames;
         }
 
         /// <summary>

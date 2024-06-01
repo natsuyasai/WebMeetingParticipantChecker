@@ -93,7 +93,7 @@
                 <ListView
                     d:ItemsSource="{d:SampleData ItemCount=5}"
                     BorderBrush="{x:Null}"
-                    ItemsSource="{Binding Path=SelectPresetData}"
+                    ItemsSource="{Binding Path=SelectPresetUsers}"
                     Style="{StaticResource ListViewStyle}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>

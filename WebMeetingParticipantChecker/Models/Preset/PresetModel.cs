@@ -61,7 +61,7 @@ namespace WebMeetingParticipantChecker.Models.Preset
         /// プリセット名一覧取得
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<string> GetPresetNameList()
+        public IEnumerable<string> GetPresetNames()
         {
             return _preset.Select(info => info.Name);
         }
@@ -70,11 +70,11 @@ namespace WebMeetingParticipantChecker.Models.Preset
         /// プリセットデータ一覧取得
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<string> GetPresetDataList(int index)
+        public IEnumerable<string> GetPresetUsers(int index)
         {
             if (index >= 0 && index < _preset.Count)
             {
-                return _preset[index].Data;
+                return _preset[index].UserNames;
             }
             else
             {
@@ -86,9 +86,9 @@ namespace WebMeetingParticipantChecker.Models.Preset
         /// 現在のプリセットデータ一覧取得
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<string> GetCurrentPresetDataList()
+        public IEnumerable<string> GetCurrentPresetUsers()
         {
-            return GetPresetDataList(_currentIndex);
+            return GetPresetUsers(_currentIndex);
         }
 
         /// <summary>

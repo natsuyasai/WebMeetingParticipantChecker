@@ -306,7 +306,7 @@ namespace WebMeetingParticipantChecker.ViewModels
             _logger.Info("監視開始");
             // 監視開始
             UpdateStatus(StatusValue.PreparingTargetWindowCaputure);
-            _monitoringModel.RegisterMonitoringTargets(_preset.GetCurrentPresetDataList());
+            _monitoringModel.RegisterMonitoringTargets(_preset.GetCurrentPresetUsers());
             OnPropertyChanged(nameof(UserStates));
 
             // Zoomの参加者ウィンドウ検索開始

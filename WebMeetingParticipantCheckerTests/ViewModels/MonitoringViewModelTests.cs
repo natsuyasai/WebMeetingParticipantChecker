@@ -40,7 +40,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
             moq.SetupGet(x => x["MonitoringCycleMs"]).Returns("100");
             AppSettingsManager.Intialization(moq.Object);
 
-            _presetMoq.Setup(x => x.GetCurrentPresetDataList())
+            _presetMoq.Setup(x => x.GetCurrentPresetUsers())
                 .Returns(new List<string>() { "テンプレート1", "テンプレート2" });
 
             _elementGetter.Setup(x => x.SubscribeToFocusChange(It.IsAny<Action>()))
