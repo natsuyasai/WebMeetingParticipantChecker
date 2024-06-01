@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UIAutomationClient;
+using WebMeetingParticipantChecker.Models.Config;
 using WebMeetingParticipantChecker.Models.Monitoring;
 using WebMeetingParticipantChecker.Models.Preset;
 using WebMeetingParticipantChecker.Models.UIAutomation;
@@ -77,6 +78,8 @@ namespace WebMeetingParticipantChecker.ViewModels
         private readonly MonitoringModel _monitoringModel;
 
         private readonly IKeyEventSender _arrowDownKeyEventSender;
+
+        private readonly int _keydownMaxCount;
 
         private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
@@ -271,7 +274,7 @@ namespace WebMeetingParticipantChecker.ViewModels
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public MonitoringViewModel(IAutomationElementGetter[] automationElementGetter, MonitoringModel monitoringModel, IKeyEventSender arrowDownKeyEventSender, IPresetProvider preset)
+        public MonitoringViewModel(IAutomationElementGetter[] automationElementGetter, MonitoringModel monitoringModel, IKeyEventSender arrowDownKeyEventSender, IReadOnlyPreset preset, int keydownMaxCount)
         {
             _status = StatusValue.Init;
             _automationElementGetter = automationElementGetter;
@@ -279,6 +282,7 @@ namespace WebMeetingParticipantChecker.ViewModels
             _arrowDownKeyEventSender = arrowDownKeyEventSender;
             _preset = preset;
             OnPropertyChanged(nameof(StatusDisplayString));
+            _keydownMaxCount = keydownMaxCount;
         }
 
 
@@ -348,13 +352,13 @@ namespace WebMeetingParticipantChecker.ViewModels
             {
                 MonitoringType.Target.Zoom =>
                 new UserNameElementGetterForZoom(
-                    new CUIAutomation(), _automationElementGetter[(int)_targetType].GetTargetElement()!, _arrowDownKeyEventSender),
+                    new CUIAutomation(), _automationElementGetter[(int)_targetType].GetTargetElement()!, _arrowDownKeyEventSender, _keydownMaxCount),
                 MonitoringType.Target.Teams =>
                 new UserNameElementGetterForTeams(
-                    new CUIAutomation(), _automationElementGetter[(int)_targetType].GetTargetElement()!, _arrowDownKeyEventSender),
+                    new CUIAutomation(), _automationElementGetter[(int)_targetType].GetTargetElement()!, _arrowDownKeyEventSender, _keydownMaxCount),
                 _ =>
                 new UserNameElementGetterForZoom(
-                    new CUIAutomation(), _automationElementGetter[(int)_targetType].GetTargetElement()!, _arrowDownKeyEventSender),
+                    new CUIAutomation(), _automationElementGetter[(int)_targetType].GetTargetElement()!, _arrowDownKeyEventSender, _keydownMaxCount),
             };
         }
 

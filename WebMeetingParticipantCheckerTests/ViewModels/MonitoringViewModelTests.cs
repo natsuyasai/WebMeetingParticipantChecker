@@ -24,6 +24,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
         private readonly Mock<IKeyEventSender> _keyEventSender;
         private readonly Mock<IAutomationElementGetter> _elementGetter;
         private readonly MonitoringModel _monitoringModel = new(100);
+        private readonly int _keydownMaxCount = 500;
 
         public MonitoringViewModelTests()
         {
@@ -63,7 +64,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
                 });
             var target = new MonitoringViewModel(
                 new IAutomationElementGetter[] { _elementGetter.Object, _elementGetter.Object },
-                _monitoringModel, _keyEventSender.Object, _presetMoq.Object);
+                _monitoringModel, _keyEventSender.Object, _presetMoq.Object, _keydownMaxCount);
 
             target.StartCommand.Execute(null);
             await Task.Delay(100);
@@ -88,7 +89,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
         {
             var target = new MonitoringViewModel(
                 new IAutomationElementGetter[] { _elementGetter.Object, _elementGetter.Object },
-                _monitoringModel, _keyEventSender.Object, _presetMoq.Object);
+                _monitoringModel, _keyEventSender.Object, _presetMoq.Object, _keydownMaxCount);
 
             target.StartCommand.Execute(null);
             await Task.Delay(100);
@@ -113,7 +114,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
         {
             var target = new MonitoringViewModel(
                 new IAutomationElementGetter[] { _elementGetter.Object, _elementGetter.Object },
-                _monitoringModel, _keyEventSender.Object, _presetMoq.Object);
+                _monitoringModel, _keyEventSender.Object, _presetMoq.Object, _keydownMaxCount);
 
             target.StartCommand.Execute(null);
             await Task.Delay(100);
@@ -143,7 +144,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
         {
             var target = new MonitoringViewModel(
                 new IAutomationElementGetter[] { _elementGetter.Object, _elementGetter.Object },
-                _monitoringModel, _keyEventSender.Object, _presetMoq.Object);
+                _monitoringModel, _keyEventSender.Object, _presetMoq.Object, _keydownMaxCount);
 
             target.StartCommand.Execute(null);
             await Task.Delay(100);
@@ -175,7 +176,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
         {
             var target = new MonitoringViewModel(
                 new IAutomationElementGetter[] { _elementGetter.Object, _elementGetter.Object },
-                _monitoringModel, _keyEventSender.Object, _presetMoq.Object);
+                _monitoringModel, _keyEventSender.Object, _presetMoq.Object, _keydownMaxCount);
 
             target.StartCommand.Execute(null);
             await Task.Delay(100);
@@ -207,7 +208,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
         {
             var target = new MonitoringViewModel(
                 new IAutomationElementGetter[] { _elementGetter.Object, _elementGetter.Object },
-                _monitoringModel, _keyEventSender.Object, _presetMoq.Object);
+                _monitoringModel, _keyEventSender.Object, _presetMoq.Object, _keydownMaxCount);
 
             target.StartCommand.Execute(null);
             await Task.Delay(100);
@@ -240,7 +241,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
         {
             var target = new MonitoringViewModel(
                 new IAutomationElementGetter[] { _elementGetter.Object, _elementGetter.Object },
-                _monitoringModel, _keyEventSender.Object, _presetMoq.Object);
+                _monitoringModel, _keyEventSender.Object, _presetMoq.Object, _keydownMaxCount);
 
             target.StartCommand.Execute(null);
             await Task.Delay(100);
@@ -284,7 +285,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
         {
             var target = new MonitoringViewModel(
                 new IAutomationElementGetter[] { _elementGetter.Object, _elementGetter.Object },
-                _monitoringModel, _keyEventSender.Object, _presetMoq.Object);
+                _monitoringModel, _keyEventSender.Object, _presetMoq.Object, _keydownMaxCount);
 
             target.StartCommand.Execute(null);
             await Task.Delay(100);

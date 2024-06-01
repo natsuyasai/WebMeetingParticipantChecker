@@ -26,15 +26,21 @@ namespace WebMeetingParticipantChecker
         {
             var services = new ServiceCollection()
                 .AddTransient<IKeyEventSender, ArrowKeyEventSender>()
-                .AddTransient<IAutomationElementGetter[]>(
-                provider => new AutomationElementGetter[] {
-                    new AutomationElementGetterForZoom(AppSettingsManager.ZoomParticipantListName),
-                    new AutomationElementGetterForTeams(AppSettingsManager.TeamsParticipantListName) })
+                .AddTransient<IAutomationElementGetter[]>(provider => 
+                    new AutomationElementGetter[] {
+                        new AutomationElementGetterForZoom(AppSettingsManager.ZoomParticipantListName),
+                        new AutomationElementGetterForTeams(AppSettingsManager.TeamsParticipantListName) })
                 .AddTransient<MonitoringModel>(provider => new MonitoringModel(AppSettingsManager.MonitoringCycleMs))
                 .AddSingleton<IPresetProvider, PresetModel>() // プリセット情報はシステムで一意とする
                 .AddSingleton<IReadOnlyPreset>(provider => provider.GetService<IPresetProvider>()!) // 読み取り専用プリセット情報
                 .AddTransient<PresetViewModel>()
-                .AddTransient<MonitoringViewModel>()
+                .AddTransient<MonitoringViewModel>(provider => 
+                    new MonitoringViewModel(
+                        provider.GetService<IAutomationElementGetter[]>()!, 
+                        provider.GetService<MonitoringModel>()!, 
+                        provider.GetService<IKeyEventSender>()!,
+                        provider.GetService<IReadOnlyPreset>()!,
+                        AppSettingsManager.KeydownMaxCount))
                 .AddTransient<MainWindowViewModel>();
 
             return services.BuildServiceProvider();
