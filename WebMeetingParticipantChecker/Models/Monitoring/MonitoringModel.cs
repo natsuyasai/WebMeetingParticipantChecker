@@ -72,9 +72,9 @@ namespace WebMeetingParticipantChecker.Models.Monitoring
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public MonitoringModel()
+        public MonitoringModel(int monitoringCycleMs)
         {
-            DelayTimeMs = AppSettingsManager.MonitoringCycleMs;
+            DelayTimeMs = monitoringCycleMs;
         }
 
         /// <summary>

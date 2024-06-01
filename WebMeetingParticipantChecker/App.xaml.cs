@@ -28,9 +28,9 @@ namespace WebMeetingParticipantChecker
                 .AddTransient<IKeyEventSender, ArrowKeyEventSender>()
                 .AddTransient<IAutomationElementGetter[]>(
                 provider => new AutomationElementGetter[] {
-                    new AutomationElementGetterForZoom(),
-                    new AutomationElementGetterForTeams() })
-                .AddTransient<MonitoringModel>()
+                    new AutomationElementGetterForZoom(AppSettingsManager.ZoomParticipantListName),
+                    new AutomationElementGetterForTeams(AppSettingsManager.TeamsParticipantListName) })
+                .AddTransient<MonitoringModel>(provider => new MonitoringModel(AppSettingsManager.MonitoringCycleMs))
                 .AddSingleton<IPresetProvider, PresetModel>() // プリセット情報はシステムで一意とする
                 .AddSingleton<IReadOnlyPreset>(provider => provider.GetService<IPresetProvider>()!) // 読み取り専用プリセット情報
                 .AddTransient<PresetViewModel>()

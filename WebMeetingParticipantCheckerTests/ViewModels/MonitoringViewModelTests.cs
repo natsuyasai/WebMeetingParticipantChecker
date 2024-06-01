@@ -23,7 +23,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
         private readonly Mock<IPresetProvider> _presetMoq;
         private readonly Mock<IKeyEventSender> _keyEventSender;
         private readonly Mock<IAutomationElementGetter> _elementGetter;
-        private readonly MonitoringModel _monitoringModel = new MonitoringModel();
+        private readonly MonitoringModel _monitoringModel = new(100);
 
         public MonitoringViewModelTests()
         {

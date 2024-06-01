@@ -27,7 +27,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
             var targetFilePath1 = System.AppDomain.CurrentDomain.BaseDirectory + @"\Preset\" + "テンプレートプリセット1.csv";
             var expectedNames = new List<PresetInfo>()
             {
-                new PresetInfo(0, targetFilePath1, "テンプレートプリセット1", new List<string>(){ "テンプレート1","テンプレート2"})
+                new(0, targetFilePath1, "テンプレートプリセット1", new List<string>(){ "テンプレート1","テンプレート2"})
             };
             var expected = new ObservableCollection<PresetInfo>(expectedNames);
             Assert.AreEqual(expected[0].Id, target.PresetNames[0].Id);
@@ -47,7 +47,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
 
             target.SetSelectedPreset(selectedPreset);
 
-            CollectionAssert.AreEqual(selectedPreset.UserNames.ToList(), target.SelectPresetData.ToList());
+            CollectionAssert.AreEqual(selectedPreset.UserNames.ToList(), target.SelectPresetUsers.ToList());
         }
     }
 }
