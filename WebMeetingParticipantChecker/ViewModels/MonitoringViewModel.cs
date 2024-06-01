@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UIAutomationClient;
 using WebMeetingParticipantChecker.Models.Config;
+using WebMeetingParticipantChecker.Models.FileWriter;
 using WebMeetingParticipantChecker.Models.Monitoring;
 using WebMeetingParticipantChecker.Models.Preset;
 using WebMeetingParticipantChecker.Models.UIAutomation;
@@ -76,6 +77,8 @@ namespace WebMeetingParticipantChecker.ViewModels
         /// 監視
         /// </summary>
         private readonly MonitoringModel _monitoringModel;
+
+        private readonly IMonitoringResultExportable _resultExporter;
 
         private readonly IKeyEventSender _arrowDownKeyEventSender;
 
@@ -274,7 +277,12 @@ namespace WebMeetingParticipantChecker.ViewModels
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public MonitoringViewModel(IAutomationElementGetter[] automationElementGetter, MonitoringModel monitoringModel, IKeyEventSender arrowDownKeyEventSender, IReadOnlyPreset preset, int keydownMaxCount)
+        public MonitoringViewModel(IAutomationElementGetter[] automationElementGetter,
+                                   MonitoringModel monitoringModel,
+                                   IKeyEventSender arrowDownKeyEventSender,
+                                   IReadOnlyPreset preset,
+                                   IMonitoringResultExportable resultExporter,
+                                   int keydownMaxCount)
         {
             _status = StatusValue.Init;
             _automationElementGetter = automationElementGetter;
@@ -282,6 +290,7 @@ namespace WebMeetingParticipantChecker.ViewModels
             _arrowDownKeyEventSender = arrowDownKeyEventSender;
             _preset = preset;
             OnPropertyChanged(nameof(StatusDisplayString));
+            _resultExporter = resultExporter;
             _keydownMaxCount = keydownMaxCount;
         }
 
