@@ -44,8 +44,8 @@ namespace WebMeetingParticipantChecker.Models.Monitoring
         /// <summary>
         /// 監視情報
         /// </summary>
-        private List<MonitoringInfo> _monitoringInfos = new();
-        private List<MonitoringInfo> _searchInfos = new();
+        private List<UserState> _userStates = new();
+        private List<UserState> _searchInfos = new();
 
         /// <summary>
         /// タスクキャンセル状態管理
@@ -80,9 +80,9 @@ namespace WebMeetingParticipantChecker.Models.Monitoring
         /// <summary>
         /// 監視情報取得
         /// </summary>
-        public IEnumerable<MonitoringInfo> GetMonitoringInfos()
+        public IEnumerable<UserState> GetUserStates()
         {
-            return _monitoringInfos;
+            return _userStates;
         }
 
         /// <summary>
@@ -92,16 +92,16 @@ namespace WebMeetingParticipantChecker.Models.Monitoring
         public void RegisterMonitoringTargets(IEnumerable<string> targetUsers)
         {
             _searchInfos.Clear();
-            _monitoringInfos.Clear();
-            _monitoringInfos = targetUsers.Select((user, index) => new MonitoringInfo(index, user)).ToList();
-            _searchInfos = _monitoringInfos.Select(info => new MonitoringInfo(info.Id, StringUtils.RemoveSpace(info.Name))).ToList();
+            _userStates.Clear();
+            _userStates = targetUsers.Select((user, index) => new UserState(index, user)).ToList();
+            _searchInfos = _userStates.Select(info => new UserState(info.Id, StringUtils.RemoveSpace(info.Name))).ToList();
             // スペースを区切りとみなして姓名入れ替え後の名前も検索用に保持
-            _searchInfos.AddRange(_monitoringInfos.Aggregate(new List<MonitoringInfo>(), (accumulate, current) =>
+            _searchInfos.AddRange(_userStates.Aggregate(new List<UserState>(), (accumulate, current) =>
             {
                 if (StringUtils.TrySwapBeforeAndAfterTheSpace(current.Name, out var result))
                 {
                     // 間にスペースがあった物のみ追加しておく
-                    accumulate.Add(new MonitoringInfo(current.Id, StringUtils.RemoveSpace(result)));
+                    accumulate.Add(new UserState(current.Id, StringUtils.RemoveSpace(result)));
                 }
                 return accumulate;
             }));
@@ -157,12 +157,12 @@ namespace WebMeetingParticipantChecker.Models.Monitoring
         /// <param name="targetId"></param>
         public void SwitchingParticipantState(int targetId)
         {
-            lock (_monitoringInfos)
+            lock (_userStates)
             {
-                var index = _monitoringInfos.FindIndex(item => item.IsMine(targetId));
+                var index = _userStates.FindIndex(item => item.IsMine(targetId));
                 if (index >= 0)
                 {
-                    _monitoringInfos[index].SwitchJoinStateOfManual();
+                    _userStates[index].SwitchJoinStateOfManual();
                 }
             }
         }
@@ -173,9 +173,9 @@ namespace WebMeetingParticipantChecker.Models.Monitoring
         /// <returns></returns>
         public bool IsAllJoin()
         {
-            lock (_monitoringInfos)
+            lock (_userStates)
             {
-                return _monitoringInfos.All(item => item.IsJoin);
+                return _userStates.All(item => item.IsJoin);
             }
         }
 
@@ -186,12 +186,12 @@ namespace WebMeetingParticipantChecker.Models.Monitoring
         /// <param name="target"></param>
         public void SetParticipantAuto(int target)
         {
-            lock (_monitoringInfos)
+            lock (_userStates)
             {
-                var index = _monitoringInfos.FindIndex(item => item.IsMine(target));
+                var index = _userStates.FindIndex(item => item.IsMine(target));
                 if (index >= 0)
                 {
-                    _monitoringInfos[index].ResetJoinState();
+                    _userStates[index].ResetJoinState();
                 }
             }
         }
@@ -239,12 +239,12 @@ namespace WebMeetingParticipantChecker.Models.Monitoring
             {
                 if (dict.ContainsKey(info.Name) || dict.Where(a => a.Key.Contains(info.Name)).FirstOrDefault().Value != null)
                 {
-                    lock (_monitoringInfos)
+                    lock (_userStates)
                     {
                         // 未参加なら変更通知
-                        if (!_monitoringInfos[info.Id].IsJoinIncludeManual())
+                        if (!_userStates[info.Id].IsJoinIncludeManual())
                         {
-                            _monitoringInfos[info.Id].SetJoin();
+                            _userStates[info.Id].SetJoin();
                             needNotifyChange = true;
                         }
                     }

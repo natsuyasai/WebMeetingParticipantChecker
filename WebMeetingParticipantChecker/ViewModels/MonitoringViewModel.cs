@@ -138,11 +138,11 @@ namespace WebMeetingParticipantChecker.ViewModels
         /// <summary>
         /// 監視情報
         /// </summary>
-        public ObservableCollection<MonitoringInfo> MonitoringInfos
+        public ObservableCollection<UserState> UserStates
         {
             get
             {
-                return new ObservableCollection<MonitoringInfo>(_monitoringModel.GetMonitoringInfos().OrderBy(info => info.IsJoin));
+                return new ObservableCollection<UserState>(_monitoringModel.GetUserStates().OrderBy(info => info.IsJoin));
             }
         }
 
@@ -156,8 +156,8 @@ namespace WebMeetingParticipantChecker.ViewModels
             {
                 if (_status == StatusValue.Monitoring || _status == StatusValue.Pause)
                 {
-                    int maxcount = _monitoringModel.GetMonitoringInfos().Count();
-                    int joincount = _monitoringModel.GetMonitoringInfos().Count(item => item.IsJoin);
+                    int maxcount = _monitoringModel.GetUserStates().Count();
+                    int joincount = _monitoringModel.GetUserStates().Count(item => item.IsJoin);
                     return StatusString[(int)_status] + $"(参加：{joincount}、未参加：{maxcount - joincount})";
                 }
                 else
@@ -307,7 +307,7 @@ namespace WebMeetingParticipantChecker.ViewModels
             // 監視開始
             UpdateStatus(StatusValue.PreparingTargetWindowCaputure);
             _monitoringModel.RegisterMonitoringTargets(_preset.GetCurrentPresetDataList());
-            OnPropertyChanged(nameof(MonitoringInfos));
+            OnPropertyChanged(nameof(UserStates));
 
             // Zoomの参加者ウィンドウ検索開始
             UpdateStatus(StatusValue.TargetWindowCaputure);
@@ -363,7 +363,7 @@ namespace WebMeetingParticipantChecker.ViewModels
         /// </summary>
         private void OnJoinStateChangeCallback()
         {
-            OnPropertyChanged(nameof(MonitoringInfos));
+            OnPropertyChanged(nameof(UserStates));
             UpdateMonitoringStates();
         }
 
@@ -377,7 +377,7 @@ namespace WebMeetingParticipantChecker.ViewModels
             {
                 UpdateStatus(StatusValue.Init);
                 _monitoringModel.StopMonitoring();
-                OnPropertyChanged(nameof(MonitoringInfos));
+                OnPropertyChanged(nameof(UserStates));
             });
         }
 
@@ -391,7 +391,7 @@ namespace WebMeetingParticipantChecker.ViewModels
             {
                 UpdateStatus(StatusValue.Init);
                 _monitoringModel.StopMonitoring();
-                OnPropertyChanged(nameof(MonitoringInfos));
+                OnPropertyChanged(nameof(UserStates));
             });
         }
 
@@ -422,7 +422,7 @@ namespace WebMeetingParticipantChecker.ViewModels
             if (target is int @int)
             {
                 _monitoringModel.SwitchingParticipantState(@int);
-                OnPropertyChanged(nameof(MonitoringInfos));
+                OnPropertyChanged(nameof(UserStates));
                 if (_status == StatusValue.Monitoring)
                 {
                     // 監視中なら通常通り更新
@@ -444,7 +444,7 @@ namespace WebMeetingParticipantChecker.ViewModels
             if (target is int @int)
             {
                 _monitoringModel.SetParticipantAuto(@int);
-                OnPropertyChanged(nameof(MonitoringInfos));
+                OnPropertyChanged(nameof(UserStates));
             }
         }
 

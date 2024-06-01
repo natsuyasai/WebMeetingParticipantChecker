@@ -74,12 +74,12 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
             Assert.IsTrue(target.CanStop);
             Assert.IsFalse(target.CanPauseAndResume);
 
-            Assert.AreEqual("テンプレート1", target.MonitoringInfos[0].Name);
-            Assert.IsFalse(target.MonitoringInfos[0].IsJoin);
-            Assert.IsFalse(target.MonitoringInfos[0].IsManual);
-            Assert.AreEqual("テンプレート2", target.MonitoringInfos[1].Name);
-            Assert.IsFalse(target.MonitoringInfos[1].IsJoin);
-            Assert.IsFalse(target.MonitoringInfos[1].IsManual);
+            Assert.AreEqual("テンプレート1", target.UserStates[0].Name);
+            Assert.IsFalse(target.UserStates[0].IsJoin);
+            Assert.IsFalse(target.UserStates[0].IsManual);
+            Assert.AreEqual("テンプレート2", target.UserStates[1].Name);
+            Assert.IsFalse(target.UserStates[1].IsJoin);
+            Assert.IsFalse(target.UserStates[1].IsManual);
         }
 
         [TestMethod()]
@@ -99,12 +99,12 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
             Assert.IsTrue(target.CanStop);
             Assert.IsTrue(target.CanPauseAndResume);
 
-            Assert.AreEqual("テンプレート1", target.MonitoringInfos[0].Name);
-            Assert.IsFalse(target.MonitoringInfos[0].IsJoin);
-            Assert.IsFalse(target.MonitoringInfos[0].IsManual);
-            Assert.AreEqual("テンプレート2", target.MonitoringInfos[1].Name);
-            Assert.IsFalse(target.MonitoringInfos[1].IsJoin);
-            Assert.IsFalse(target.MonitoringInfos[1].IsManual);
+            Assert.AreEqual("テンプレート1", target.UserStates[0].Name);
+            Assert.IsFalse(target.UserStates[0].IsJoin);
+            Assert.IsFalse(target.UserStates[0].IsManual);
+            Assert.AreEqual("テンプレート2", target.UserStates[1].Name);
+            Assert.IsFalse(target.UserStates[1].IsJoin);
+            Assert.IsFalse(target.UserStates[1].IsManual);
         }
 
         [TestMethod()]
@@ -129,12 +129,12 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
             Assert.IsFalse(target.CanStop);
             Assert.IsFalse(target.CanPauseAndResume);
 
-            Assert.AreEqual("テンプレート1", target.MonitoringInfos[0].Name);
-            Assert.IsFalse(target.MonitoringInfos[0].IsJoin);
-            Assert.IsFalse(target.MonitoringInfos[0].IsManual);
-            Assert.AreEqual("テンプレート2", target.MonitoringInfos[1].Name);
-            Assert.IsFalse(target.MonitoringInfos[1].IsJoin);
-            Assert.IsFalse(target.MonitoringInfos[1].IsManual);
+            Assert.AreEqual("テンプレート1", target.UserStates[0].Name);
+            Assert.IsFalse(target.UserStates[0].IsJoin);
+            Assert.IsFalse(target.UserStates[0].IsManual);
+            Assert.AreEqual("テンプレート2", target.UserStates[1].Name);
+            Assert.IsFalse(target.UserStates[1].IsJoin);
+            Assert.IsFalse(target.UserStates[1].IsManual);
         }
 
         [TestMethod()]
@@ -180,24 +180,24 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
             target.StartCommand.Execute(null);
             await Task.Delay(100);
 
-            Assert.AreEqual("テンプレート1", target.MonitoringInfos[0].Name);
-            Assert.IsFalse(target.MonitoringInfos[0].IsJoin);
-            Assert.IsFalse(target.MonitoringInfos[0].IsManual);
-            Assert.AreEqual("テンプレート2", target.MonitoringInfos[1].Name);
-            Assert.IsFalse(target.MonitoringInfos[1].IsJoin);
-            Assert.IsFalse(target.MonitoringInfos[1].IsManual);
+            Assert.AreEqual("テンプレート1", target.UserStates[0].Name);
+            Assert.IsFalse(target.UserStates[0].IsJoin);
+            Assert.IsFalse(target.UserStates[0].IsManual);
+            Assert.AreEqual("テンプレート2", target.UserStates[1].Name);
+            Assert.IsFalse(target.UserStates[1].IsJoin);
+            Assert.IsFalse(target.UserStates[1].IsManual);
             Assert.AreEqual("監視中……(参加：0、未参加：2)", target.StatusDisplayString);
 
             // 手動で切り替え
             target.SwitchingParticipantStateCommand.Execute(1);
             await Task.Delay(100);
 
-            Assert.AreEqual("テンプレート1", target.MonitoringInfos[0].Name);
-            Assert.IsFalse(target.MonitoringInfos[0].IsJoin);
-            Assert.IsFalse(target.MonitoringInfos[0].IsManual);
-            Assert.AreEqual("テンプレート2", target.MonitoringInfos[1].Name);
-            Assert.IsTrue(target.MonitoringInfos[1].IsJoin);
-            Assert.IsTrue(target.MonitoringInfos[1].IsManual);
+            Assert.AreEqual("テンプレート1", target.UserStates[0].Name);
+            Assert.IsFalse(target.UserStates[0].IsJoin);
+            Assert.IsFalse(target.UserStates[0].IsManual);
+            Assert.AreEqual("テンプレート2", target.UserStates[1].Name);
+            Assert.IsTrue(target.UserStates[1].IsJoin);
+            Assert.IsTrue(target.UserStates[1].IsManual);
             Assert.AreEqual("監視中……(参加：1、未参加：1)", target.StatusDisplayString);
         }
 
@@ -214,23 +214,23 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
             target.PauseCommand.Execute(null);
             await Task.Delay(100);
 
-            Assert.AreEqual("テンプレート1", target.MonitoringInfos[0].Name);
-            Assert.IsFalse(target.MonitoringInfos[0].IsJoin);
-            Assert.IsFalse(target.MonitoringInfos[0].IsManual);
-            Assert.AreEqual("テンプレート2", target.MonitoringInfos[1].Name);
-            Assert.IsFalse(target.MonitoringInfos[1].IsJoin);
-            Assert.IsFalse(target.MonitoringInfos[1].IsManual);
+            Assert.AreEqual("テンプレート1", target.UserStates[0].Name);
+            Assert.IsFalse(target.UserStates[0].IsJoin);
+            Assert.IsFalse(target.UserStates[0].IsManual);
+            Assert.AreEqual("テンプレート2", target.UserStates[1].Name);
+            Assert.IsFalse(target.UserStates[1].IsJoin);
+            Assert.IsFalse(target.UserStates[1].IsManual);
             Assert.AreEqual("一時停止中(参加：0、未参加：2)", target.StatusDisplayString);
 
             target.SwitchingParticipantStateCommand.Execute(1);
             await Task.Delay(100);
 
-            Assert.AreEqual("テンプレート1", target.MonitoringInfos[0].Name);
-            Assert.IsFalse(target.MonitoringInfos[0].IsJoin);
-            Assert.IsFalse(target.MonitoringInfos[0].IsManual);
-            Assert.AreEqual("テンプレート2", target.MonitoringInfos[1].Name);
-            Assert.IsTrue(target.MonitoringInfos[1].IsJoin);
-            Assert.IsTrue(target.MonitoringInfos[1].IsManual);
+            Assert.AreEqual("テンプレート1", target.UserStates[0].Name);
+            Assert.IsFalse(target.UserStates[0].IsJoin);
+            Assert.IsFalse(target.UserStates[0].IsManual);
+            Assert.AreEqual("テンプレート2", target.UserStates[1].Name);
+            Assert.IsTrue(target.UserStates[1].IsJoin);
+            Assert.IsTrue(target.UserStates[1].IsManual);
             Assert.AreEqual("一時停止中(参加：1、未参加：1)", target.StatusDisplayString);
         }
 
@@ -245,36 +245,36 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
             target.StartCommand.Execute(null);
             await Task.Delay(100);
 
-            Assert.AreEqual("テンプレート1", target.MonitoringInfos[0].Name);
-            Assert.IsFalse(target.MonitoringInfos[0].IsJoin);
-            Assert.IsFalse(target.MonitoringInfos[0].IsManual);
-            Assert.AreEqual("テンプレート2", target.MonitoringInfos[1].Name);
-            Assert.IsFalse(target.MonitoringInfos[1].IsJoin);
-            Assert.IsFalse(target.MonitoringInfos[1].IsManual);
+            Assert.AreEqual("テンプレート1", target.UserStates[0].Name);
+            Assert.IsFalse(target.UserStates[0].IsJoin);
+            Assert.IsFalse(target.UserStates[0].IsManual);
+            Assert.AreEqual("テンプレート2", target.UserStates[1].Name);
+            Assert.IsFalse(target.UserStates[1].IsJoin);
+            Assert.IsFalse(target.UserStates[1].IsManual);
             Assert.AreEqual("監視中……(参加：0、未参加：2)", target.StatusDisplayString);
 
             // 手動で参加にする
             target.SwitchingParticipantStateCommand.Execute(1);
             await Task.Delay(100);
 
-            Assert.AreEqual("テンプレート1", target.MonitoringInfos[0].Name);
-            Assert.IsFalse(target.MonitoringInfos[0].IsJoin);
-            Assert.IsFalse(target.MonitoringInfos[0].IsManual);
-            Assert.AreEqual("テンプレート2", target.MonitoringInfos[1].Name);
-            Assert.IsTrue(target.MonitoringInfos[1].IsJoin);
-            Assert.IsTrue(target.MonitoringInfos[1].IsManual);
+            Assert.AreEqual("テンプレート1", target.UserStates[0].Name);
+            Assert.IsFalse(target.UserStates[0].IsJoin);
+            Assert.IsFalse(target.UserStates[0].IsManual);
+            Assert.AreEqual("テンプレート2", target.UserStates[1].Name);
+            Assert.IsTrue(target.UserStates[1].IsJoin);
+            Assert.IsTrue(target.UserStates[1].IsManual);
             Assert.AreEqual("監視中……(参加：1、未参加：1)", target.StatusDisplayString);
 
             // 自動に戻す
             target.SetParticipantAutoCommand.Execute(1);
             await Task.Delay(100);
 
-            Assert.AreEqual("テンプレート1", target.MonitoringInfos[0].Name);
-            Assert.IsFalse(target.MonitoringInfos[0].IsJoin);
-            Assert.IsFalse(target.MonitoringInfos[0].IsManual);
-            Assert.AreEqual("テンプレート2", target.MonitoringInfos[1].Name);
-            Assert.IsFalse(target.MonitoringInfos[1].IsJoin);
-            Assert.IsFalse(target.MonitoringInfos[1].IsManual);
+            Assert.AreEqual("テンプレート1", target.UserStates[0].Name);
+            Assert.IsFalse(target.UserStates[0].IsJoin);
+            Assert.IsFalse(target.UserStates[0].IsManual);
+            Assert.AreEqual("テンプレート2", target.UserStates[1].Name);
+            Assert.IsFalse(target.UserStates[1].IsJoin);
+            Assert.IsFalse(target.UserStates[1].IsManual);
             Assert.AreEqual("監視中……(参加：0、未参加：2)", target.StatusDisplayString);
         }
 
@@ -289,12 +289,12 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
             target.StartCommand.Execute(null);
             await Task.Delay(100);
 
-            Assert.AreEqual("テンプレート1", target.MonitoringInfos[0].Name);
-            Assert.IsFalse(target.MonitoringInfos[0].IsJoin);
-            Assert.IsFalse(target.MonitoringInfos[0].IsManual);
-            Assert.AreEqual("テンプレート2", target.MonitoringInfos[1].Name);
-            Assert.IsFalse(target.MonitoringInfos[1].IsJoin);
-            Assert.IsFalse(target.MonitoringInfos[1].IsManual);
+            Assert.AreEqual("テンプレート1", target.UserStates[0].Name);
+            Assert.IsFalse(target.UserStates[0].IsJoin);
+            Assert.IsFalse(target.UserStates[0].IsManual);
+            Assert.AreEqual("テンプレート2", target.UserStates[1].Name);
+            Assert.IsFalse(target.UserStates[1].IsJoin);
+            Assert.IsFalse(target.UserStates[1].IsManual);
             Assert.AreEqual("監視中……(参加：0、未参加：2)", target.StatusDisplayString);
             Assert.AreEqual("一時停止", target.PauseButtonString);
             Assert.IsFalse(target.CanStart);
@@ -306,12 +306,12 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
             target.SwitchingParticipantStateCommand.Execute(1);
             await Task.Delay(100);
 
-            Assert.AreEqual("テンプレート1", target.MonitoringInfos[0].Name);
-            Assert.IsTrue(target.MonitoringInfos[0].IsJoin);
-            Assert.IsTrue(target.MonitoringInfos[0].IsManual);
-            Assert.AreEqual("テンプレート2", target.MonitoringInfos[1].Name);
-            Assert.IsTrue(target.MonitoringInfos[1].IsJoin);
-            Assert.IsTrue(target.MonitoringInfos[1].IsManual);
+            Assert.AreEqual("テンプレート1", target.UserStates[0].Name);
+            Assert.IsTrue(target.UserStates[0].IsJoin);
+            Assert.IsTrue(target.UserStates[0].IsManual);
+            Assert.AreEqual("テンプレート2", target.UserStates[1].Name);
+            Assert.IsTrue(target.UserStates[1].IsJoin);
+            Assert.IsTrue(target.UserStates[1].IsManual);
 
             await Task.Delay(100);
             Assert.AreEqual("未監視", target.StatusDisplayString);

@@ -181,7 +181,7 @@
                 <ListView
                     d:ItemsSource="{d:SampleData ItemCount=5}"
                     BorderBrush="{x:Null}"
-                    ItemsSource="{Binding Path=MonitoringInfos}"
+                    ItemsSource="{Binding Path=UserStates}"
                     Style="{StaticResource ListViewStyle}"
                     Tag="{Binding DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
                     <ListBox.ItemTemplate>
