@@ -32,29 +32,35 @@
                 Grid.Column="0"
                 Margin="4,0,0,0"
                 HorizontalAlignment="Center"
+                VerticalAlignment="Center"
                 Style="{StaticResource GridStyle}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <RadioButton
-                    Grid.Column="0"
-                    Margin="0,0,4,0"
-                    Content="Zoom"
-                    FontSize="16px"
-                    GroupName="TargetType"
-                    IsChecked="{Binding Path=CheckTarget, Mode=TwoWay, Converter={StaticResource TargetTypeToBoolean}, ConverterParameter=Zoom, UpdateSourceTrigger=PropertyChanged}"
-                    IsEnabled="{Binding Path=IsEnableTargetTypeRadio}"
-                    Style="{StaticResource RadioToggleButton}" />
-                <RadioButton
-                    Grid.Column="1"
-                    Margin="4,0,8,0"
-                    Content="Teams"
-                    FontSize="16px"
-                    GroupName="TargetType"
-                    IsChecked="{Binding Path=CheckTarget, Mode=TwoWay, Converter={StaticResource TargetTypeToBoolean}, ConverterParameter=Teams, UpdateSourceTrigger=PropertyChanged}"
-                    IsEnabled="{Binding Path=IsEnableTargetTypeRadio}"
-                    Style="{StaticResource RadioToggleButton}" />
+                <Grid Grid.Column="0" Style="{StaticResource GridStyle}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <RadioButton
+                        Grid.Column="0"
+                        Margin="0,0,4,0"
+                        Content="Zoom"
+                        FontSize="16px"
+                        GroupName="TargetType"
+                        IsChecked="{Binding Path=CheckTarget, Mode=TwoWay, Converter={StaticResource TargetTypeToBoolean}, ConverterParameter=Zoom, UpdateSourceTrigger=PropertyChanged}"
+                        IsEnabled="{Binding Path=IsEnableTargetTypeRadio}"
+                        Style="{StaticResource RadioToggleButton}" />
+                    <RadioButton
+                        Grid.Column="1"
+                        Margin="4,0,8,0"
+                        Content="Teams"
+                        FontSize="16px"
+                        GroupName="TargetType"
+                        IsChecked="{Binding Path=CheckTarget, Mode=TwoWay, Converter={StaticResource TargetTypeToBoolean}, ConverterParameter=Teams, UpdateSourceTrigger=PropertyChanged}"
+                        IsEnabled="{Binding Path=IsEnableTargetTypeRadio}"
+                        Style="{StaticResource RadioToggleButton}" />
+                </Grid>
             </Grid>
             <!--  開始停止ボタン  -->
             <Grid Grid.Row="1">
@@ -145,13 +151,14 @@
             <Grid Grid.Row="2" Style="{StaticResource GridStyle}">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="0.7*" />
+                        <ColumnDefinition Width="0.8*" />
+                        <ColumnDefinition Width="0.2*" />
                     </Grid.ColumnDefinitions>
                     <Grid Grid.Column="0">
                         <CheckBox
                             Margin="8,0,8,0"
                             VerticalContentAlignment="Center"
-                            Content="自動スクロールによる監視を許可"
+                            Content="自動スクロール"
                             IsChecked="{Binding IsEnableAutoScroll}"
                             IsEnabled="{Binding Path=CheckTarget, Mode=OneWay, Converter={StaticResource TargetTypeToBoolean}, ConverterParameter=Zoom}"
                             Style="{StaticResource CheckBoxStyle}"
@@ -164,6 +171,20 @@
                             </CheckBox.ToolTip>
                         </CheckBox>
                     </Grid>
+                    <Button
+                        Grid.Column="1"
+                        Width="24px"
+                        Height="24px"
+                        Margin="0,0,8,0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Command="{Binding ExportResultCommand, Mode=OneWay}"
+                        Style="{StaticResource FlatButton}">
+                        <Image Width="24px" Source="{Binding Converter={StaticResource ImageConverter}, ConverterParameter=save_24dp.png}" />
+                        <Button.ToolTip>
+                            <TextBlock>開始</TextBlock>
+                        </Button.ToolTip>
+                    </Button>
                 </Grid>
             </Grid>
             <!--  接続結果  -->

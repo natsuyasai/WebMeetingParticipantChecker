@@ -108,11 +108,27 @@ namespace WebMeetingParticipantChecker.Models.Preset
         /// 現在のプリセットのファイルパス取得
         /// </summary>
         /// <returns></returns>
-        public string GetCurrntPresetFilePath()
+        public string GetCurrentPresetFilePath()
         {
             if (_currentIndex >= 0 && _currentIndex < _preset.Count)
             {
                 return _preset[_currentIndex].FilePath;
+            }
+            else
+            {
+                return "";
+            }
+        }
+
+        /// <summary>
+        /// 現在のプリセットファイル名取得
+        /// </summary>
+        /// <returns></returns>
+        public string GetCurrentPresetName()
+        {
+            if (_currentIndex >= 0 && _currentIndex < _preset.Count)
+            {
+                return _preset[_currentIndex].Name;
             }
             else
             {

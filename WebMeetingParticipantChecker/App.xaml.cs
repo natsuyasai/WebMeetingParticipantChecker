@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using System.Windows;
 using WebMeetingParticipantChecker.Models.Config;
+using WebMeetingParticipantChecker.Models.FileWriter;
 using WebMeetingParticipantChecker.Models.Monitoring;
 using WebMeetingParticipantChecker.Models.Preset;
 using WebMeetingParticipantChecker.Models.Theme;
@@ -30,6 +31,7 @@ namespace WebMeetingParticipantChecker
                     new AutomationElementGetter[] {
                         new AutomationElementGetterForZoom(AppSettingsManager.ZoomParticipantListName),
                         new AutomationElementGetterForTeams(AppSettingsManager.TeamsParticipantListName) })
+                .AddTransient<IMonitoringResultExportable, MonitoringResultExporter>()
                 .AddTransient<MonitoringModel>(provider => new MonitoringModel(AppSettingsManager.MonitoringCycleMs))
                 .AddSingleton<IPresetProvider, PresetModel>() // プリセット情報はシステムで一意とする
                 .AddSingleton<IReadOnlyPreset>(provider => provider.GetService<IPresetProvider>()!) // 読み取り専用プリセット情報
@@ -40,6 +42,7 @@ namespace WebMeetingParticipantChecker
                         provider.GetService<MonitoringModel>()!, 
                         provider.GetService<IKeyEventSender>()!,
                         provider.GetService<IReadOnlyPreset>()!,
+                        provider.GetService<IMonitoringResultExportable>()!,
                         AppSettingsManager.KeydownMaxCount))
                 .AddTransient<MainWindowViewModel>();
 
