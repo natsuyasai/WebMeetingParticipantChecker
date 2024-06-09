@@ -27,13 +27,13 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
             var targetFilePath1 = System.AppDomain.CurrentDomain.BaseDirectory + @"\Preset\" + "テンプレートプリセット1.csv";
             var expectedNames = new List<PresetInfo>()
             {
-                new PresetInfo(0, targetFilePath1, "テンプレートプリセット1", new List<string>(){ "テンプレート1","テンプレート2"})
+                new(0, targetFilePath1, "テンプレートプリセット1", new List<string>(){ "テンプレート1","テンプレート2"})
             };
             var expected = new ObservableCollection<PresetInfo>(expectedNames);
             Assert.AreEqual(expected[0].Id, target.PresetNames[0].Id);
             Assert.AreEqual(expected[0].Name, target.PresetNames[0].Name);
             Assert.AreEqual(expected[0].FilePath, target.PresetNames[0].FilePath);
-            CollectionAssert.AreEqual(expected[0].Data.ToList(), target.PresetNames[0].Data.ToList());
+            CollectionAssert.AreEqual(expected[0].UserNames.ToList(), target.PresetNames[0].UserNames.ToList());
         }
 
         [TestMethod()]
@@ -47,7 +47,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
 
             target.SetSelectedPreset(selectedPreset);
 
-            CollectionAssert.AreEqual(selectedPreset.Data.ToList(), target.SelectPresetData.ToList());
+            CollectionAssert.AreEqual(selectedPreset.UserNames.ToList(), target.SelectPresetUsers.ToList());
         }
     }
 }

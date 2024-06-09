@@ -9,7 +9,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
             CUIAutomation automation, 
             IUIAutomationElement element,
             IKeyEventSender keyEventSender,
-            int? keyDonwMaxCount = null)
+            int keyDonwMaxCount)
             : base(automation, element, keyEventSender, keyDonwMaxCount)
         {
         }

@@ -46,11 +46,11 @@ namespace WebMeetingParticipantChecker.ViewModels
         /// <summary>
         /// 選択中のプリセットデータ
         /// </summary>
-        public IEnumerable<string> SelectPresetData
+        public IEnumerable<string> SelectPresetUsers
         {
             get
             {
-                return _preset.GetCurrentPresetDataList();
+                return _preset.GetCurrentPresetUsers();
             }
         }
 
@@ -97,7 +97,7 @@ namespace WebMeetingParticipantChecker.ViewModels
         /// </summary>
         private void EditPresetData()
         {
-            Process.Start(new ProcessStartInfo((_preset.GetCurrntPresetFilePath())) { UseShellExecute = true });
+            Process.Start(new ProcessStartInfo((_preset.GetCurrentPresetFilePath())) { UseShellExecute = true });
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace WebMeetingParticipantChecker.ViewModels
         public void SetSelectedPreset(PresetInfo presetInfo)
         {
             _preset.UpdateCurrentIndex(presetInfo.Id);
-            OnPropertyChanged(nameof(SelectPresetData));
+            OnPropertyChanged(nameof(SelectPresetUsers));
         }
     }
 }

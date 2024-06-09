@@ -29,11 +29,11 @@ namespace WebMeetingParticipantChecker.Models.Config
         /// <summary>
         /// 下キー入力上限(フェールセーフ)
         /// </summary>
-        public static int KyedownMaxCount
+        public static int KeydownMaxCount
         {
             get
             {
-                if (int.TryParse(_configuration?["KyedownMaxCount"], out var value))
+                if (int.TryParse(_configuration?["KeydownMaxCount"], out var value))
                 {
                     return value;
                 }

@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using System.Windows;
 using WebMeetingParticipantChecker.Models.Config;
+using WebMeetingParticipantChecker.Models.FileWriter;
 using WebMeetingParticipantChecker.Models.Monitoring;
 using WebMeetingParticipantChecker.Models.Preset;
 using WebMeetingParticipantChecker.Models.Theme;
@@ -26,15 +27,23 @@ namespace WebMeetingParticipantChecker
         {
             var services = new ServiceCollection()
                 .AddTransient<IKeyEventSender, ArrowKeyEventSender>()
-                .AddTransient<IAutomationElementGetter[]>(
-                provider => new AutomationElementGetter[] {
-                    new AutomationElementGetterForZoom(),
-                    new AutomationElementGetterForTeams() })
-                .AddTransient<MonitoringModel>()
+                .AddTransient<IAutomationElementGetter[]>(provider => 
+                    new AutomationElementGetter[] {
+                        new AutomationElementGetterForZoom(AppSettingsManager.ZoomParticipantListName),
+                        new AutomationElementGetterForTeams(AppSettingsManager.TeamsParticipantListName) })
+                .AddTransient<IMonitoringResultExportable, MonitoringResultExporter>()
+                .AddTransient<MonitoringModel>(provider => new MonitoringModel(AppSettingsManager.MonitoringCycleMs))
                 .AddSingleton<IPresetProvider, PresetModel>() // プリセット情報はシステムで一意とする
                 .AddSingleton<IReadOnlyPreset>(provider => provider.GetService<IPresetProvider>()!) // 読み取り専用プリセット情報
                 .AddTransient<PresetViewModel>()
-                .AddTransient<MonitoringViewModel>()
+                .AddTransient<MonitoringViewModel>(provider => 
+                    new MonitoringViewModel(
+                        provider.GetService<IAutomationElementGetter[]>()!, 
+                        provider.GetService<MonitoringModel>()!, 
+                        provider.GetService<IKeyEventSender>()!,
+                        provider.GetService<IReadOnlyPreset>()!,
+                        provider.GetService<IMonitoringResultExportable>()!,
+                        AppSettingsManager.KeydownMaxCount))
                 .AddTransient<MainWindowViewModel>();
 
             return services.BuildServiceProvider();
@@ -81,7 +90,6 @@ namespace WebMeetingParticipantChecker
                 return (int)currentThemeId;
             }
 
-#pragma warning disable CA1416 // プラットフォームの互換性を検証
             int getmode = -1;
             string rKeyName = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
             string rGetValueName = "AppsUseLightTheme";
@@ -97,7 +105,6 @@ namespace WebMeetingParticipantChecker
             {
             }
             return getmode;
-#pragma warning restore CA1416 // プラットフォームの互換性を検証
         }
     }
 }

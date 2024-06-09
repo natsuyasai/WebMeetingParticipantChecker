@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using WebMeetingParticipantChecker.Models.Config;
 using WebMeetingParticipantChecker.Models.Theme;
-using static WebMeetingParticipantChecker.Models.Monitoring.MonitoringInfo;
+using static WebMeetingParticipantChecker.Models.Monitoring.UserState;
 
 namespace WebMeetingParticipantChecker.Views.Converter
 {

@@ -25,17 +25,10 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public ElementScroller(IKeyEventSender keyEventSender, int? keyDonwMaxCount = null)
+        public ElementScroller(IKeyEventSender keyEventSender, int keyDonwMaxCount)
         {
             _arrowDownKeyEventSender = keyEventSender;
-            if (keyDonwMaxCount == null)
-            {
-                KeyEventMaxCount = AppSettingsManager.KyedownMaxCount;
-            }
-            else
-            {
-                KeyEventMaxCount = keyDonwMaxCount.Value;
-            }
+            KeyEventMaxCount = keyDonwMaxCount;
         }
 
         public bool IsOverflowScroll()

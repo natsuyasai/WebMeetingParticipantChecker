@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using NLog;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UIAutomationClient;
+using WebMeetingParticipantChecker.Models.Config;
+using WebMeetingParticipantChecker.Models.FileWriter;
+using WebMeetingParticipantChecker.Models.Message;
 using WebMeetingParticipantChecker.Models.Monitoring;
 using WebMeetingParticipantChecker.Models.Preset;
 using WebMeetingParticipantChecker.Models.UIAutomation;
@@ -76,7 +80,11 @@ namespace WebMeetingParticipantChecker.ViewModels
         /// </summary>
         private readonly MonitoringModel _monitoringModel;
 
+        private readonly IMonitoringResultExportable _resultExporter;
+
         private readonly IKeyEventSender _arrowDownKeyEventSender;
+
+        private readonly int _keydownMaxCount;
 
         private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
@@ -138,11 +146,11 @@ namespace WebMeetingParticipantChecker.ViewModels
         /// <summary>
         /// 監視情報
         /// </summary>
-        public ObservableCollection<MonitoringInfo> MonitoringInfos
+        public ObservableCollection<UserState> UserStates
         {
             get
             {
-                return new ObservableCollection<MonitoringInfo>(_monitoringModel.GetMonitoringInfos().OrderBy(info => info.IsJoin));
+                return new ObservableCollection<UserState>(_monitoringModel.GetUserStates().OrderBy(info => info.IsJoin));
             }
         }
 
@@ -156,8 +164,8 @@ namespace WebMeetingParticipantChecker.ViewModels
             {
                 if (_status == StatusValue.Monitoring || _status == StatusValue.Pause)
                 {
-                    int maxcount = _monitoringModel.GetMonitoringInfos().Count();
-                    int joincount = _monitoringModel.GetMonitoringInfos().Count(item => item.IsJoin);
+                    int maxcount = _monitoringModel.GetUserStates().Count();
+                    int joincount = _monitoringModel.GetUserStates().Count(item => item.IsJoin);
                     return StatusString[(int)_status] + $"(参加：{joincount}、未参加：{maxcount - joincount})";
                 }
                 else
@@ -254,6 +262,15 @@ namespace WebMeetingParticipantChecker.ViewModels
             }
         }
 
+        private RelayCommand? _exportResultCommand;
+        public RelayCommand ExportResultCommand
+        {
+            get
+            {
+                return _exportResultCommand ??= new RelayCommand(ExportResult);
+            }
+        }
+
         /// <summary>
         /// 参加状態自動監視コマンド
         /// </summary>
@@ -271,7 +288,12 @@ namespace WebMeetingParticipantChecker.ViewModels
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public MonitoringViewModel(IAutomationElementGetter[] automationElementGetter, MonitoringModel monitoringModel, IKeyEventSender arrowDownKeyEventSender, IPresetProvider preset)
+        public MonitoringViewModel(IAutomationElementGetter[] automationElementGetter,
+                                   MonitoringModel monitoringModel,
+                                   IKeyEventSender arrowDownKeyEventSender,
+                                   IReadOnlyPreset preset,
+                                   IMonitoringResultExportable resultExporter,
+                                   int keydownMaxCount)
         {
             _status = StatusValue.Init;
             _automationElementGetter = automationElementGetter;
@@ -279,6 +301,8 @@ namespace WebMeetingParticipantChecker.ViewModels
             _arrowDownKeyEventSender = arrowDownKeyEventSender;
             _preset = preset;
             OnPropertyChanged(nameof(StatusDisplayString));
+            _resultExporter = resultExporter;
+            _keydownMaxCount = keydownMaxCount;
         }
 
 
@@ -306,8 +330,8 @@ namespace WebMeetingParticipantChecker.ViewModels
             _logger.Info("監視開始");
             // 監視開始
             UpdateStatus(StatusValue.PreparingTargetWindowCaputure);
-            _monitoringModel.RegisterMonitoringTargets(_preset.GetCurrentPresetDataList());
-            OnPropertyChanged(nameof(MonitoringInfos));
+            _monitoringModel.RegisterMonitoringTargets(_preset.GetCurrentPresetUsers());
+            OnPropertyChanged(nameof(UserStates));
 
             // Zoomの参加者ウィンドウ検索開始
             UpdateStatus(StatusValue.TargetWindowCaputure);
@@ -348,13 +372,13 @@ namespace WebMeetingParticipantChecker.ViewModels
             {
                 MonitoringType.Target.Zoom =>
                 new UserNameElementGetterForZoom(
-                    new CUIAutomation(), _automationElementGetter[(int)_targetType].GetTargetElement()!, _arrowDownKeyEventSender),
+                    new CUIAutomation(), _automationElementGetter[(int)_targetType].GetTargetElement()!, _arrowDownKeyEventSender, _keydownMaxCount),
                 MonitoringType.Target.Teams =>
                 new UserNameElementGetterForTeams(
-                    new CUIAutomation(), _automationElementGetter[(int)_targetType].GetTargetElement()!, _arrowDownKeyEventSender),
+                    new CUIAutomation(), _automationElementGetter[(int)_targetType].GetTargetElement()!, _arrowDownKeyEventSender, _keydownMaxCount),
                 _ =>
                 new UserNameElementGetterForZoom(
-                    new CUIAutomation(), _automationElementGetter[(int)_targetType].GetTargetElement()!, _arrowDownKeyEventSender),
+                    new CUIAutomation(), _automationElementGetter[(int)_targetType].GetTargetElement()!, _arrowDownKeyEventSender, _keydownMaxCount),
             };
         }
 
@@ -363,7 +387,7 @@ namespace WebMeetingParticipantChecker.ViewModels
         /// </summary>
         private void OnJoinStateChangeCallback()
         {
-            OnPropertyChanged(nameof(MonitoringInfos));
+            OnPropertyChanged(nameof(UserStates));
             UpdateMonitoringStates();
         }
 
@@ -377,7 +401,7 @@ namespace WebMeetingParticipantChecker.ViewModels
             {
                 UpdateStatus(StatusValue.Init);
                 _monitoringModel.StopMonitoring();
-                OnPropertyChanged(nameof(MonitoringInfos));
+                OnPropertyChanged(nameof(UserStates));
             });
         }
 
@@ -391,7 +415,7 @@ namespace WebMeetingParticipantChecker.ViewModels
             {
                 UpdateStatus(StatusValue.Init);
                 _monitoringModel.StopMonitoring();
-                OnPropertyChanged(nameof(MonitoringInfos));
+                OnPropertyChanged(nameof(UserStates));
             });
         }
 
@@ -422,7 +446,7 @@ namespace WebMeetingParticipantChecker.ViewModels
             if (target is int @int)
             {
                 _monitoringModel.SwitchingParticipantState(@int);
-                OnPropertyChanged(nameof(MonitoringInfos));
+                OnPropertyChanged(nameof(UserStates));
                 if (_status == StatusValue.Monitoring)
                 {
                     // 監視中なら通常通り更新
@@ -444,7 +468,7 @@ namespace WebMeetingParticipantChecker.ViewModels
             if (target is int @int)
             {
                 _monitoringModel.SetParticipantAuto(@int);
-                OnPropertyChanged(nameof(MonitoringInfos));
+                OnPropertyChanged(nameof(UserStates));
             }
         }
 
@@ -462,6 +486,43 @@ namespace WebMeetingParticipantChecker.ViewModels
             else
             {
                 UpdateStatus(StatusValue.Monitoring);
+            }
+        }
+
+        /// <summary>
+        /// 結果出力
+        /// </summary>
+        private void ExportResult()
+        {
+            var filename = _preset.GetCurrentPresetName();
+            if (!_monitoringModel.GetUserStates().Any())
+            {
+                WeakReferenceMessenger.Default.Send(new Message<MainWindow>(
+                    new MessageInfo
+                    {
+                        Title = "情報",
+                        Message = "出力する結果がありません。"
+                    }));
+                return;
+            }
+            var result = _resultExporter.Export(filename, _monitoringModel.GetUserStates());
+            if (result)
+            {
+                WeakReferenceMessenger.Default.Send(new Message<MainWindow>(
+                    new MessageInfo
+                    {
+                        Title = "情報",
+                        Message = $"出力しました。\r\nファイル名：{filename}"
+                    }));
+            }
+            else
+            {
+                WeakReferenceMessenger.Default.Send(new Message<MainWindow>(
+                    new MessageInfo
+                    {
+                        Title = "エラー",
+                        Message = $"出力に失敗しました。"
+                    }));
             }
         }
     }

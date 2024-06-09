@@ -29,6 +29,8 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// </summary>
         private Action? _onDetectedTargetElemetCallback = null;
 
+        private readonly string _targetElementName;
+
         /// <summary>
         /// CUIAutomation
         /// </summary>
@@ -38,16 +40,18 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// コンストラクタ
         /// </summary>
         /// <param name="targetName"></param>
-        public AutomationElementGetter()
+        public AutomationElementGetter(string targetElementName)
         {
             _automation = new CUIAutomation();
+            _targetElementName = targetElementName;
         }
 
         /// <summary>
         /// 取得対象の要素の名前
         /// </summary>
         /// <returns></returns>
-        protected abstract string GetTargetElementName();
+        protected string GetTargetElementName()
+            => _targetElementName;
 
         /// <summary>
         /// 要素取得時のコンディション取得

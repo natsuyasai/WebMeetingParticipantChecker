@@ -5,13 +5,8 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
 {
     internal class AutomationElementGetterForTeams : AutomationElementGetter
     {
-        public AutomationElementGetterForTeams() : base()
+        public AutomationElementGetterForTeams(string targetElementName) : base(targetElementName)
         {
-        }
-
-        protected override string GetTargetElementName()
-        {
-            return AppSettingsManager.TeamsParticipantListName;
         }
 
         protected override IUIAutomationCondition GetConditon()

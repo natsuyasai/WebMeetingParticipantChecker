@@ -61,7 +61,7 @@ namespace WebMeetingParticipantChecker.Models.Preset
         /// プリセット名一覧取得
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<string> GetPresetNameList()
+        public IEnumerable<string> GetPresetNames()
         {
             return _preset.Select(info => info.Name);
         }
@@ -70,11 +70,11 @@ namespace WebMeetingParticipantChecker.Models.Preset
         /// プリセットデータ一覧取得
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<string> GetPresetDataList(int index)
+        public IEnumerable<string> GetPresetUsers(int index)
         {
             if (index >= 0 && index < _preset.Count)
             {
-                return _preset[index].Data;
+                return _preset[index].UserNames;
             }
             else
             {
@@ -86,9 +86,9 @@ namespace WebMeetingParticipantChecker.Models.Preset
         /// 現在のプリセットデータ一覧取得
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<string> GetCurrentPresetDataList()
+        public IEnumerable<string> GetCurrentPresetUsers()
         {
-            return GetPresetDataList(_currentIndex);
+            return GetPresetUsers(_currentIndex);
         }
 
         /// <summary>
@@ -108,11 +108,27 @@ namespace WebMeetingParticipantChecker.Models.Preset
         /// 現在のプリセットのファイルパス取得
         /// </summary>
         /// <returns></returns>
-        public string GetCurrntPresetFilePath()
+        public string GetCurrentPresetFilePath()
         {
             if (_currentIndex >= 0 && _currentIndex < _preset.Count)
             {
                 return _preset[_currentIndex].FilePath;
+            }
+            else
+            {
+                return "";
+            }
+        }
+
+        /// <summary>
+        /// 現在のプリセットファイル名取得
+        /// </summary>
+        /// <returns></returns>
+        public string GetCurrentPresetName()
+        {
+            if (_currentIndex >= 0 && _currentIndex < _preset.Count)
+            {
+                return _preset[_currentIndex].Name;
             }
             else
             {

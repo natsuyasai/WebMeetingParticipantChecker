@@ -24,11 +24,13 @@ namespace WebMeetingParticipantChecker.Models.Monitoring.Tests
             AppSettingsManager.Intialization(moq.Object);
         }
 
+        private readonly int MonitoringCycleMs = 100;
+
         [TestMethod()]
         [TestCategory("監視対象登録")]
         public void 監視対象登録_姓名入れ替えケース含む()
         {
-            var target = new MonitoringModel();
+            var target = new MonitoringModel(MonitoringCycleMs);
 
             var targetUsers = new List<string>()
             {
@@ -38,7 +40,7 @@ namespace WebMeetingParticipantChecker.Models.Monitoring.Tests
             };
             target.RegisterMonitoringTargets(targetUsers);
 
-            var monitoringInfos = target.GetMonitoringInfos().ToList();
+            var monitoringInfos = target.GetUserStates().ToList();
             Assert.AreEqual(3, monitoringInfos.Count);
             Assert.AreEqual(targetUsers[0], monitoringInfos[0].Name);
             Assert.AreEqual(targetUsers[1], monitoringInfos[1].Name);
@@ -59,7 +61,7 @@ namespace WebMeetingParticipantChecker.Models.Monitoring.Tests
         [TestCategory("監視開始")]
         public async Task 監視開始_全員参加()
         {
-            var target = new MonitoringModel();
+            var target = new MonitoringModel(MonitoringCycleMs);
             bool isCalled = false;
             void callback() { isCalled = true; }
             var retDict = new Dictionary<string, string>() {
@@ -88,7 +90,7 @@ namespace WebMeetingParticipantChecker.Models.Monitoring.Tests
         [TestCategory("参加状態切り替え")]
         public void 参加状態切り替え_全員参加状態に切り替え()
         {
-            var target = new MonitoringModel();
+            var target = new MonitoringModel(MonitoringCycleMs);
             var targetUsers = new List<string>()
             {
                 "ユーザ 1",
@@ -109,7 +111,7 @@ namespace WebMeetingParticipantChecker.Models.Monitoring.Tests
         [TestCategory("監視状態を自動に切り替え")]
         public void 監視状態を自動に切り替え_手動で全員参加後自動に戻して未参加状態に遷移()
         {
-            var target = new MonitoringModel();
+            var target = new MonitoringModel(MonitoringCycleMs);
             var targetUsers = new List<string>()
             {
                 "ユーザ 1",

@@ -3,7 +3,7 @@
     /// <summary>
     /// モニタ情報
     /// </summary>
-    class MonitoringInfo
+    class UserState
     {
         internal enum JoinState
         {
@@ -54,7 +54,7 @@
         /// </summary>
         /// <param name="id">ID</param>
         /// <param name="name">名前</param>
-        public MonitoringInfo(int id, string name)
+        public UserState(int id, string name)
         {
             Id = id;
             Name = name;

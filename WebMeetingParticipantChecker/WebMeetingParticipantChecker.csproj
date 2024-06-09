@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net7.0-windows10.0.17763.0</TargetFramework>
+    <TargetFramework>net8.0-windows10.0.17763.0</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>True</UseWindowsForms>
@@ -33,9 +33,11 @@
     <None Remove="Resources\Images\Action\Dark\play_arrow_FILL0_wght400_GRAD0_opsz24.png" />
     <None Remove="Resources\Images\Action\Dark\refresh_FILL0_wght400_GRAD0_opsz24.png" />
     <None Remove="Resources\Images\Action\Dark\resume_FILL0_wght400_GRAD0_opsz24.png" />
+    <None Remove="Resources\Images\Action\Dark\save_24dp.png" />
     <None Remove="Resources\Images\Action\Dark\settings_FILL0_wght400_GRAD0_opsz24.png" />
     <None Remove="Resources\Images\Action\Dark\stop_FILL0_wght400_GRAD0_opsz24.png" />
     <None Remove="Resources\Images\Action\edit_FILL0_wght400_GRAD0_opsz24.png" />
+    <None Remove="Resources\Images\Action\Light\save_24dp.png" />
     <None Remove="Resources\Images\Action\pause_FILL0_wght400_GRAD0_opsz24.png" />
     <None Remove="Resources\Images\Action\play_arrow_FILL0_wght400_GRAD0_opsz24.png" />
     <None Remove="Resources\Images\Action\refresh_FILL0_wght400_GRAD0_opsz24.png" />
@@ -68,6 +70,7 @@
     <Resource Include="Resources\Images\Action\Dark\play_arrow_FILL0_wght400_GRAD0_opsz24.png" />
     <Resource Include="Resources\Images\Action\Dark\refresh_FILL0_wght400_GRAD0_opsz24.png" />
     <Resource Include="Resources\Images\Action\Dark\resume_FILL0_wght400_GRAD0_opsz24.png" />
+    <Resource Include="Resources\Images\Action\Dark\save_24dp.png" />
     <Resource Include="Resources\Images\Action\Dark\settings_FILL0_wght400_GRAD0_opsz24.png" />
     <Resource Include="Resources\Images\Action\Dark\stop_FILL0_wght400_GRAD0_opsz24.png" />
     <Resource Include="Resources\Images\Action\Light\edit_FILL0_wght400_GRAD0_opsz24.png" />
@@ -75,6 +78,7 @@
     <Resource Include="Resources\Images\Action\Light\play_arrow_FILL0_wght400_GRAD0_opsz24.png" />
     <Resource Include="Resources\Images\Action\Light\refresh_FILL0_wght400_GRAD0_opsz24.png" />
     <Resource Include="Resources\Images\Action\Light\resume_FILL0_wght400_GRAD0_opsz24.png" />
+    <Resource Include="Resources\Images\Action\Light\save_24dp.png" />
     <Resource Include="Resources\Images\Action\Light\settings_FILL0_wght400_GRAD0_opsz24.png" />
     <Resource Include="Resources\Images\Action\Light\stop_FILL0_wght400_GRAD0_opsz24.png" />
     <Resource Include="Resources\Images\join.png">
