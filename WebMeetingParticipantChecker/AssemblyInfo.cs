@@ -20,8 +20,8 @@ using System.Windows;
 [assembly: AssemblyCopyright("Copyright 2023 @natsuyasai")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: AssemblyVersion("1.2")]
-[assembly: AssemblyFileVersion("1.2")]
+[assembly: AssemblyVersion("1.3")]
+[assembly: AssemblyFileVersion("1.3")]
 
 [assembly: System.Runtime.Versioning.SupportedOSPlatform("windows10.0.17763.0")]
 
