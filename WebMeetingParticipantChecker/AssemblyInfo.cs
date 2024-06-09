@@ -23,6 +23,7 @@ using System.Windows;
 [assembly: AssemblyVersion("1.2")]
 [assembly: AssemblyFileVersion("1.2")]
 
+[assembly: System.Runtime.Versioning.SupportedOSPlatform("windows10.0.17763.0")]
 
 [assembly: InternalsVisibleTo("WebMeetingParticipantCheckerTests")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
