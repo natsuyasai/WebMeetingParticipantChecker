@@ -64,13 +64,18 @@
                 </Grid>
                 <Button
                     Grid.Column="1"
-                    Width="64px"
+                    Width="24px"
+                    Height="24px"
                     Margin="8,2,8,2"
                     HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
+                    VerticalAlignment="Center"
                     Command="{Binding ExportResultCommand, Mode=OneWay}"
-                    Content="結果出力"
-                    Style="{StaticResource FlatButton}" />
+                    Style="{StaticResource FlatButton}">
+                    <Image Width="24px" Source="{Binding Converter={StaticResource ImageConverter}, ConverterParameter=save_24dp.png}" />
+                    <Button.ToolTip>
+                        <TextBlock>開始</TextBlock>
+                    </Button.ToolTip>
+                </Button>
             </Grid>
             <!--  開始停止ボタン  -->
             <Grid Grid.Row="1">
