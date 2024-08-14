@@ -1,4 +1,5 @@
-﻿using UIAutomationClient;
+﻿using System.DirectoryServices.ActiveDirectory;
+using UIAutomationClient;
 using WebMeetingParticipantChecker.Models.Config;
 
 namespace WebMeetingParticipantChecker.Models.UIAutomation
@@ -22,10 +23,27 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// </summary>
         private readonly CUIAutomation _automation;
 
+        /// <summary>
+        /// 共通処理
+        /// </summary>
+        private readonly AutomationElementGetterUtil automationElementGetterUtil = new();
 
-        public AutomationElementGetterForZoom()
+        /// <summary>
+        /// ウィンドウのルート要素名
+        /// </summary>
+        private readonly string _rootWindowName;
+
+        /// <summary>
+        /// 参加者リスト名
+        /// </summary>
+        private readonly string _participantListName;
+
+
+        public AutomationElementGetterForZoom(string rootWindowName, string participantListName)
         {
             _automation = new CUIAutomation();
+            _rootWindowName = rootWindowName;
+            _participantListName = participantListName;
         }
 
         /// <summary>
@@ -63,84 +81,14 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         private IUIAutomationElement? TryGetParticipantElement(IUIAutomationElement root)
         {
             var windowCondition = _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_WindowTypePropertyId);
-            var rootWindow = TryGetTargetElementForChildren(root, "Zoom ミーティング", windowCondition);
+            var rootWindow = automationElementGetterUtil.TryGetTargetElementForChildren(root, _rootWindowName, windowCondition);
             if (rootWindow == null)
             {
                 return null;
             }
-            var contentRightPanel = TryGetTargetElementForChildren(rootWindow, "ContentRightPanel", windowCondition);
-            if (contentRightPanel == null)
-            {
-                return null;
-            }
-            var pListContainer = TryGetTargetElementForChildren(contentRightPanel, "PListContainer", windowCondition);
-            if (pListContainer == null)
-            {
-                return null;
-            }
-            var participantRoot = TryGetTargetElementForChildren(pListContainer, "参加者", windowCondition);
-            if (participantRoot == null)
-            {
-                return null;
-            }
             var listCondition = _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_ListControlTypeId);
-            return TryGetTargetElementForChildren(participantRoot, "参加者リスト", listCondition);
+            return automationElementGetterUtil.TryGetTargetElementForChildren(rootWindow, _participantListName, listCondition);
 
-        }
-
-        /// <summary>
-        /// 子要素から対象要素を取得
-        /// </summary>
-        /// <param name="root"></param>
-        /// <param name="targetName"></param>
-        /// <param name="condition"></param>
-        /// <returns></returns>
-        private IUIAutomationElement? TryGetTargetElementForChildren(IUIAutomationElement root, string targetName, IUIAutomationCondition condition)
-        {
-            var walker = _automation.CreateTreeWalker(condition);
-            var filstChild = walker.GetFirstChildElement(root);
-            if (filstChild == null)
-            {
-                return null;
-            }
-            // 最初の要素が対象要素ならその時点で終了
-            if (ContainsTargetName(filstChild, targetName))
-            {
-                return filstChild;
-            }
-            // ルートの子要素を順に確認していく
-            var target = filstChild;
-            IUIAutomationElement child;
-            var lastChild = walker.GetLastChildElement(root);
-            var count = 0;
-            do
-            {
-                child = walker.GetNextSiblingElement(target);
-                if (ContainsTargetName(child, targetName))
-                {
-                    return child;
-                }
-                target = child;
-                // 無限ループ対策
-                // 外的要因を終了条件にしているため、念のため追加
-                count++;
-                if (count > 1000)
-                {
-                    break;
-                }
-            } while (lastChild.GetHashCode() != child?.GetHashCode());
-
-            return null;
-        }
-
-        /// <summary>
-        /// 対象の要素の名前が含まれているか
-        /// </summary>
-        /// <param name="element"></param>
-        /// <returns></returns>
-        private bool ContainsTargetName(IUIAutomationElement element, string targetName)
-        {
-            return element?.CurrentName?.Replace(" ", "")?.ToLower()?.Contains(targetName.Replace(" ", "").ToLower()) == true;
         }
     }
 }

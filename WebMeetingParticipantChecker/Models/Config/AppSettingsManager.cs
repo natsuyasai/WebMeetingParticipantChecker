@@ -42,6 +42,36 @@ namespace WebMeetingParticipantChecker.Models.Config
         }
 
         /// <summary>
+        /// ルート名
+        /// </summary>
+        public static string ZoomRootName
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_configuration?["ZoomRootName"]))
+                {
+                    return "Zoom ミーティング";
+                }
+                return _configuration["ZoomRootName"]!;
+            }
+        }
+
+        /// <summary>
+        /// ルート名
+        /// </summary>
+        public static string TeamsRootName
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_configuration?["TeamsRootName"]))
+                {
+                    return "との会議 | Microsoft Teams";
+                }
+                return _configuration["TeamsRootName"]!;
+            }
+        }
+
+        /// <summary>
         /// 参加者リスト名
         /// </summary>
         public static string ZoomParticipantListName
