@@ -346,6 +346,7 @@ namespace WebMeetingParticipantChecker.ViewModels
             }
             else
             {
+                UpdateStatus(StatusValue.Init);
                 WeakReferenceMessenger.Default.Send(new Message<MainWindow>(
                     new MessageInfo
                     {
