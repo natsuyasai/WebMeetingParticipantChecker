@@ -64,16 +64,10 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// <summary>
         /// フォーカスイベント購読
         /// </summary>
-        public void SubscribeToFocusChange(Action onDetectedTargetElemetCallback)
+        public bool DetectiParticipantElement()
         {
             _targetElement = null;
-            _onDetectedTargetElemetCallback = onDetectedTargetElemetCallback;
-            if (_focusHandler != null)
-            {
-                UnsubscribeFocusChange();
-            }
-            _focusHandler = new FocusChangeHandler(OnFocusChange);
-            _automation.AddFocusChangedEventHandler(null, _focusHandler);
+            return true;
         }
 
         /// <summary>
