@@ -11,12 +11,12 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
     /// https://docs.microsoft.com/ja-jp/dotnet/framework/ui-automation/subscribe-to-ui-automation-events
     /// https://docs.microsoft.com/ja-jp/windows/win32/winauto/uiauto-eventsforclients
     /// </remarks>
-    internal abstract class AutomationElementGetter : IAutomationElementGetter
+    internal abstract class AutomationElementGetter
     {
         /// <summary>
         /// 対象の要素
         /// </summary>
-        private IUIAutomationElement? _targetElement { get; set; } = null;
+        protected IUIAutomationElement? _targetElement { get; set; } = null;
 
         /// <summary>
         /// フォーカスイベントハンドラ
@@ -60,15 +60,6 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         protected abstract IUIAutomationCondition GetConditon();
 
         private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
-
-        /// <summary>
-        /// フォーカスイベント購読
-        /// </summary>
-        public bool DetectiParticipantElement()
-        {
-            _targetElement = null;
-            return true;
-        }
 
         /// <summary>
         /// フォーカスイベント購読破棄

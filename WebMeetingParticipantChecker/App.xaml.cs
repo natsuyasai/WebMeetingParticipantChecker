@@ -27,10 +27,10 @@ namespace WebMeetingParticipantChecker
         {
             var services = new ServiceCollection()
                 .AddTransient<IKeyEventSender, ArrowKeyEventSender>()
-                .AddTransient<IAutomationElementGetter[]>(provider => 
-                    new AutomationElementGetter[] {
-                        new AutomationElementGetterForZoom(AppSettingsManager.ZoomParticipantListName),
-                        new AutomationElementGetterForTeams(AppSettingsManager.TeamsParticipantListName) })
+                .AddTransient(provider => 
+                    new IAutomationElementGetter[] {
+                        new AutomationElementGetterForZoom(),
+                        new AutomationElementGetterForTeams() })
                 .AddTransient<IMonitoringResultExportable, MonitoringResultExporter>()
                 .AddTransient<MonitoringModel>(provider => new MonitoringModel(AppSettingsManager.MonitoringCycleMs))
                 .AddSingleton<IPresetProvider, PresetModel>() // プリセット情報はシステムで一意とする

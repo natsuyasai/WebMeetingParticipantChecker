@@ -10,6 +10,12 @@
         /// </summary>
         public static readonly int UIA_ControlTypePropertyId = 30003;
 
+
+        /// <summary>
+        /// UIA_PropertyIds.UIA_WindowTypePropertyId
+        /// </summary>
+        public static readonly int UIA_WindowTypePropertyId = 0xC370;
+
         /// <summary>
         /// UIA_ControlTypeIds.UIA_ListControlTypeId
         /// </summary>
