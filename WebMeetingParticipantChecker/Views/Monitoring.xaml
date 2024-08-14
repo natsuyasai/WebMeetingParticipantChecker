@@ -182,7 +182,7 @@
                         Style="{StaticResource FlatButton}">
                         <Image Width="24px" Source="{Binding Converter={StaticResource ImageConverter}, ConverterParameter=save_24dp.png}" />
                         <Button.ToolTip>
-                            <TextBlock>開始</TextBlock>
+                            <TextBlock>保存</TextBlock>
                         </Button.ToolTip>
                     </Button>
                 </Grid>
