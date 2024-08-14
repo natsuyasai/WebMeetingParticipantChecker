@@ -46,43 +46,11 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
             _presetMoq.Setup(x => x.GetCurrentPresetUsers())
                 .Returns(new List<string>() { "テンプレート1", "テンプレート2" });
 
-            _elementGetter.Setup(x => x.SubscribeToFocusChange(It.IsAny<Action>()))
-                .Callback<Action>((action) =>
-                {
-                    action();
-                });
+            _elementGetter.Setup(x => x.DetectiParticipantElement())
+                .Returns(true);
             _elementGetter.Setup(x => x.GetTargetElement()).Returns(new Mock<IUIAutomationElement>().Object);
 
             _monitoringModel.RegisterMonitoringTargets(new List<string>() { "テンプレート1", "テンプレート2" });
-        }
-
-        [TestMethod()]
-        [TestCategory("監視開始")]
-        public async Task 監視開始すると捕捉中状態となること()
-        {
-            _elementGetter.Setup(x => x.SubscribeToFocusChange(It.IsAny<Action>()))
-                .Callback<Action>((action) =>
-                {
-                });
-            var target = new MonitoringViewModel(
-                new IAutomationElementGetter[] { _elementGetter.Object, _elementGetter.Object },
-                _monitoringModel, _keyEventSender.Object, _presetMoq.Object, _resultExporter.Object, _keydownMaxCount);
-
-            target.StartCommand.Execute(null);
-            await Task.Delay(100);
-
-            Assert.AreEqual("対象ウィンドウ捕捉中(参加者リスト要素をクリックしてください)", target.StatusDisplayString);
-            Assert.AreEqual("一時停止", target.PauseButtonString);
-            Assert.IsFalse(target.CanStart);
-            Assert.IsTrue(target.CanStop);
-            Assert.IsFalse(target.CanPauseAndResume);
-
-            Assert.AreEqual("テンプレート1", target.UserStates[0].Name);
-            Assert.IsFalse(target.UserStates[0].IsJoin);
-            Assert.IsFalse(target.UserStates[0].IsManual);
-            Assert.AreEqual("テンプレート2", target.UserStates[1].Name);
-            Assert.IsFalse(target.UserStates[1].IsJoin);
-            Assert.IsFalse(target.UserStates[1].IsManual);
         }
 
         [TestMethod()]
@@ -93,7 +61,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
                 new IAutomationElementGetter[] { _elementGetter.Object, _elementGetter.Object },
                 _monitoringModel, _keyEventSender.Object, _presetMoq.Object, _resultExporter.Object, _keydownMaxCount);
 
-            target.StartCommand.Execute(null);
+            await target.StartCommand.ExecuteAsync(null);
             await Task.Delay(100);
 
             Assert.AreEqual("監視中……(参加：0、未参加：2)", target.StatusDisplayString);
@@ -118,7 +86,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
                 new IAutomationElementGetter[] { _elementGetter.Object, _elementGetter.Object },
                 _monitoringModel, _keyEventSender.Object, _presetMoq.Object, _resultExporter.Object, _keydownMaxCount);
 
-            target.StartCommand.Execute(null);
+            await target.StartCommand.ExecuteAsync(null);
             await Task.Delay(100);
 
             Assert.AreEqual("監視中……(参加：0、未参加：2)", target.StatusDisplayString);
@@ -148,7 +116,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
                 new IAutomationElementGetter[] { _elementGetter.Object, _elementGetter.Object },
                 _monitoringModel, _keyEventSender.Object, _presetMoq.Object, _resultExporter.Object, _keydownMaxCount);
 
-            target.StartCommand.Execute(null);
+            await target.StartCommand.ExecuteAsync(null);
             await Task.Delay(100);
 
             // 一時停止
@@ -180,7 +148,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
                 new IAutomationElementGetter[] { _elementGetter.Object, _elementGetter.Object },
                 _monitoringModel, _keyEventSender.Object, _presetMoq.Object, _resultExporter.Object, _keydownMaxCount);
 
-            target.StartCommand.Execute(null);
+            await target.StartCommand.ExecuteAsync(null);
             await Task.Delay(100);
 
             Assert.AreEqual("テンプレート1", target.UserStates[0].Name);
@@ -212,7 +180,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
                 new IAutomationElementGetter[] { _elementGetter.Object, _elementGetter.Object },
                 _monitoringModel, _keyEventSender.Object, _presetMoq.Object, _resultExporter.Object, _keydownMaxCount);
 
-            target.StartCommand.Execute(null);
+            await target.StartCommand.ExecuteAsync(null);
             await Task.Delay(100);
             target.PauseCommand.Execute(null);
             await Task.Delay(100);
@@ -245,7 +213,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
                 new IAutomationElementGetter[] { _elementGetter.Object, _elementGetter.Object },
                 _monitoringModel, _keyEventSender.Object, _presetMoq.Object, _resultExporter.Object, _keydownMaxCount);
 
-            target.StartCommand.Execute(null);
+            await target.StartCommand.ExecuteAsync(null);
             await Task.Delay(100);
 
             Assert.AreEqual("テンプレート1", target.UserStates[0].Name);
@@ -289,7 +257,7 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
                 new IAutomationElementGetter[] { _elementGetter.Object, _elementGetter.Object },
                 _monitoringModel, _keyEventSender.Object, _presetMoq.Object, _resultExporter.Object, _keydownMaxCount);
 
-            target.StartCommand.Execute(null);
+            await target.StartCommand.ExecuteAsync(null);
             await Task.Delay(100);
 
             Assert.AreEqual("テンプレート1", target.UserStates[0].Name);
