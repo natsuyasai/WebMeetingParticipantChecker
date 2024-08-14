@@ -1,4 +1,5 @@
-﻿using UIAutomationClient;
+﻿using System.Windows.Automation;
+using UIAutomationClient;
 using WebMeetingParticipantChecker.Models.Config;
 
 namespace WebMeetingParticipantChecker.Models.UIAutomation
@@ -64,28 +65,13 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         private IUIAutomationElement? TryGetParticipantElement(IUIAutomationElement root)
         {
             var windowCondition = _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_WindowTypePropertyId);
-            var rootWindow = TryGetTargetElementForChildren(root, "Zoom ミーティング", windowCondition);
+            var rootWindow = TryGetTargetElementForChildren(root, "との会議 | Microsoft Teams", windowCondition);
             if (rootWindow == null)
             {
                 return null;
             }
-            var contentRightPanel = TryGetTargetElementForChildren(rootWindow, "ContentRightPanel", windowCondition);
-            if (contentRightPanel == null)
-            {
-                return null;
-            }
-            var pListContainer = TryGetTargetElementForChildren(contentRightPanel, "PListContainer", windowCondition);
-            if (pListContainer == null)
-            {
-                return null;
-            }
-            var participantRoot = TryGetTargetElementForChildren(pListContainer, "参加者", windowCondition);
-            if (participantRoot == null)
-            {
-                return null;
-            }
-            var listCondition = _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_ListControlTypeId);
-            return TryGetTargetElementForChildren(participantRoot, "参加者リスト", listCondition);
+            var treeCondition = _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_TreeControlTypeId);
+            return TryGetTargetElementForChildren(rootWindow, "出席者", treeCondition);
 
         }
 

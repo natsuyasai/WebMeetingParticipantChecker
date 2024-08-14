@@ -17,6 +17,16 @@
         public static readonly int UIA_WindowTypePropertyId = 0xC370;
 
         /// <summary>
+        /// UIA_PropertyIds.UIA_PaneControlTypeId
+        /// </summary>
+        public static readonly int UIA_PaneControlTypeId = 0xC371;
+
+        /// <summary>
+        /// UIA_PropertyIds.UIA_DocumentControlTypeId 
+        /// </summary>
+        public static readonly int UIA_DocumentControlTypeId = 0xC36E;
+
+        /// <summary>
         /// UIA_ControlTypeIds.UIA_ListControlTypeId
         /// </summary>
         public static readonly int UIA_ListControlTypeId = 50008;
