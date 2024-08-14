@@ -59,7 +59,7 @@ namespace WebMeetingParticipantChecker.ViewModels
         {
         "未監視",
         "準備中",
-        "対象ウィンドウ捕捉中(参加者リスト要素をクリックしてください)",
+        "検出中",
         "監視中……",
         "対象者参加済み",
         "一時停止中",
@@ -335,20 +335,31 @@ namespace WebMeetingParticipantChecker.ViewModels
 
             // Zoomの参加者ウィンドウ検索開始
             UpdateStatus(StatusValue.TargetWindowCaputure);
-            await Task.Run(() =>
+            var isDetected = await Task.Run(() =>
             {
-                _automationElementGetter[(int)_targetType].SubscribeToFocusChange(() =>
-                {
-                    _logger.Info("対象エレメント検知");
-                    OnDetectedTargetElemetCallback();
-                });
+                return _automationElementGetter[(int)_targetType].DetectiParticipantElement();
             });
+            if (isDetected)
+            {
+                _logger.Info("対象エレメント検知");
+                OnDetectedTargetElemet();
+            }
+            else
+            {
+                UpdateStatus(StatusValue.Init);
+                WeakReferenceMessenger.Default.Send(new Message<MainWindow>(
+                    new MessageInfo
+                    {
+                        Title = "エラー",
+                        Message = $"参加者要素が見つかりません。何度も失敗する場合は一度本アプリを起動しなおしてください。"
+                    }));
+            }
         }
 
         /// <summary>
-        /// 監視対象エレメント検出コールバック
+        /// 監視対象エレメント検出
         /// </summary>
-        private async void OnDetectedTargetElemetCallback()
+        private async void OnDetectedTargetElemet()
         {
             _logger.Info("対象要素検出");
             UpdateMonitoringStates();
