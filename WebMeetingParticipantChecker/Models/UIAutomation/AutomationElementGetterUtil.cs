@@ -47,6 +47,10 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
             var count = 0;
             do
             {
+                if (target == null)
+                {
+                    break;
+                }
                 child = walker.GetNextSiblingElement(target);
                 if (ContainsTargetName(child, targetName))
                 {
