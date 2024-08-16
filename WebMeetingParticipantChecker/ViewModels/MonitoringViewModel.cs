@@ -339,6 +339,11 @@ namespace WebMeetingParticipantChecker.ViewModels
             {
                 return _automationElementGetter[(int)_targetType].DetectiParticipantElement();
             });
+            // 対象検知の結果を受け取る前に停止された場合
+            if (_status != StatusValue.TargetWindowCaputure)
+            {
+                return;
+            }
             if (isDetected)
             {
                 _logger.Info("対象エレメント検知");
