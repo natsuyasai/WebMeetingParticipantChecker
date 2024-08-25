@@ -86,7 +86,7 @@ jobs:
 
     # Execute all unit tests in the solution
     - name: Execute unit tests
-      uses: microsoft/vstest-action@v1.0.0
+      uses: rusty-bender/vstest-action@main
       with: 
         testAssembly: WebMeetingParticipantCheckerTests.dll
         searchFolder: .\WebMeetingParticipantCheckerTests\bin\${{ matrix.configuration }}\
