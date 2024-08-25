@@ -16,6 +16,7 @@
     FontSize="13"
     StateChanged="WindowStateChanged"
     Style="{StaticResource WindowStyle}"
+    Topmost="{Binding IsAlwaysTop}"
     WindowStyle="None"
     mc:Ignorable="d">
     <Window.Resources>
@@ -111,8 +112,9 @@
             <Grid
                 Grid.Column="0"
                 Margin="0,0,0,0"
-                Style="{StaticResource GridStyle}" />
-            <local:Preset />
+                Style="{StaticResource GridStyle}">
+                <local:Preset />
+            </Grid>
             <!--  区切り線  -->
             <GridSplitter
                 Grid.Column="1"

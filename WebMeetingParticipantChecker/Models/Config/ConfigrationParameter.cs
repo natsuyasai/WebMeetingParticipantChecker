@@ -9,5 +9,6 @@
         public string? TeamsRootName { get; set; }
         public string? TeamsParticipantListName { get; set; }
         public string? ThemeId { get; set; }
+        public string? IsAlwaysTop { get; set; }
     }
 }
