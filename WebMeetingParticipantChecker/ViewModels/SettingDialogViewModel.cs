@@ -23,6 +23,7 @@ namespace WebMeetingParticipantChecker.ViewModels
     {
         private readonly string _initMonitoringCycleMs;
         private readonly int? _initThemeId;
+        private readonly bool _initIsAlwaysTop;
 
         private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
@@ -74,7 +75,8 @@ namespace WebMeetingParticipantChecker.ViewModels
             get
             {
                 if (_initMonitoringCycleMs != _monitoringCycleMs
-                    || _initThemeId != _selectedTheme.Id)
+                    || _initThemeId != _selectedTheme.Id 
+                    || _initIsAlwaysTop != _isAlwaysTop)
                 {
                     return "※ 変更適用後再起動されていません。";
                 }
@@ -109,6 +111,7 @@ namespace WebMeetingParticipantChecker.ViewModels
                 ? ThemeDefine.ThemeDefault.ElementAt(currentThemeId) : ThemeDefine.ThemeDefault.ElementAt(2);
             _initThemeId = currentThemeId;
             _isAlwaysTop = AppSettingsManager.IsAlwaysTop;
+            _initIsAlwaysTop = AppSettingsManager.IsAlwaysTop;
         }
 
         private void Apply()
