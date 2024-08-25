@@ -28,10 +28,10 @@ namespace WebMeetingParticipantChecker.ViewModels
 
         #region 表示データ
 
-    /// <summary>
-    /// 
-    /// </summary>
-    private string _monitoringCycleMs = "";
+        /// <summary>
+        /// 
+        /// </summary>
+        private string _monitoringCycleMs = "";
         public string MonitoringCycleMs
         {
             get { return _monitoringCycleMs; }
@@ -56,6 +56,17 @@ namespace WebMeetingParticipantChecker.ViewModels
         public ObservableCollection<Theme> Theme
         {
             get { return new ObservableCollection<Theme>(_theme); }
+        }
+
+        private bool _isAlwaysTop = false;
+        public bool IsAlwaysTop
+        {
+            get { return _isAlwaysTop; }
+            set
+            {
+                SetProperty(ref _isAlwaysTop, value);
+                OnPropertyChanged(nameof(IsAlwaysTop));
+            }
         }
 
         public string ExistsNotAppliedData
@@ -94,9 +105,10 @@ namespace WebMeetingParticipantChecker.ViewModels
             _monitoringCycleMs = AppSettingsManager.MonitoringCycleMs.ToString();
             _initMonitoringCycleMs = _monitoringCycleMs;
             var currentThemeId = AppSettingsManager.ThemeId;
-            _selectedTheme = (ThemeDefine.IsContaine(currentThemeId)) 
+            _selectedTheme = (ThemeDefine.IsContaine(currentThemeId))
                 ? ThemeDefine.ThemeDefault.ElementAt(currentThemeId) : ThemeDefine.ThemeDefault.ElementAt(2);
             _initThemeId = currentThemeId;
+            _isAlwaysTop = AppSettingsManager.IsAlwaysTop;
         }
 
         private void Apply()
@@ -114,6 +126,7 @@ namespace WebMeetingParticipantChecker.ViewModels
 
                 UpdateProperty(ref config, "MonitoringCycleMs", _monitoringCycleMs);
                 UpdateProperty(ref config, "ThemeId", _selectedTheme.Id.ToString());
+                UpdateProperty(ref config, "IsAlwaysTop", _isAlwaysTop.ToString());
 
                 using var writer = new StreamWriter(path);
                 var json = JsonSerializer.Serialize(config);

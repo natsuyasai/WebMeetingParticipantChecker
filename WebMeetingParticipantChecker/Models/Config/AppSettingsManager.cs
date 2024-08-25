@@ -27,6 +27,21 @@ namespace WebMeetingParticipantChecker.Models.Config
         }
 
         /// <summary>
+        /// 常に最前面に表示するか
+        /// </summary>
+        public static bool IsAlwaysTop
+        {
+            get
+            {
+                if (bool.TryParse(_configuration?["IsAlwaysTop"], out var value))
+                {
+                    return value;
+                }
+                return true;
+            }
+        }
+
+        /// <summary>
         /// 下キー入力上限(フェールセーフ)
         /// </summary>
         public static int KeydownMaxCount
