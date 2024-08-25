@@ -16,6 +16,7 @@
     FontSize="13"
     StateChanged="WindowStateChanged"
     Style="{StaticResource WindowStyle}"
+    Topmost="{Binding IsAlwaysTop}"
     WindowStyle="None"
     mc:Ignorable="d">
     <Window.Resources>
