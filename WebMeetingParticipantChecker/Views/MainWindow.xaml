@@ -111,8 +111,9 @@
             <Grid
                 Grid.Column="0"
                 Margin="0,0,0,0"
-                Style="{StaticResource GridStyle}" />
-            <local:Preset />
+                Style="{StaticResource GridStyle}">
+                <local:Preset />
+            </Grid>
             <!--  区切り線  -->
             <GridSplitter
                 Grid.Column="1"
