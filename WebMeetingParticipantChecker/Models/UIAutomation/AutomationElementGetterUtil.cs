@@ -78,5 +78,19 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         {
             return element?.CurrentName?.Replace(" ", "")?.ToLower()?.Contains(targetName.Replace(" ", "").ToLower()) == true;
         }
+
+        public bool ExistElement(IUIAutomationElement? element)
+        {
+            // element自体はnullではないが、取得出来なかった場合、
+            // 各プロパティやメソッドにアクセスするとnull参照例外が発生するため、それをもって判断する
+            try
+            {
+                return element?.CurrentControlType > 0;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

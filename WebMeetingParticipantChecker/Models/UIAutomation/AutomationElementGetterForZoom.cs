@@ -34,15 +34,21 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         private readonly string _rootWindowName;
 
         /// <summary>
+        /// 参加者リストウィンドウ要素（ポップアウト時）
+        /// </summary>
+        private readonly string _participantListRootName;
+
+        /// <summary>
         /// 参加者リスト名
         /// </summary>
         private readonly string _participantListName;
 
 
-        public AutomationElementGetterForZoom(string rootWindowName, string participantListName)
+        public AutomationElementGetterForZoom(string rootWindowName, string participantListRootName, string participantListName)
         {
             _automation = new CUIAutomation();
             _rootWindowName = rootWindowName;
+            _participantListRootName = participantListRootName;
             _participantListName = participantListName;
         }
 
@@ -65,7 +71,8 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
                 _targetElement = null;
                 var rootElement = _automation.GetRootElement();
                 _targetElement = TryGetParticipantElement(rootElement);
-                return _targetElement != null;
+                var result = automationElementGetterUtil.ExistElement(_targetElement);
+                return result;
             }
             catch
             {
@@ -80,15 +87,26 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// <returns></returns>
         private IUIAutomationElement? TryGetParticipantElement(IUIAutomationElement root)
         {
+            // Zoomミーティングウィンドウ
             var windowCondition = _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_WindowTypePropertyId);
             var rootWindow = automationElementGetterUtil.TryGetTargetElementForChildren(root, _rootWindowName, windowCondition);
-            if (rootWindow == null)
+            if (rootWindow == null || !automationElementGetterUtil.ExistElement(rootWindow))
             {
                 return null;
             }
+            // 参加者リスト
             var listCondition = _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_ListControlTypeId);
-            return automationElementGetterUtil.TryGetTargetElementForChildren(rootWindow, _participantListName, listCondition);
+            var targetElement = automationElementGetterUtil.TryGetTargetElementForChildren(rootWindow, _participantListName, listCondition);
 
+            if (targetElement == null || !automationElementGetterUtil.ExistElement(targetElement))
+            {
+                rootWindow = automationElementGetterUtil.TryGetTargetElementForChildren(root, _participantListRootName, windowCondition);
+                if (rootWindow != null && automationElementGetterUtil.ExistElement(rootWindow))
+                {
+                    targetElement = automationElementGetterUtil.TryGetTargetElementForChildren(rootWindow, _participantListName, listCondition);
+                }
+            }
+            return targetElement;
         }
     }
 }

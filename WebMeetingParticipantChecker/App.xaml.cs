@@ -29,7 +29,7 @@ namespace WebMeetingParticipantChecker
                 .AddTransient<IKeyEventSender, ArrowKeyEventSender>()
                 .AddTransient(provider => 
                     new IAutomationElementGetter[] {
-                        new AutomationElementGetterForZoom(AppSettingsManager.ZoomRootName, AppSettingsManager.ZoomParticipantListName),
+                        new AutomationElementGetterForZoom(AppSettingsManager.ZoomRootName,AppSettingsManager.ZoomParticipantListRootName ,AppSettingsManager.ZoomParticipantListName),
                         new AutomationElementGetterForTeams(AppSettingsManager.TeamsRootName, AppSettingsManager.TeamsParticipantListName) })
                 .AddTransient<IMonitoringResultExportable, MonitoringResultExporter>()
                 .AddTransient<MonitoringModel>(provider => new MonitoringModel(AppSettingsManager.MonitoringCycleMs))
