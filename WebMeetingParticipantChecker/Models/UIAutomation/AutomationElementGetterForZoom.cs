@@ -92,7 +92,12 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
             var rootWindow = automationElementGetterUtil.TryGetTargetElementForChildren(root, _rootWindowName, windowCondition);
             if (rootWindow == null || !automationElementGetterUtil.ExistElement(rootWindow))
             {
-                return null;
+                // 画面共有中は「Zoomミーティング」では見つからない
+                rootWindow = automationElementGetterUtil.TryGetTargetElementForChildren(root, _participantListRootName, windowCondition);
+                if (rootWindow == null || !automationElementGetterUtil.ExistElement(rootWindow))
+                {
+                    return null;
+                }
             }
             // 参加者リスト
             var listCondition = _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_ListControlTypeId);
