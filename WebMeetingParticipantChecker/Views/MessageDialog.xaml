@@ -58,13 +58,25 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Label
                 Grid.Column="0"
                 Content="{Binding ExistsNotAppliedData}"
                 Style="{StaticResource LablelStyle}" />
             <Button
+                x:Name="OkButton"
                 Grid.Column="1"
+                Width="Auto"
+                Height="24px"
+                MinWidth="64px"
+                Margin="4,4,4,4"
+                Padding="4,4,4,4"
+                Click="HandleOK"
+                Content="OK"
+                Style="{StaticResource FlatButton}" />
+            <Button
+                Grid.Column="2"
                 Width="64px"
                 Height="24px"
                 Margin="4,4,4,4"
