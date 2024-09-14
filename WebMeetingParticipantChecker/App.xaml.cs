@@ -9,9 +9,10 @@ using WebMeetingParticipantChecker.Models.FileWriter;
 using WebMeetingParticipantChecker.Models.Monitoring;
 using WebMeetingParticipantChecker.Models.Preset;
 using WebMeetingParticipantChecker.Models.Theme;
-using WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.Auto;
 using WebMeetingParticipantChecker.Models.UIAutomation.Utils;
 using WebMeetingParticipantChecker.ViewModels;
+using Auto = WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.Auto;
+using Manual = WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.Manual;
 
 namespace WebMeetingParticipantChecker
 {
@@ -20,18 +21,22 @@ namespace WebMeetingParticipantChecker
     /// </summary>
     partial class App : Application
     {
-        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         public static IServiceProvider Services { get; } = ConfigureServices();
 
-        private static IServiceProvider ConfigureServices()
+        private static ServiceProvider ConfigureServices()
         {
             var services = new ServiceCollection()
                 .AddTransient<IKeyEventSender, ArrowKeyEventSender>()
                 .AddTransient(provider => 
-                    new IAutomationElementGetter[] {
-                        new AutomationElementGetterForZoom(AppSettingsManager.ZoomRootName,AppSettingsManager.ZoomParticipantListRootName ,AppSettingsManager.ZoomParticipantListName),
-                        new AutomationElementGetterForTeams(AppSettingsManager.TeamsRootName, AppSettingsManager.TeamsParticipantListName) })
+                    new Auto.IAutomationElementGetter[] {
+                        new Auto.AutomationElementGetterForZoom(AppSettingsManager.ZoomRootName,AppSettingsManager.ZoomParticipantListRootName ,AppSettingsManager.ZoomParticipantListName),
+                        new Auto.AutomationElementGetterForTeams(AppSettingsManager.TeamsRootName, AppSettingsManager.TeamsParticipantListName) })
+                .AddTransient(provider =>
+                    new Manual.IAutomationElementGetter[] {
+                        new Manual.AutomationElementGetterForZoom(AppSettingsManager.ZoomParticipantListName),
+                        new Manual.AutomationElementGetterForTeams(AppSettingsManager.TeamsParticipantListName) })
                 .AddTransient<IMonitoringResultExportable, MonitoringResultExporter>()
                 .AddTransient<MonitoringModel>(provider => new MonitoringModel(AppSettingsManager.MonitoringCycleMs))
                 .AddSingleton<IPresetProvider, PresetModel>() // プリセット情報はシステムで一意とする
@@ -39,7 +44,8 @@ namespace WebMeetingParticipantChecker
                 .AddTransient<PresetViewModel>()
                 .AddTransient<MonitoringViewModel>(provider => 
                     new MonitoringViewModel(
-                        provider.GetService<IAutomationElementGetter[]>()!, 
+                        provider.GetService<Auto.IAutomationElementGetter[]>()!,
+                        provider.GetService<Manual.IAutomationElementGetter[]>()!,
                         provider.GetService<MonitoringModel>()!, 
                         provider.GetService<IKeyEventSender>()!,
                         provider.GetService<IReadOnlyPreset>()!,

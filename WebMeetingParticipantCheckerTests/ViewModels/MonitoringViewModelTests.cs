@@ -15,7 +15,8 @@ using Microsoft.Extensions.Configuration;
 using UIAutomationClient;
 using WebMeetingParticipantChecker.Models.FileWriter;
 using WebMeetingParticipantChecker.Models.UIAutomation.Utils;
-using WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.Auto;
+using Auto = WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.Auto;
+using Manual = WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.Manual;
 
 namespace WebMeetingParticipantChecker.ViewModels.Tests
 {
@@ -24,7 +25,8 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
     {
         private readonly Mock<IPresetProvider> _presetMoq;
         private readonly Mock<IKeyEventSender> _keyEventSender;
-        private readonly Mock<IAutomationElementGetter> _elementGetter;
+        private readonly Mock<Auto.IAutomationElementGetter> _elementGetter;
+        private readonly Mock<Manual.IAutomationElementGetter> _elementGetterForManual;
         private readonly Mock<IMonitoringResultExportable> _resultExporter;
         private readonly MonitoringModel _monitoringModel = new(100);
         private readonly int _keydownMaxCount = 500;
@@ -33,7 +35,8 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
         {
             _presetMoq = new Mock<IPresetProvider>();
             _keyEventSender = new Mock<IKeyEventSender>();
-            _elementGetter = new Mock<IAutomationElementGetter>();
+            _elementGetter = new Mock<Auto.IAutomationElementGetter>();
+            _elementGetterForManual = new Mock<Manual.IAutomationElementGetter>();
             _resultExporter = new Mock<IMonitoringResultExportable>();
         }
 
@@ -59,7 +62,8 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
         public async Task 監視対象要素の捕捉完了後監視中状態となること()
         {
             var target = new MonitoringViewModel(
-                new IAutomationElementGetter[] { _elementGetter.Object, _elementGetter.Object },
+                [_elementGetter.Object, _elementGetter.Object],
+                [_elementGetterForManual.Object, _elementGetterForManual.Object],
                 _monitoringModel, _keyEventSender.Object, _presetMoq.Object, _resultExporter.Object, _keydownMaxCount);
 
             await target.StartCommand.ExecuteAsync(null);
@@ -84,7 +88,8 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
         public async Task 監視停止を行うと初期状態に戻ること()
         {
             var target = new MonitoringViewModel(
-                new IAutomationElementGetter[] { _elementGetter.Object, _elementGetter.Object },
+                [_elementGetter.Object, _elementGetter.Object],
+                [_elementGetterForManual.Object, _elementGetterForManual.Object],
                 _monitoringModel, _keyEventSender.Object, _presetMoq.Object, _resultExporter.Object, _keydownMaxCount);
 
             await target.StartCommand.ExecuteAsync(null);
@@ -114,7 +119,8 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
         public async Task 監視中に一時停止とすると一時停止状態となりその後再開させると監視中状態に戻ること()
         {
             var target = new MonitoringViewModel(
-                new IAutomationElementGetter[] { _elementGetter.Object, _elementGetter.Object },
+                [_elementGetter.Object, _elementGetter.Object],
+                [_elementGetterForManual.Object, _elementGetterForManual.Object],
                 _monitoringModel, _keyEventSender.Object, _presetMoq.Object, _resultExporter.Object, _keydownMaxCount);
 
             await target.StartCommand.ExecuteAsync(null);
@@ -146,7 +152,8 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
         public async Task 監視中に参加状態を手動で参加状態に切り替えたとき切り替えた対象が参加状態となること()
         {
             var target = new MonitoringViewModel(
-                new IAutomationElementGetter[] { _elementGetter.Object, _elementGetter.Object },
+                [_elementGetter.Object, _elementGetter.Object],
+                [_elementGetterForManual.Object, _elementGetterForManual.Object],
                 _monitoringModel, _keyEventSender.Object, _presetMoq.Object, _resultExporter.Object, _keydownMaxCount);
 
             await target.StartCommand.ExecuteAsync(null);
@@ -178,7 +185,8 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
         public async Task 一時停止中_参加状態を手動で参加状態に切り替えたとき切り替えた対象が参加状態となること()
         {
             var target = new MonitoringViewModel(
-                new IAutomationElementGetter[] { _elementGetter.Object, _elementGetter.Object },
+                [_elementGetter.Object, _elementGetter.Object],
+                [_elementGetterForManual.Object, _elementGetterForManual.Object],
                 _monitoringModel, _keyEventSender.Object, _presetMoq.Object, _resultExporter.Object, _keydownMaxCount);
 
             await target.StartCommand.ExecuteAsync(null);
@@ -211,7 +219,8 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
         public async Task 参加状態を自動に切り替えたとき手動で設定した状態がリセットされること()
         {
             var target = new MonitoringViewModel(
-                new IAutomationElementGetter[] { _elementGetter.Object, _elementGetter.Object },
+                [_elementGetter.Object, _elementGetter.Object],
+                [_elementGetterForManual.Object, _elementGetterForManual.Object],
                 _monitoringModel, _keyEventSender.Object, _presetMoq.Object, _resultExporter.Object, _keydownMaxCount);
 
             await target.StartCommand.ExecuteAsync(null);
@@ -255,7 +264,8 @@ namespace WebMeetingParticipantChecker.ViewModels.Tests
         public async Task 監視中に全員参加状態となったとき初期状態に戻ること()
         {
             var target = new MonitoringViewModel(
-                new IAutomationElementGetter[] { _elementGetter.Object, _elementGetter.Object },
+                [_elementGetter.Object, _elementGetter.Object],
+                [_elementGetterForManual.Object, _elementGetterForManual.Object],
                 _monitoringModel, _keyEventSender.Object, _presetMoq.Object, _resultExporter.Object, _keydownMaxCount);
 
             await target.StartCommand.ExecuteAsync(null);
