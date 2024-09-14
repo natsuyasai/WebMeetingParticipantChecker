@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace WebMeetingParticipantChecker.Models.UIAutomation
+namespace WebMeetingParticipantChecker.Models.UIAutomation.Utils
 {
 
     internal class ArrowKeyEventSender : IKeyEventSender

@@ -27,6 +27,21 @@ namespace WebMeetingParticipantChecker.Models.Config
         }
 
         /// <summary>
+        /// 常に最前面に表示するか
+        /// </summary>
+        public static bool IsAlwaysTop
+        {
+            get
+            {
+                if (bool.TryParse(_configuration?["IsAlwaysTop"], out var value))
+                {
+                    return value;
+                }
+                return true;
+            }
+        }
+
+        /// <summary>
         /// 下キー入力上限(フェールセーフ)
         /// </summary>
         public static int KeydownMaxCount
@@ -42,7 +57,7 @@ namespace WebMeetingParticipantChecker.Models.Config
         }
 
         /// <summary>
-        /// ルート名
+        /// Zoomルート名
         /// </summary>
         public static string ZoomRootName
         {
@@ -57,7 +72,7 @@ namespace WebMeetingParticipantChecker.Models.Config
         }
 
         /// <summary>
-        /// ルート名
+        /// Teamsルート名
         /// </summary>
         public static string TeamsRootName
         {
@@ -72,7 +87,22 @@ namespace WebMeetingParticipantChecker.Models.Config
         }
 
         /// <summary>
-        /// 参加者リスト名
+        /// Zoom参加者リストウィンドウ名
+        /// </summary>
+        public static string ZoomParticipantListRootName
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_configuration?["ZoomParticipantListRootName"]))
+                {
+                    return "参加者（";
+                }
+                return _configuration["ZoomParticipantListRootName"]!;
+            }
+        }
+
+        /// <summary>
+        /// Zoom参加者リスト名
         /// </summary>
         public static string ZoomParticipantListName
         {
@@ -87,7 +117,7 @@ namespace WebMeetingParticipantChecker.Models.Config
         }
 
         /// <summary>
-        /// 参加者リスト名
+        /// Teams参加者リスト名
         /// </summary>
         public static string TeamsParticipantListName
         {

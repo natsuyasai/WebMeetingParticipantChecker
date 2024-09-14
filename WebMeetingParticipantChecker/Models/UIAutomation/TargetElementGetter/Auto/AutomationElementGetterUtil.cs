@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Automation;
 using UIAutomationClient;
 
-namespace WebMeetingParticipantChecker.Models.UIAutomation
+namespace WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.Auto
 {
     internal class AutomationElementGetterUtil
     {
@@ -15,7 +15,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// </summary>
         private readonly CUIAutomation _automation;
 
-        public AutomationElementGetterUtil() 
+        public AutomationElementGetterUtil()
         {
             _automation = new CUIAutomation();
         }
@@ -47,6 +47,10 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
             var count = 0;
             do
             {
+                if (target == null)
+                {
+                    break;
+                }
                 child = walker.GetNextSiblingElement(target);
                 if (ContainsTargetName(child, targetName))
                 {
@@ -73,6 +77,20 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         public bool ContainsTargetName(IUIAutomationElement element, string targetName)
         {
             return element?.CurrentName?.Replace(" ", "")?.ToLower()?.Contains(targetName.Replace(" ", "").ToLower()) == true;
+        }
+
+        public bool ExistElement(IUIAutomationElement? element)
+        {
+            // element自体はnullではないが、取得出来なかった場合、
+            // 各プロパティやメソッドにアクセスするとnull参照例外が発生するため、それをもって判断する
+            try
+            {
+                return element?.CurrentControlType > 0;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

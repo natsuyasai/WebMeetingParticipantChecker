@@ -8,8 +8,9 @@ using System.Windows.Automation;
 using System.Windows.Forms;
 using UIAutomationClient;
 using WebMeetingParticipantChecker.Models.Config;
+using WebMeetingParticipantChecker.Models.UIAutomation.Define;
 
-namespace WebMeetingParticipantChecker.Models.UIAutomation
+namespace WebMeetingParticipantChecker.Models.UIAutomation.Utils
 {
     internal class ElementScroller
     {

@@ -23,15 +23,16 @@ namespace WebMeetingParticipantChecker.ViewModels
     {
         private readonly string _initMonitoringCycleMs;
         private readonly int? _initThemeId;
+        private readonly bool _initIsAlwaysTop;
 
         private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
         #region 表示データ
 
-    /// <summary>
-    /// 
-    /// </summary>
-    private string _monitoringCycleMs = "";
+        /// <summary>
+        /// 
+        /// </summary>
+        private string _monitoringCycleMs = "";
         public string MonitoringCycleMs
         {
             get { return _monitoringCycleMs; }
@@ -58,12 +59,24 @@ namespace WebMeetingParticipantChecker.ViewModels
             get { return new ObservableCollection<Theme>(_theme); }
         }
 
+        private bool _isAlwaysTop = false;
+        public bool IsAlwaysTop
+        {
+            get { return _isAlwaysTop; }
+            set
+            {
+                SetProperty(ref _isAlwaysTop, value);
+                OnPropertyChanged(nameof(IsAlwaysTop));
+            }
+        }
+
         public string ExistsNotAppliedData
         {
             get
             {
                 if (_initMonitoringCycleMs != _monitoringCycleMs
-                    || _initThemeId != _selectedTheme.Id)
+                    || _initThemeId != _selectedTheme.Id 
+                    || _initIsAlwaysTop != _isAlwaysTop)
                 {
                     return "※ 変更適用後再起動されていません。";
                 }
@@ -94,9 +107,11 @@ namespace WebMeetingParticipantChecker.ViewModels
             _monitoringCycleMs = AppSettingsManager.MonitoringCycleMs.ToString();
             _initMonitoringCycleMs = _monitoringCycleMs;
             var currentThemeId = AppSettingsManager.ThemeId;
-            _selectedTheme = (ThemeDefine.IsContaine(currentThemeId)) 
+            _selectedTheme = (ThemeDefine.IsContaine(currentThemeId))
                 ? ThemeDefine.ThemeDefault.ElementAt(currentThemeId) : ThemeDefine.ThemeDefault.ElementAt(2);
             _initThemeId = currentThemeId;
+            _isAlwaysTop = AppSettingsManager.IsAlwaysTop;
+            _initIsAlwaysTop = AppSettingsManager.IsAlwaysTop;
         }
 
         private void Apply()
@@ -114,6 +129,7 @@ namespace WebMeetingParticipantChecker.ViewModels
 
                 UpdateProperty(ref config, "MonitoringCycleMs", _monitoringCycleMs);
                 UpdateProperty(ref config, "ThemeId", _selectedTheme.Id.ToString());
+                UpdateProperty(ref config, "IsAlwaysTop", _isAlwaysTop.ToString());
 
                 using var writer = new StreamWriter(path);
                 var json = JsonSerializer.Serialize(config);

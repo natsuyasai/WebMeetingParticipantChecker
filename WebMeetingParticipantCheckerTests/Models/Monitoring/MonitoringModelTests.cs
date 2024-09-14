@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 using Moq;
 using System.Collections.Specialized;
 using WebMeetingParticipantChecker.Models.Config;
-using WebMeetingParticipantChecker.Models.UIAutomation;
 using Microsoft.Extensions.Configuration;
+using WebMeetingParticipantChecker.Models.UIAutomation.UserNameGetter;
 
 namespace WebMeetingParticipantChecker.Models.Monitoring.Tests
 {

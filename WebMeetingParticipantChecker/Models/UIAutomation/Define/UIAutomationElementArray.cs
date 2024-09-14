@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UIAutomationClient;
 
-namespace WebMeetingParticipantChecker.Models.UIAutomation
+namespace WebMeetingParticipantChecker.Models.UIAutomation.Define
 {
     internal class UIAutomationElementArray : IUIAutomationElementArray
     {

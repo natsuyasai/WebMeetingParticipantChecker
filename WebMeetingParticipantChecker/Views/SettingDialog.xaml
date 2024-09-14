@@ -77,6 +77,13 @@
                             Style="{StaticResource TextBlockStyle}"
                             Text="テーマ：" />
                     </Grid>
+                    <Grid Grid.Row="2">
+                        <TextBlock
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource TextBlockStyle}"
+                            Text="常に最前面に表示：" />
+                    </Grid>
                 </Grid>
             </Grid>
             <Grid Grid.Column="1">
@@ -125,6 +132,14 @@
                                     </Style>
                                 </ComboBox.ItemContainerStyle>
                             </ComboBox>
+                        </Grid>
+                        <Grid Grid.Row="2">
+                            <CheckBox
+                                Margin="0,4,4,0"
+                                VerticalAlignment="Center"
+                                Content=""
+                                IsChecked="{Binding IsAlwaysTop, Mode=TwoWay}"
+                                Style="{StaticResource CheckBoxStyle}" />
                         </Grid>
                     </Grid>
                 </Grid>
