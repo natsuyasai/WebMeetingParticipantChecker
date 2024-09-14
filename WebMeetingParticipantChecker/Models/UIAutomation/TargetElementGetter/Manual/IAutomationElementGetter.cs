@@ -9,7 +9,8 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.M
 {
     internal interface IAutomationElementGetter
     {
-        bool DetectiParticipantElement();
+        void SubscribeToFocusChange(Action onDetectedTargetElemetCallback);
+        void UnsubscribeFocusChange();
         IUIAutomationElement? GetTargetElement();
     }
 }

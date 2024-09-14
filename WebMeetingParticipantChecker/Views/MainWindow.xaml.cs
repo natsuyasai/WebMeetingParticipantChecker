@@ -93,7 +93,8 @@ namespace WebMeetingParticipantChecker.Views
         {
             var msg = new MessageDialog();
             msg.Initialize(message.Value.Title, message.Value.Message, message.Value.OkButtonMessage, this);
-            msg.ShowDialog();
+            var result = msg.ShowDialog();
+            message.Value.OnCloseDialog?.Invoke(result == true ? ResultCode.OK : ResultCode.Close);
         }
     }
 }

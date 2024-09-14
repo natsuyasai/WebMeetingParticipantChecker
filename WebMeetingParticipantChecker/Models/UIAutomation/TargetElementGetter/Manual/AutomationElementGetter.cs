@@ -64,10 +64,16 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.M
         /// <summary>
         /// フォーカスイベント購読
         /// </summary>
-        public bool DetectiParticipantElement()
+        public void SubscribeToFocusChange(Action onDetectedTargetElemetCallback)
         {
             _targetElement = null;
-            return true;
+            _onDetectedTargetElemetCallback = onDetectedTargetElemetCallback;
+            if (_focusHandler != null)
+            {
+                UnsubscribeFocusChange();
+            }
+            _focusHandler = new FocusChangeHandler(OnFocusChange);
+            _automation.AddFocusChangedEventHandler(null, _focusHandler);
         }
 
         /// <summary>
@@ -161,13 +167,16 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.M
         /// <summary>
         /// イベントハンドラ
         /// </summary>
-        /// <remarks>
-        /// コンストラクタ
-        /// </remarks>
-        private class FocusChangeHandler(Action<IUIAutomationElement> handler) : IUIAutomationFocusChangedEventHandler
+        private class FocusChangeHandler : IUIAutomationFocusChangedEventHandler
         {
-            private readonly Action<IUIAutomationElement> Handler = handler;
-
+            private readonly Action<IUIAutomationElement> Handler;
+            /// <summary>
+            /// コンストラクタ
+            /// </summary>
+            public FocusChangeHandler(Action<IUIAutomationElement> handler)
+            {
+                Handler = handler;
+            }
             /// <summary>
             /// イベント
             /// </summary>
