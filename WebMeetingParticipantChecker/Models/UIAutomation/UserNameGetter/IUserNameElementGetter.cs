@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace WebMeetingParticipantChecker.Models.UIAutomation
+namespace WebMeetingParticipantChecker.Models.UIAutomation.UserNameGetter
 {
     /// <summary>
     /// AutomationElementのユーザー名表示要素取得

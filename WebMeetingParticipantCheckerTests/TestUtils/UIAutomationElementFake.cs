@@ -1,6 +1,6 @@
 ﻿using System;
 using UIAutomationClient;
-using WebMeetingParticipantChecker.Models.UIAutomation;
+using WebMeetingParticipantChecker.Models.UIAutomation.Define;
 
 namespace WebMeetingParticipantCheckerTests.TestUtils
 {

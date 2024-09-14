@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WebMeetingParticipantChecker.Models.Config;
-using WebMeetingParticipantChecker.Models.UIAutomation;
+using WebMeetingParticipantChecker.Models.UIAutomation.UserNameGetter;
 using WebMeetingParticipantChecker.Utils;
 
 namespace WebMeetingParticipantChecker.Models.Monitoring

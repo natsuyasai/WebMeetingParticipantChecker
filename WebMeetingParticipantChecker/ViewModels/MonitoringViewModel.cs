@@ -14,8 +14,11 @@ using WebMeetingParticipantChecker.Models.FileWriter;
 using WebMeetingParticipantChecker.Models.Message;
 using WebMeetingParticipantChecker.Models.Monitoring;
 using WebMeetingParticipantChecker.Models.Preset;
-using WebMeetingParticipantChecker.Models.UIAutomation;
+using WebMeetingParticipantChecker.Models.UIAutomation.UserNameGetter;
+using WebMeetingParticipantChecker.Models.UIAutomation.Utils;
 using WebMeetingParticipantChecker.Views;
+using Auto = WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.Auto;
+using Manual = WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.Manual;
 
 namespace WebMeetingParticipantChecker.ViewModels
 {
@@ -73,7 +76,8 @@ namespace WebMeetingParticipantChecker.ViewModels
         /// <summary>
         /// 参加者リスト取得
         /// </summary>
-        private readonly IAutomationElementGetter[] _automationElementGetter;
+        private readonly Auto.IAutomationElementGetter[] _automationElementGetterForAuto;
+        private readonly Manual.IAutomationElementGetter[] _automationElementGetterForManual;
 
         /// <summary>
         /// 監視
@@ -288,15 +292,18 @@ namespace WebMeetingParticipantChecker.ViewModels
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public MonitoringViewModel(IAutomationElementGetter[] automationElementGetter,
-                                   MonitoringModel monitoringModel,
-                                   IKeyEventSender arrowDownKeyEventSender,
-                                   IReadOnlyPreset preset,
-                                   IMonitoringResultExportable resultExporter,
-                                   int keydownMaxCount)
+        public MonitoringViewModel(
+            Auto.IAutomationElementGetter[] automationElementGetterForAuto,
+            Manual.IAutomationElementGetter[] automationElementGetterForManual,
+            MonitoringModel monitoringModel,
+            IKeyEventSender arrowDownKeyEventSender,
+            IReadOnlyPreset preset,
+            IMonitoringResultExportable resultExporter,
+            int keydownMaxCount)
         {
             _status = StatusValue.Init;
-            _automationElementGetter = automationElementGetter;
+            _automationElementGetterForAuto = automationElementGetterForAuto;
+            _automationElementGetterForManual = automationElementGetterForManual;
             _monitoringModel = monitoringModel;
             _arrowDownKeyEventSender = arrowDownKeyEventSender;
             _preset = preset;
@@ -332,12 +339,20 @@ namespace WebMeetingParticipantChecker.ViewModels
             UpdateStatus(StatusValue.PreparingTargetWindowCaputure);
             _monitoringModel.RegisterMonitoringTargets(_preset.GetCurrentPresetUsers());
             OnPropertyChanged(nameof(UserStates));
+            await DetectTargetElement();
+        }
 
+        /// <summary>
+        /// 対象要素検出
+        /// </summary>
+        /// <returns></returns>
+        private async Task DetectTargetElement()
+        {
             // Zoomの参加者ウィンドウ検索開始
             UpdateStatus(StatusValue.TargetWindowCaputure);
             var isDetected = await Task.Run(() =>
             {
-                return _automationElementGetter[(int)_targetType].DetectiParticipantElement();
+                return _automationElementGetterForAuto[(int)_targetType].DetectiParticipantElement();
             });
             // 対象検知の結果を受け取る前に停止された場合
             if (_status != StatusValue.TargetWindowCaputure)
@@ -347,54 +362,75 @@ namespace WebMeetingParticipantChecker.ViewModels
             if (isDetected)
             {
                 _logger.Info("対象エレメント検知");
-                OnDetectedTargetElemet();
+                OnDetectedTargetElemet(_automationElementGetterForAuto[(int)_targetType].GetTargetElement());
             }
             else
             {
-                UpdateStatus(StatusValue.Init);
+                // 自動検知に失敗した場合、手動検出を有効にする
                 WeakReferenceMessenger.Default.Send(new Message<MainWindow>(
                     new MessageInfo
                     {
                         Title = "エラー",
-                        Message = $"参加者要素が見つかりません。何度も失敗する場合は一度本アプリを起動しなおしてください。"
+                        Message = "参加者リストが見つかりません。何度も失敗する場合は一度本アプリを起動しなおしてください。",
+                        OkButtonMessage = "手動で取得する",
+                        OnCloseDialog = DetectiParticipantElementFailedMessageCallback
                     }));
+            }
+        }
+
+        /// <summary>
+        /// 対象要素の検出失敗メッセージコールバック
+        /// </summary>
+        /// <param name="resultCode"></param>
+        private void DetectiParticipantElementFailedMessageCallback(ResultCode resultCode)
+        {
+            if (resultCode == ResultCode.OK)
+            {
+                _automationElementGetterForManual[(int)_targetType].SubscribeToFocusChange(() =>
+                {
+                    OnDetectedTargetElemet(_automationElementGetterForManual[(int)_targetType].GetTargetElement());
+                });
+            }
+            else
+            {
+                UpdateStatus(StatusValue.Init);
             }
         }
 
         /// <summary>
         /// 監視対象エレメント検出
         /// </summary>
-        private async void OnDetectedTargetElemet()
+        private async void OnDetectedTargetElemet(IUIAutomationElement? targetElement)
         {
             _logger.Info("対象要素検出");
             UpdateMonitoringStates();
-            if (_automationElementGetter[(int)_targetType].GetTargetElement() == null)
+            if (targetElement == null)
             {
                 _logger.Error("対象の要素が見つかっていません");
                 await StopMonitoring();
                 return;
             }
             _logger.Info("タスク開始");
-            await _monitoringModel.StartMonitoring(OnJoinStateChangeCallback, GetUserNameElementGetter());
+            await _monitoringModel.StartMonitoring(OnJoinStateChangeCallback, GetUserNameElementGetter(targetElement));
         }
 
         /// <summary>
         /// 子要素取得クラス取得
         /// </summary>
         /// <returns></returns>
-        private UserNameElementGetter GetUserNameElementGetter()
+        private UserNameElementGetter GetUserNameElementGetter(IUIAutomationElement? targetElement)
         {
             return _targetType switch
             {
                 MonitoringType.Target.Zoom =>
                 new UserNameElementGetterForZoom(
-                    new CUIAutomation(), _automationElementGetter[(int)_targetType].GetTargetElement()!, _arrowDownKeyEventSender, _keydownMaxCount),
+                    new CUIAutomation(), targetElement!, _arrowDownKeyEventSender, _keydownMaxCount),
                 MonitoringType.Target.Teams =>
                 new UserNameElementGetterForTeams(
-                    new CUIAutomation(), _automationElementGetter[(int)_targetType].GetTargetElement()!, _arrowDownKeyEventSender, _keydownMaxCount),
+                    new CUIAutomation(), targetElement!, _arrowDownKeyEventSender, _keydownMaxCount),
                 _ =>
                 new UserNameElementGetterForZoom(
-                    new CUIAutomation(), _automationElementGetter[(int)_targetType].GetTargetElement()!, _arrowDownKeyEventSender, _keydownMaxCount),
+                    new CUIAutomation(), targetElement!, _arrowDownKeyEventSender, _keydownMaxCount),
             };
         }
 
@@ -418,6 +454,7 @@ namespace WebMeetingParticipantChecker.ViewModels
                 UpdateStatus(StatusValue.Init);
                 _monitoringModel.StopMonitoring();
                 OnPropertyChanged(nameof(UserStates));
+                _automationElementGetterForManual[(int)_targetType].UnsubscribeFocusChange();
             });
         }
 

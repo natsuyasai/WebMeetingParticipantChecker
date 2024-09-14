@@ -1,8 +1,9 @@
 ﻿using System.Windows.Automation;
 using UIAutomationClient;
 using WebMeetingParticipantChecker.Models.Config;
+using WebMeetingParticipantChecker.Models.UIAutomation.Define;
 
-namespace WebMeetingParticipantChecker.Models.UIAutomation
+namespace WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.Auto
 {
     /// <summary>
     /// teamseの参加者リスト検出用

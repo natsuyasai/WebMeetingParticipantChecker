@@ -14,7 +14,7 @@ namespace WebMeetingParticipantChecker.Views
             SizeToContent = SizeToContent.Height;
         }
 
-        public void Initialize(string title, string message, Window? owner = null)
+        public void Initialize(string title, string message, string okButtonMessage, Window? owner = null)
         {
             if (FindName("Message") is TextBlock messageElement)
             {
@@ -25,10 +25,26 @@ namespace WebMeetingParticipantChecker.Views
             {
                 titleLabelElement.Content = title;
             }
+
+            if (FindName("OkButton") is Button okButton)
+            {
+                okButton.Content = okButtonMessage;
+                if (okButtonMessage == "")
+                {
+                    okButton.Visibility = Visibility.Collapsed;
+                }
+            }
+
             if (owner != null)
             {
                 Owner = owner;
             }
+        }
+
+        private void HandleOK(object sender, RoutedEventArgs e)
+        {
+            DialogResult = true;
+            SystemCommands.CloseWindow(this);
         }
 
         private void HandleClose(object sender, RoutedEventArgs e)
