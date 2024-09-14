@@ -12,9 +12,10 @@ using System.Collections.ObjectModel;
 using WebMeetingParticipantChecker.Models.Monitoring;
 using WebMeetingParticipantChecker.Models.Preset;
 using Microsoft.Extensions.Configuration;
-using WebMeetingParticipantChecker.Models.UIAutomation;
 using UIAutomationClient;
 using WebMeetingParticipantChecker.Models.FileWriter;
+using WebMeetingParticipantChecker.Models.UIAutomation.Utils;
+using WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.Auto;
 
 namespace WebMeetingParticipantChecker.ViewModels.Tests
 {

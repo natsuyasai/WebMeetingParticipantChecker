@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Automation;
 using UIAutomationClient;
 
-namespace WebMeetingParticipantChecker.Models.UIAutomation
+namespace WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.Auto
 {
     internal class AutomationElementGetterUtil
     {
@@ -15,7 +15,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// </summary>
         private readonly CUIAutomation _automation;
 
-        public AutomationElementGetterUtil() 
+        public AutomationElementGetterUtil()
         {
             _automation = new CUIAutomation();
         }

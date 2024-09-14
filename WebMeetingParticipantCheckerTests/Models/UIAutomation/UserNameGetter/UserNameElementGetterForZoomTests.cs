@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using WebMeetingParticipantChecker.Models.UIAutomation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +8,10 @@ using UIAutomationClient;
 using WebMeetingParticipantCheckerTests.TestUtils;
 using Microsoft.Extensions.Configuration;
 using Moq;
+using WebMeetingParticipantChecker.Models.UIAutomation.Utils;
+using WebMeetingParticipantChecker.Models.UIAutomation.UserNameGetter;
 
-namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
+namespace WebMeetingParticipantCheckerTests.Models.UIAutomation.UserNameGetter
 {
     [TestClass()]
     public class UserNameElementGetterForZoomTests
@@ -32,7 +33,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
             {
                 var fakeelement = new UIAutomationElementFake
                 {
-                    CurrentName = ("ユーザ" + (i + 1) + ",テスト,テスト,テスト,テスト")
+                    CurrentName = "ユーザ" + (i + 1) + ",テスト,テスト,テスト,テスト"
                 };
                 elemArrayFake.elements.Add(fakeelement);
                 expected["ユーザ" + (i + 1)] = fakeelement.CurrentName;
@@ -70,7 +71,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
             {
                 var fakeelement = new UIAutomationElementFake
                 {
-                    CurrentName = ("ユーザ" + (i + 1) + ",テスト,テスト,テスト,テスト")
+                    CurrentName = "ユーザ" + (i + 1) + ",テスト,テスト,テスト,テスト"
                 };
                 elemArrayFake.elements.Add(fakeelement);
                 expected["ユーザ" + (i + 1)] = fakeelement.CurrentName;
@@ -89,7 +90,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
                 {
                     var fakeelement = new UIAutomationElementFake
                     {
-                        CurrentName = ("ユーザ" + (i + 1) + ",テスト,テスト,テスト,テスト")
+                        CurrentName = "ユーザ" + (i + 1) + ",テスト,テスト,テスト,テスト"
                     };
                     elemArrayFake2.elements.Add(fakeelement);
                     expected["ユーザ" + (i + 1)] = fakeelement.CurrentName;
@@ -107,7 +108,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
             Assert.AreEqual(true, lastFakeItem2.selectionItemPatternFake.IsSelected);
             _keyEventMock.Verify(x => x.SendWait(KeyCode.Down), Times.Exactly(2));
             // 要素数+補正値分上に戻す
-            _keyEventMock.Verify(x => x.SendWait(KeyCode.Up), Times.Exactly(30 + (30/2)));
+            _keyEventMock.Verify(x => x.SendWait(KeyCode.Up), Times.Exactly(30 + 30 / 2));
         }
 
 
@@ -128,7 +129,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
             {
                 var fakeelement = new UIAutomationElementFake
                 {
-                    CurrentName = ("ユーザ" + (i + 1) + ",テスト,テスト,テスト,テスト")
+                    CurrentName = "ユーザ" + (i + 1) + ",テスト,テスト,テスト,テスト"
                 };
                 elemArrayFake.elements.Add(fakeelement);
                 expected["ユーザ" + (i + 1)] = fakeelement.CurrentName;
@@ -143,11 +144,11 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
             void onSelect()
             {
                 var elemArrayFake2 = new UIAutomationElementArrayFake();
-                for (int i = (shiftCount * 10); i < (shiftCount * 10 + 10); i++)
+                for (int i = shiftCount * 10; i < shiftCount * 10 + 10; i++)
                 {
                     var fakeelement = new UIAutomationElementFake
                     {
-                        CurrentName = ("ユーザ" + (i + 1) + ",テスト,テスト,テスト,テスト")
+                        CurrentName = "ユーザ" + (i + 1) + ",テスト,テスト,テスト,テスト"
                     };
                     elemArrayFake2.elements.Add(fakeelement);
                     if (shiftCount < MaxCount)
@@ -170,8 +171,8 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
             Assert.AreEqual(true, lastFakeItem.selectionItemPatternFake.IsSelected);
             Assert.AreEqual(false, lastFakeItem2.selectionItemPatternFake.IsSelected);
             _keyEventMock.Verify(x => x.SendWait(KeyCode.Down), Times.Exactly(MaxCount));
-            var upCount = MaxCount*10;
-            upCount += (upCount / 2);
+            var upCount = MaxCount * 10;
+            upCount += upCount / 2;
             _keyEventMock.Verify(x => x.SendWait(KeyCode.Up), Times.Exactly(upCount));
         }
     }

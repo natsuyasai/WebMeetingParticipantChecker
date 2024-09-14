@@ -1,4 +1,4 @@
-﻿namespace WebMeetingParticipantChecker.Models.UIAutomation
+﻿namespace WebMeetingParticipantChecker.Models.UIAutomation.Define
 {
     /// <summary>
     /// UIAutomation関連のID定義

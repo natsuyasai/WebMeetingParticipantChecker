@@ -14,7 +14,9 @@ using WebMeetingParticipantChecker.Models.FileWriter;
 using WebMeetingParticipantChecker.Models.Message;
 using WebMeetingParticipantChecker.Models.Monitoring;
 using WebMeetingParticipantChecker.Models.Preset;
-using WebMeetingParticipantChecker.Models.UIAutomation;
+using WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.Auto;
+using WebMeetingParticipantChecker.Models.UIAutomation.UserNameGetter;
+using WebMeetingParticipantChecker.Models.UIAutomation.Utils;
 using WebMeetingParticipantChecker.Views;
 
 namespace WebMeetingParticipantChecker.ViewModels

@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using UIAutomationClient;
 using WebMeetingParticipantChecker.Models.Config;
+using WebMeetingParticipantChecker.Models.UIAutomation.Define;
+using WebMeetingParticipantChecker.Models.UIAutomation.Utils;
 using WebMeetingParticipantChecker.Utils;
 
-namespace WebMeetingParticipantChecker.Models.UIAutomation
+namespace WebMeetingParticipantChecker.Models.UIAutomation.UserNameGetter
 {
     /// <summary>
     /// AutomationElementツリー情報取得
@@ -133,7 +135,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
             if (isEnableAutoScroll)
             {
                 // 本処理中にも参加される可能性があるので、少しだけ多めにしておく（値は適当）
-                _autoScroll.ReturnScrollPositionToTop(lastElement, itemSumCount + (itemSumCount/2));
+                _autoScroll.ReturnScrollPositionToTop(lastElement, itemSumCount + itemSumCount / 2);
             }
             return _nameInfos;
         }
@@ -166,7 +168,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         /// <returns></returns>
         private bool IsEnableElements(UIAutomationElementArray? elements)
         {
-            return (elements != null && elements.Length > 0);
+            return elements != null && elements.Length > 0;
         }
 
         /// <summary>

@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using WebMeetingParticipantChecker.Models.UIAutomation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +8,10 @@ using UIAutomationClient;
 using WebMeetingParticipantCheckerTests.TestUtils;
 using Microsoft.Extensions.Configuration;
 using Moq;
+using WebMeetingParticipantChecker.Models.UIAutomation.Utils;
+using WebMeetingParticipantChecker.Models.UIAutomation.UserNameGetter;
 
-namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
+namespace WebMeetingParticipantCheckerTests.Models.UIAutomation.UserNameGetter
 {
     [TestClass()]
     public class UserNameElementGetterForTeamsTests
@@ -34,7 +35,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.Tests
                 // Teamsは空白区切りになる
                 var fakeelement = new UIAutomationElementFake
                 {
-                    CurrentName = ("ユーザ" + (i + 1) + " テスト テスト テスト テスト")
+                    CurrentName = "ユーザ" + (i + 1) + " テスト テスト テスト テスト"
                 };
                 elemArrayFake.elements.Add(fakeelement);
                 actual[fakeelement.CurrentName.Replace(" ", "")] = fakeelement.CurrentName;

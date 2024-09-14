@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using UIAutomationClient;
+using WebMeetingParticipantChecker.Models.UIAutomation.Define;
+using WebMeetingParticipantChecker.Models.UIAutomation.Utils;
 
-namespace WebMeetingParticipantChecker.Models.UIAutomation
+namespace WebMeetingParticipantChecker.Models.UIAutomation.UserNameGetter
 {
     internal class UserNameElementGetterForZoom : UserNameElementGetter
     {
@@ -11,7 +13,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation
         private readonly char[] ElementTargetNameSplitChars = new char[] { ',' };
 
         public UserNameElementGetterForZoom(
-            CUIAutomation automation, 
+            CUIAutomation automation,
             IUIAutomationElement element,
             IKeyEventSender keyEventSender,
             int keyDonwMaxCount)
