@@ -115,6 +115,17 @@ namespace WebMeetingParticipantChecker.Models.Config
                 return _configuration["ZoomParticipantListName"]!;
             }
         }
+        public static string ZoomParticipantListNameEn
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_configuration?["ZoomParticipantListNameEn"]))
+                {
+                    return "Participant list";
+                }
+                return _configuration["ZoomParticipantListNameEn"]!;
+            }
+        }
 
         /// <summary>
         /// Teams参加者リスト名

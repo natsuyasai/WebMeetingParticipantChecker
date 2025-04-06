@@ -30,6 +30,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.M
         private Action? _onDetectedTargetElemetCallback = null;
 
         private readonly string _targetElementName;
+        private readonly string _targetElementNameEn;
 
         /// <summary>
         /// CUIAutomation
@@ -40,10 +41,11 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.M
         /// コンストラクタ
         /// </summary>
         /// <param name="targetName"></param>
-        public AutomationElementGetter(string targetElementName)
+        public AutomationElementGetter(string targetElementName, string targetElementNameEn)
         {
             _automation = new CUIAutomation();
             _targetElementName = targetElementName;
+            _targetElementNameEn = targetElementNameEn;
         }
 
         /// <summary>
@@ -52,6 +54,8 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.M
         /// <returns></returns>
         protected string GetTargetElementName()
             => _targetElementName;
+        protected string GetTargetElementNameEn()
+            => _targetElementNameEn;
 
         /// <summary>
         /// 要素取得時のコンディション取得
@@ -109,7 +113,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.M
                     return;
                 }
                 _logger.Info($"name:[{element.CurrentName}]");
-                if (element.CurrentName.Contains(GetTargetElementName()))
+                if (element.CurrentName.Contains(GetTargetElementName()) || element.CurrentName.Contains(GetTargetElementNameEn()))
                 {
                     SetTargetElement(element);
                 }
@@ -125,7 +129,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.M
                         {
                             break;
                         }
-                        if (ret.CurrentName.Contains(GetTargetElementName()))
+                        if (ret.CurrentName.Contains(GetTargetElementName()) || ret.CurrentName.Contains(GetTargetElementNameEn()))
                         {
                             SetTargetElement(ret);
                             break;

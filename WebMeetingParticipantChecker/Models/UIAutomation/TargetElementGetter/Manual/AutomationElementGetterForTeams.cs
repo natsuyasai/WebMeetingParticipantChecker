@@ -6,7 +6,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.M
 {
     internal class AutomationElementGetterForTeams : AutomationElementGetter
     {
-        public AutomationElementGetterForTeams(string targetElementName) : base(targetElementName)
+        public AutomationElementGetterForTeams(string targetElementName) : base(targetElementName, targetElementName)
         {
         }
 
