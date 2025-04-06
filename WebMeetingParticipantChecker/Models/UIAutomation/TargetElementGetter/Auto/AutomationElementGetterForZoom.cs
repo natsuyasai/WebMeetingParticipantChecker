@@ -43,14 +43,16 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.A
         /// 参加者リスト名
         /// </summary>
         private readonly string _participantListName;
+        private readonly string _participantListNameEn;
 
 
-        public AutomationElementGetterForZoom(string rootWindowName, string participantListRootName, string participantListName)
+        public AutomationElementGetterForZoom(string rootWindowName, string participantListRootName, string participantListName, string participantListNameEn)
         {
             _automation = new CUIAutomation();
             _rootWindowName = rootWindowName;
             _participantListRootName = participantListRootName;
             _participantListName = participantListName;
+            _participantListNameEn = participantListNameEn;
         }
 
         /// <summary>
@@ -91,26 +93,37 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.A
             // Zoomミーティングウィンドウ
             var windowCondition = _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_WindowTypePropertyId);
             var rootWindow = automationElementGetterUtil.TryGetTargetElementForChildren(root, _rootWindowName, windowCondition);
-            if (rootWindow == null || !automationElementGetterUtil.ExistElement(rootWindow))
+            if (!automationElementGetterUtil.ExistElement(rootWindow))
             {
                 // 画面共有中は「Zoomミーティング」では見つからない
                 rootWindow = automationElementGetterUtil.TryGetTargetElementForChildren(root, _participantListRootName, windowCondition);
-                if (rootWindow == null || !automationElementGetterUtil.ExistElement(rootWindow))
+                if (!automationElementGetterUtil.ExistElement(rootWindow))
                 {
                     return null;
                 }
             }
             // 参加者リスト
-            var listCondition = _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_ListControlTypeId);
-            var targetElement = automationElementGetterUtil.TryGetTargetElementForChildren(rootWindow, _participantListName, listCondition);
+            var targetElement = TryGetTargetElement(rootWindow!);
 
-            if (targetElement == null || !automationElementGetterUtil.ExistElement(targetElement))
+            if (!automationElementGetterUtil.ExistElement(targetElement))
             {
                 rootWindow = automationElementGetterUtil.TryGetTargetElementForChildren(root, _participantListRootName, windowCondition);
-                if (rootWindow != null && automationElementGetterUtil.ExistElement(rootWindow))
+                if (automationElementGetterUtil.ExistElement(rootWindow))
                 {
-                    targetElement = automationElementGetterUtil.TryGetTargetElementForChildren(rootWindow, _participantListName, listCondition);
+                    targetElement = TryGetTargetElement(rootWindow!);
                 }
+            }
+            return targetElement;
+        }
+
+        private IUIAutomationElement? TryGetTargetElement(IUIAutomationElement rootWindow)
+        {
+            var listCondition = _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_ListControlTypeId);
+            var targetElement = automationElementGetterUtil.TryGetTargetElementForChildren(rootWindow!, _participantListName, listCondition);
+            // 参加者リストの要素の名前が環境に応じた言語になっていない可能性を考慮して、英語表記の場合の取得も試みる
+            if (!automationElementGetterUtil.ExistElement(targetElement))
+            {
+                targetElement = automationElementGetterUtil.TryGetTargetElementForChildren(rootWindow!, _participantListNameEn, listCondition);
             }
             return targetElement;
         }

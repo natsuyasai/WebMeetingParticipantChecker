@@ -6,7 +6,8 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.M
 {
     internal class AutomationElementGetterForZoom : AutomationElementGetter
     {
-        public AutomationElementGetterForZoom(string targetElementName) : base(targetElementName)
+        public AutomationElementGetterForZoom(string targetElementName, string targetElementNameEn) 
+            : base(targetElementName, targetElementNameEn)
         {
         }
 
