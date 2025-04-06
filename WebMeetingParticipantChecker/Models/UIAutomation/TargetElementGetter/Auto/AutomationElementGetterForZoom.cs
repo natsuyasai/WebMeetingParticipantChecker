@@ -102,14 +102,14 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.A
             }
             // 参加者リスト
             var listCondition = _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_ListControlTypeId);
-            var targetElement = automationElementGetterUtil.TryGetTargetElementForChildren(rootWindow, _participantListName, listCondition);
+            var targetElement = automationElementGetterUtil.TryGetTargetElementForChildren(rootWindow!, _participantListName, listCondition);
 
             if (!automationElementGetterUtil.ExistElement(targetElement))
             {
                 rootWindow = automationElementGetterUtil.TryGetTargetElementForChildren(root, _participantListRootName, windowCondition);
                 if (automationElementGetterUtil.ExistElement(rootWindow))
                 {
-                    targetElement = automationElementGetterUtil.TryGetTargetElementForChildren(rootWindow, _participantListName, listCondition);
+                    targetElement = automationElementGetterUtil.TryGetTargetElementForChildren(rootWindow!, _participantListName, listCondition);
                 }
             }
             return targetElement;
