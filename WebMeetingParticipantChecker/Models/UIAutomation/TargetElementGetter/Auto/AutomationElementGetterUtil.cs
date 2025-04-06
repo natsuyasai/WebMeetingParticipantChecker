@@ -81,6 +81,10 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.A
 
         public bool ExistElement(IUIAutomationElement? element)
         {
+            if (element == null)
+            {
+                return false;
+            }
             // element自体はnullではないが、取得出来なかった場合、
             // 各プロパティやメソッドにアクセスするとnull参照例外が発生するため、それをもって判断する
             try
