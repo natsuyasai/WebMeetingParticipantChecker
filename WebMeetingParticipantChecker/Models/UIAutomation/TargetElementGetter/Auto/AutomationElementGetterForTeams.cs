@@ -34,18 +34,22 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.A
         /// ウィンドウのルート要素名
         /// </summary>
         private readonly string _rootWindowName;
+        private readonly string _rootWindowNameEn;
 
         /// <summary>
         /// 参加者リスト名
         /// </summary>
         private readonly string _participantListName;
+        private readonly string _participantListNameEn;
 
 
-        public AutomationElementGetterForTeams(string rootWindowName, string participantListName)
+        public AutomationElementGetterForTeams(string rootWindowName, string rootWindowNameEn, string participantListName, string participantListNameEn)
         {
             _automation = new CUIAutomation();
             _rootWindowName = rootWindowName;
+            _rootWindowNameEn = rootWindowNameEn;
             _participantListName = participantListName;
+            _participantListNameEn = participantListNameEn;
         }
 
         /// <summary>
@@ -84,13 +88,21 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.A
         {
             var windowCondition = _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_WindowTypePropertyId);
             var rootWindow = automationElementGetterUtil.TryGetTargetElementForChildren(root, _rootWindowName, windowCondition);
-            if (rootWindow == null)
+            if (!automationElementGetterUtil.ExistElement(rootWindow))
             {
-                return null;
+                rootWindow = automationElementGetterUtil.TryGetTargetElementForChildren(root, _rootWindowNameEn, windowCondition);
+                if (!automationElementGetterUtil.ExistElement(rootWindow))
+                {
+                    return null;
+                }
             }
             var treeCondition = _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_TreeControlTypeId);
-            return automationElementGetterUtil.TryGetTargetElementForChildren(rootWindow, _participantListName, treeCondition);
-
+            var targetElement = automationElementGetterUtil.TryGetTargetElementForChildren(rootWindow!, _participantListName, treeCondition);
+            if (!automationElementGetterUtil.ExistElement(targetElement))
+            {
+                targetElement = automationElementGetterUtil.TryGetTargetElementForChildren(rootWindow!, _participantListNameEn, treeCondition);
+            }
+            return targetElement;
         }
     }
 }

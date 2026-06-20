@@ -33,11 +33,13 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.A
         /// ウィンドウのルート要素名
         /// </summary>
         private readonly string _rootWindowName;
+        private readonly string _rootWindowNameEn;
 
         /// <summary>
         /// 参加者リストウィンドウ要素（ポップアウト時）
         /// </summary>
         private readonly string _participantListRootName;
+        private readonly string _participantListRootNameEn;
 
         /// <summary>
         /// 参加者リスト名
@@ -46,11 +48,13 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.A
         private readonly string _participantListNameEn;
 
 
-        public AutomationElementGetterForZoom(string rootWindowName, string participantListRootName, string participantListName, string participantListNameEn)
+        public AutomationElementGetterForZoom(string rootWindowName, string rootWindowNameEn, string participantListRootName, string participantListRootNameEn, string participantListName, string participantListNameEn)
         {
             _automation = new CUIAutomation();
             _rootWindowName = rootWindowName;
+            _rootWindowNameEn = rootWindowNameEn;
             _participantListRootName = participantListRootName;
+            _participantListRootNameEn = participantListRootNameEn;
             _participantListName = participantListName;
             _participantListNameEn = participantListNameEn;
         }
@@ -92,11 +96,11 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.A
         {
             // Zoomミーティングウィンドウ
             var windowCondition = _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_WindowTypePropertyId);
-            var rootWindow = automationElementGetterUtil.TryGetTargetElementForChildren(root, _rootWindowName, windowCondition);
+            var rootWindow = TryGetElementByNames(root, _rootWindowName, _rootWindowNameEn, windowCondition);
             if (!automationElementGetterUtil.ExistElement(rootWindow))
             {
                 // 画面共有中は「Zoomミーティング」では見つからない
-                rootWindow = automationElementGetterUtil.TryGetTargetElementForChildren(root, _participantListRootName, windowCondition);
+                rootWindow = TryGetElementByNames(root, _participantListRootName, _participantListRootNameEn, windowCondition);
                 if (!automationElementGetterUtil.ExistElement(rootWindow))
                 {
                     return null;
@@ -107,7 +111,7 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.A
 
             if (!automationElementGetterUtil.ExistElement(targetElement))
             {
-                rootWindow = automationElementGetterUtil.TryGetTargetElementForChildren(root, _participantListRootName, windowCondition);
+                rootWindow = TryGetElementByNames(root, _participantListRootName, _participantListRootNameEn, windowCondition);
                 if (automationElementGetterUtil.ExistElement(rootWindow))
                 {
                     targetElement = TryGetTargetElement(rootWindow!);
@@ -119,13 +123,17 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.A
         private IUIAutomationElement? TryGetTargetElement(IUIAutomationElement rootWindow)
         {
             var listCondition = _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_ListControlTypeId);
-            var targetElement = automationElementGetterUtil.TryGetTargetElementForChildren(rootWindow!, _participantListName, listCondition);
-            // 参加者リストの要素の名前が環境に応じた言語になっていない可能性を考慮して、英語表記の場合の取得も試みる
-            if (!automationElementGetterUtil.ExistElement(targetElement))
+            return TryGetElementByNames(rootWindow, _participantListName, _participantListNameEn, listCondition);
+        }
+
+        private IUIAutomationElement? TryGetElementByNames(IUIAutomationElement root, string name, string nameEn, IUIAutomationCondition condition)
+        {
+            var element = automationElementGetterUtil.TryGetTargetElementForChildren(root, name, condition);
+            if (!automationElementGetterUtil.ExistElement(element))
             {
-                targetElement = automationElementGetterUtil.TryGetTargetElementForChildren(rootWindow!, _participantListNameEn, listCondition);
+                element = automationElementGetterUtil.TryGetTargetElementForChildren(root, nameEn, condition);
             }
-            return targetElement;
+            return element;
         }
     }
 }

@@ -29,20 +29,28 @@ namespace WebMeetingParticipantChecker
         {
             var services = new ServiceCollection()
                 .AddTransient<IKeyEventSender, ArrowKeyEventSender>()
-                .AddTransient(provider => 
+                .AddTransient(provider =>
                     new Auto.IAutomationElementGetter[] {
                         new Auto.AutomationElementGetterForZoom(
                             AppSettingsManager.ZoomRootName,
+                            AppSettingsManager.ZoomRootNameEn,
                             AppSettingsManager.ZoomParticipantListRootName,
+                            AppSettingsManager.ZoomParticipantListRootNameEn,
                             AppSettingsManager.ZoomParticipantListName,
                             AppSettingsManager.ZoomParticipantListNameEn),
-                        new Auto.AutomationElementGetterForTeams(AppSettingsManager.TeamsRootName, AppSettingsManager.TeamsParticipantListName) })
+                        new Auto.AutomationElementGetterForTeams(
+                            AppSettingsManager.TeamsRootName,
+                            AppSettingsManager.TeamsRootNameEn,
+                            AppSettingsManager.TeamsParticipantListName,
+                            AppSettingsManager.TeamsParticipantListNameEn) })
                 .AddTransient(provider =>
                     new Manual.IAutomationElementGetter[] {
                         new Manual.AutomationElementGetterForZoom(
                             AppSettingsManager.ZoomParticipantListName,
                             AppSettingsManager.ZoomParticipantListNameEn),
-                        new Manual.AutomationElementGetterForTeams(AppSettingsManager.TeamsParticipantListName) })
+                        new Manual.AutomationElementGetterForTeams(
+                            AppSettingsManager.TeamsParticipantListName,
+                            AppSettingsManager.TeamsParticipantListNameEn) })
                 .AddTransient<IMonitoringResultExportable, MonitoringResultExporter>()
                 .AddTransient<MonitoringModel>(provider => new MonitoringModel(AppSettingsManager.MonitoringCycleMs))
                 .AddSingleton<IPresetProvider, PresetModel>() // プリセット情報はシステムで一意とする

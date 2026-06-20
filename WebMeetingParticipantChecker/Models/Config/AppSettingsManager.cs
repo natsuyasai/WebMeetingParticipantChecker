@@ -71,6 +71,18 @@ namespace WebMeetingParticipantChecker.Models.Config
             }
         }
 
+        public static string ZoomRootNameEn
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_configuration?["ZoomRootNameEn"]))
+                {
+                    return "Zoom Meeting";
+                }
+                return _configuration["ZoomRootNameEn"]!;
+            }
+        }
+
         /// <summary>
         /// Teamsルート名
         /// </summary>
@@ -86,6 +98,18 @@ namespace WebMeetingParticipantChecker.Models.Config
             }
         }
 
+        public static string TeamsRootNameEn
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_configuration?["TeamsRootNameEn"]))
+                {
+                    return "Meeting with ";
+                }
+                return _configuration["TeamsRootNameEn"]!;
+            }
+        }
+
         /// <summary>
         /// Zoom参加者リストウィンドウ名
         /// </summary>
@@ -98,6 +122,18 @@ namespace WebMeetingParticipantChecker.Models.Config
                     return "参加者（";
                 }
                 return _configuration["ZoomParticipantListRootName"]!;
+            }
+        }
+
+        public static string ZoomParticipantListRootNameEn
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_configuration?["ZoomParticipantListRootNameEn"]))
+                {
+                    return "Participants (";
+                }
+                return _configuration["ZoomParticipantListRootNameEn"]!;
             }
         }
 
@@ -139,6 +175,18 @@ namespace WebMeetingParticipantChecker.Models.Config
                     return "出席者";
                 }
                 return _configuration["TeamsParticipantListName"]!;
+            }
+        }
+
+        public static string TeamsParticipantListNameEn
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_configuration?["TeamsParticipantListNameEn"]))
+                {
+                    return "Participants";
+                }
+                return _configuration["TeamsParticipantListNameEn"]!;
             }
         }
 
