@@ -1,6 +1,6 @@
-﻿using System.DirectoryServices.ActiveDirectory;
+﻿using System;
+using System.Threading.Tasks;
 using UIAutomationClient;
-using WebMeetingParticipantChecker.Models.Config;
 using WebMeetingParticipantChecker.Models.UIAutomation.Define;
 
 namespace WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.Auto
@@ -33,11 +33,13 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.A
         /// ウィンドウのルート要素名
         /// </summary>
         private readonly string _rootWindowName;
+        private readonly string _rootWindowNameEn;
 
         /// <summary>
         /// 参加者リストウィンドウ要素（ポップアウト時）
         /// </summary>
         private readonly string _participantListRootName;
+        private readonly string _participantListRootNameEn;
 
         /// <summary>
         /// 参加者リスト名
@@ -46,11 +48,13 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.A
         private readonly string _participantListNameEn;
 
 
-        public AutomationElementGetterForZoom(string rootWindowName, string participantListRootName, string participantListName, string participantListNameEn)
+        public AutomationElementGetterForZoom(string rootWindowName, string rootWindowNameEn, string participantListRootName, string participantListRootNameEn, string participantListName, string participantListNameEn)
         {
             _automation = new CUIAutomation();
             _rootWindowName = rootWindowName;
+            _rootWindowNameEn = rootWindowNameEn;
             _participantListRootName = participantListRootName;
+            _participantListRootNameEn = participantListRootNameEn;
             _participantListName = participantListName;
             _participantListNameEn = participantListNameEn;
         }
@@ -90,42 +94,67 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.A
         /// <returns></returns>
         private IUIAutomationElement? TryGetParticipantElement(IUIAutomationElement root)
         {
+            IUIAutomationCondition WindowCondition() =>
+                _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_WindowTypePropertyId);
+            IUIAutomationCondition ListCondition() =>
+                _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_ListControlTypeId);
+
             // Zoomミーティングウィンドウ
-            var windowCondition = _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_WindowTypePropertyId);
-            var rootWindow = automationElementGetterUtil.TryGetTargetElementForChildren(root, _rootWindowName, windowCondition);
+            var rootWindow = TryGetElementByNames(root, _rootWindowName, _rootWindowNameEn, WindowCondition);
             if (!automationElementGetterUtil.ExistElement(rootWindow))
             {
                 // 画面共有中は「Zoomミーティング」では見つからない
-                rootWindow = automationElementGetterUtil.TryGetTargetElementForChildren(root, _participantListRootName, windowCondition);
+                rootWindow = TryGetElementByNames(root, _participantListRootName, _participantListRootNameEn, WindowCondition);
                 if (!automationElementGetterUtil.ExistElement(rootWindow))
                 {
                     return null;
                 }
             }
             // 参加者リスト
-            var targetElement = TryGetTargetElement(rootWindow!);
+            var targetElement = TryGetElementByNames(rootWindow!, _participantListName, _participantListNameEn, ListCondition);
 
             if (!automationElementGetterUtil.ExistElement(targetElement))
             {
-                rootWindow = automationElementGetterUtil.TryGetTargetElementForChildren(root, _participantListRootName, windowCondition);
+                rootWindow = TryGetElementByNames(root, _participantListRootName, _participantListRootNameEn, WindowCondition);
                 if (automationElementGetterUtil.ExistElement(rootWindow))
                 {
-                    targetElement = TryGetTargetElement(rootWindow!);
+                    targetElement = TryGetElementByNames(rootWindow!, _participantListName, _participantListNameEn, ListCondition);
                 }
             }
             return targetElement;
         }
 
-        private IUIAutomationElement? TryGetTargetElement(IUIAutomationElement rootWindow)
+        /// <summary>
+        /// JA・EN名で並列検索し、先に有効な要素を返した結果を採用する
+        /// </summary>
+        private IUIAutomationElement? TryGetElementByNames(
+            IUIAutomationElement root, string name, string nameEn,
+            Func<IUIAutomationCondition> conditionFactory)
         {
-            var listCondition = _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_ListControlTypeId);
-            var targetElement = automationElementGetterUtil.TryGetTargetElementForChildren(rootWindow!, _participantListName, listCondition);
-            // 参加者リストの要素の名前が環境に応じた言語になっていない可能性を考慮して、英語表記の場合の取得も試みる
-            if (!automationElementGetterUtil.ExistElement(targetElement))
+            var taskJa = Task.Run(() =>
             {
-                targetElement = automationElementGetterUtil.TryGetTargetElementForChildren(rootWindow!, _participantListNameEn, listCondition);
+                var util = new AutomationElementGetterUtil();
+                return util.TryGetTargetElementForChildren(root, name, conditionFactory());
+            });
+            var taskEn = Task.Run(() =>
+            {
+                var util = new AutomationElementGetterUtil();
+                return util.TryGetTargetElementForChildren(root, nameEn, conditionFactory());
+            });
+
+            while (true)
+            {
+                var completed = Task.WhenAny(taskJa, taskEn).GetAwaiter().GetResult();
+                var result = completed.GetAwaiter().GetResult();
+                if (automationElementGetterUtil.ExistElement(result))
+                {
+                    return result;
+                }
+                if (taskJa.IsCompleted && taskEn.IsCompleted)
+                {
+                    return null;
+                }
             }
-            return targetElement;
         }
     }
 }
