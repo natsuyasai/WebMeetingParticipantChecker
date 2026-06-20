@@ -1,6 +1,6 @@
-﻿using System.DirectoryServices.ActiveDirectory;
+﻿using System;
+using System.Threading.Tasks;
 using UIAutomationClient;
-using WebMeetingParticipantChecker.Models.Config;
 using WebMeetingParticipantChecker.Models.UIAutomation.Define;
 
 namespace WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.Auto
@@ -94,46 +94,67 @@ namespace WebMeetingParticipantChecker.Models.UIAutomation.TargetElementGetter.A
         /// <returns></returns>
         private IUIAutomationElement? TryGetParticipantElement(IUIAutomationElement root)
         {
+            IUIAutomationCondition WindowCondition() =>
+                _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_WindowTypePropertyId);
+            IUIAutomationCondition ListCondition() =>
+                _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_ListControlTypeId);
+
             // Zoomミーティングウィンドウ
-            var windowCondition = _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_WindowTypePropertyId);
-            var rootWindow = TryGetElementByNames(root, _rootWindowName, _rootWindowNameEn, windowCondition);
+            var rootWindow = TryGetElementByNames(root, _rootWindowName, _rootWindowNameEn, WindowCondition);
             if (!automationElementGetterUtil.ExistElement(rootWindow))
             {
                 // 画面共有中は「Zoomミーティング」では見つからない
-                rootWindow = TryGetElementByNames(root, _participantListRootName, _participantListRootNameEn, windowCondition);
+                rootWindow = TryGetElementByNames(root, _participantListRootName, _participantListRootNameEn, WindowCondition);
                 if (!automationElementGetterUtil.ExistElement(rootWindow))
                 {
                     return null;
                 }
             }
             // 参加者リスト
-            var targetElement = TryGetTargetElement(rootWindow!);
+            var targetElement = TryGetElementByNames(rootWindow!, _participantListName, _participantListNameEn, ListCondition);
 
             if (!automationElementGetterUtil.ExistElement(targetElement))
             {
-                rootWindow = TryGetElementByNames(root, _participantListRootName, _participantListRootNameEn, windowCondition);
+                rootWindow = TryGetElementByNames(root, _participantListRootName, _participantListRootNameEn, WindowCondition);
                 if (automationElementGetterUtil.ExistElement(rootWindow))
                 {
-                    targetElement = TryGetTargetElement(rootWindow!);
+                    targetElement = TryGetElementByNames(rootWindow!, _participantListName, _participantListNameEn, ListCondition);
                 }
             }
             return targetElement;
         }
 
-        private IUIAutomationElement? TryGetTargetElement(IUIAutomationElement rootWindow)
+        /// <summary>
+        /// JA・EN名で並列検索し、先に有効な要素を返した結果を採用する
+        /// </summary>
+        private IUIAutomationElement? TryGetElementByNames(
+            IUIAutomationElement root, string name, string nameEn,
+            Func<IUIAutomationCondition> conditionFactory)
         {
-            var listCondition = _automation.CreatePropertyCondition(UIAutomationIdDefine.UIA_ControlTypePropertyId, UIAutomationIdDefine.UIA_ListControlTypeId);
-            return TryGetElementByNames(rootWindow, _participantListName, _participantListNameEn, listCondition);
-        }
-
-        private IUIAutomationElement? TryGetElementByNames(IUIAutomationElement root, string name, string nameEn, IUIAutomationCondition condition)
-        {
-            var element = automationElementGetterUtil.TryGetTargetElementForChildren(root, name, condition);
-            if (!automationElementGetterUtil.ExistElement(element))
+            var taskJa = Task.Run(() =>
             {
-                element = automationElementGetterUtil.TryGetTargetElementForChildren(root, nameEn, condition);
+                var util = new AutomationElementGetterUtil();
+                return util.TryGetTargetElementForChildren(root, name, conditionFactory());
+            });
+            var taskEn = Task.Run(() =>
+            {
+                var util = new AutomationElementGetterUtil();
+                return util.TryGetTargetElementForChildren(root, nameEn, conditionFactory());
+            });
+
+            while (true)
+            {
+                var completed = Task.WhenAny(taskJa, taskEn).GetAwaiter().GetResult();
+                var result = completed.GetAwaiter().GetResult();
+                if (automationElementGetterUtil.ExistElement(result))
+                {
+                    return result;
+                }
+                if (taskJa.IsCompleted && taskEn.IsCompleted)
+                {
+                    return null;
+                }
             }
-            return element;
         }
     }
 }
